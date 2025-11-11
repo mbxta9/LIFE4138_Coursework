@@ -48,3 +48,25 @@ head(arrange(starwars, desc(height)), 1)
 data(storms)
 uniquestorms <- unique(storms$name)
 uniquestorms %>% count(year)
+
+# Question 7
+library(dplyr)
+data(storms)
+head(unique(storms))
+# Number of different storms
+storms %>%
+    distinct(name) %>%
+    tally()
+
+# Year with most storms
+storms %>%
+    distinct(name, year) %>%
+    count(year) %>%
+    arrange(desc(n)) %>%
+    head(1)
+
+# Highest Pressure
+storms %>%
+    select(name, year, pressure) %>%
+    arrange(desc(pressure)) %>%
+    head(1)
