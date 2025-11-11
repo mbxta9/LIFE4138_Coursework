@@ -12,3 +12,4 @@ my_dataframe <- data.frame(name = rep(c("a", "b"), each = 10), value = 21:40)
 my_list <- list(my_vector, my_matrix, my_dataframe)
 
 my_vector[4]
+my_matrix[7, 4]
