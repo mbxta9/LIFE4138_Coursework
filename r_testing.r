@@ -44,4 +44,7 @@ install.packages("dplyr")
 library(dplyr)
 data(starwars)
 head(arrange(starwars, desc(height)), 1)
-as.da
+
+data(storms)
+uniquestorms <- unique(storms$name)
+uniquestorms %>% count(year)
