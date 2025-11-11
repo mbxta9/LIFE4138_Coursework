@@ -40,14 +40,10 @@ data(cars)
 plot(cars, xlab = "Speed (mph)", ylab = "Stopping distance (ft)", main = "Scatterplot of car stopping distances vs speed")
 
 # Question 6
-install.packages("dplyr")
 library(dplyr)
 data(starwars)
-head(arrange(starwars, desc(height)), 1)
-
-data(storms)
-uniquestorms <- unique(storms$name)
-uniquestorms %>% count(year)
+as.data.frame(head(arrange(starwars, desc(height)), 1))
+as.data.frame(head(arrange(starwars, mass), 1))
 
 # Question 7
 library(dplyr)
