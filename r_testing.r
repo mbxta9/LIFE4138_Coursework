@@ -66,3 +66,19 @@ storms %>%
     select(name, year, pressure) %>%
     arrange(desc(pressure)) %>%
     head(1)
+
+# Question 8
+# Loading Requirements
+library(tidyverse)
+data(diamonds)
+
+# Creating plot of relationship between carat and price
+ggplot(aes(x = carat, y = price), data = diamonds) +
+    geom_point(alpha = 0.25, colour = "blue") + # Creating scatterplot
+    labs( # Adding labels to axis and title
+        x = "Carat (Weight of Diamond)",
+        y = "Price (Dollars)",
+        title = "Scatterplot of relationship between Carat of Diamonds and their price"
+    ) +
+    theme_light() + # Using Theme to centre title
+    theme(plot.title = element_text(hjust = 0.5))
