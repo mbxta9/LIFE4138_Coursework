@@ -70,6 +70,9 @@ mtcars = "https://raw.githubusercontent.com/Apress/mastering-ml-w-python-in-six-
 cars = pd.read_csv(mtcars)
 
 #Creating plot
-plt.scatter(x = cars['hp'],y = cars['mpg'])
-plt.title("Car horsepower against mpg")
+plt.scatter(x = cars['hp'],y = cars['mpg'], color = 'blue') #Plots data
+plt.title("Car horsepower against mpg") #Adding labels
+plt.xlabel("Horsepower (hp)")
+plt.ylabel("Miles per Gallon (mpg)")
+plt.grid(True, alpha = 0.25) #Adds grid in background
 plt.show()
