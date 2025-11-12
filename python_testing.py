@@ -76,3 +76,17 @@ plt.xlabel("Horsepower (hp)")
 plt.ylabel("Miles per Gallon (mpg)")
 plt.grid(True, alpha = 0.25) #Adds grid in background
 plt.show()
+
+#Question 6
+#Importing Requirements
+import pandas as pd
+starwars_dataset="https://www.fabricionarcizo.com/post/starwars/updated_starwars.csv"
+starwars = pd.read_csv(starwars_dataset)
+
+#Find tallest height (Yarael Poof)
+most_tall = starwars.sort_values(by = 'height', ascending=False).head(1)
+print(most_tall)
+
+#Find the lowest mass (Ratts Tyerell)
+lowest_mass = starwars.sort_values(by='mass', ascending=True).head(1)
+print(lowest_mass)
