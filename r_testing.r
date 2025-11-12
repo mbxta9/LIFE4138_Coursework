@@ -78,7 +78,66 @@ ggplot(aes(x = carat, y = price), data = diamonds) +
     labs( # Adding labels to axis and title
         x = "Carat (Weight of Diamond)",
         y = "Price (Dollars)",
-        title = "Scatterplot of relationship between Carat of Diamonds and their price"
+        title = "Scatterplot of relationship between Carat of diamonds and Price"
     ) +
     theme_light() + # Using Theme to centre title
     theme(plot.title = element_text(hjust = 0.5))
+
+# Creating histogram of all prices
+ggplot(aes(x = price), data = diamonds) +
+    geom_histogram( # Creating Histogram
+        binwidth = 500,
+        colour = "black",
+        fill = "blue"
+    ) +
+    labs( # Adding labels to axis and title
+        x = "Price of Diamond (Dollars)",
+        y = "Frequency",
+        title = "Histogram of quantity of diamonds by price"
+    ) +
+    theme_light() + # Adjusting title to centre
+    theme(plot.title = element_text(hjust = 0.5))
+
+# Creating boxplot of diamond cut
+ggplot(aes(x = cut, y = price), data = diamonds) +
+    geom_boxplot( # Creating boxplot
+        fill = "blue"
+    ) +
+    labs( # Adding axis labels and title
+        x = "Cut of Diamond",
+        y = "Price (Dollars)",
+        title = "Boxplot of cut of diamond against price"
+    ) +
+    theme_light() + # Making title centred
+    theme(plot.title = element_text(hjust = 0.5))
+
+# Question 9
+# Loading Requirements
+library(dplyr)
+data(diamonds)
+
+# Find maximum and minimum prices
+print(paste("Maximum price diamond: ", max(diamonds$price)))
+print(paste("Minimum price diamond: ", min(diamonds$price)))
+
+# Creating a price type column
+diamonds <- diamonds %>%
+    mutate(price_type = ifelse( # Create new column and pass in result of if else
+        diamonds$price < 5000,
+        "Low Price", # Result if True
+        "High Price" # Result if False
+    ))
+
+# Question 10
+# Function to convert diamond carat to grams or milligrams
+carat_conversion <- function(carat, unit) {
+    if (unit == "grams") { # Converts to grams
+        return(carat * 0.2)
+    } else if (unit == "milligrams") { # Converts to milligrams
+        return(carat * 200)
+    } else { # If no valid option selected
+        return("Error: Choose a valid unit ('grams' or 'milligrams')")
+    }
+}
+# Print the heaviest diamond (in grams)
+print(paste("Heaviest Diamond weighs: ", carat_conversion(max(diamonds$carat), "grams"), " grams."))
