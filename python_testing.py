@@ -36,3 +36,40 @@ data = { #Generates data for golf holes and score accumulated
 }
 golf_data_frame = pd.DataFrame(data) #Creates pandas dataframe with golf data
 print(golf_data_frame[8:9]) #Print only the 9th row
+
+#Question 3
+#for loop
+for i in range(200,301):
+    print(i)
+
+#while loop
+i = 200
+while i <=300:
+    print(i)
+    i+=1
+
+#list loop
+nums = [i for i in range(200,301)]
+for num in nums: print(num)
+
+#Question 4
+# Replace elements in this list
+animals = ["tiger", "lion", "badger", "fox", "rabbit", "fish", "dog", "octopus"]
+
+#Tasks 1-3
+animals[5] = "horse" #Replace element 5 with horse
+animals.append("badger") #Add badger to end of list
+animals[animals.index("octopus")] = "squirrel" #Replace octopus with squirrel by finding its index first
+print(animals) 
+
+#Question 5
+#Loading Requirements
+import pandas as pd
+import matplotlib.pyplot as plt
+mtcars = "https://raw.githubusercontent.com/Apress/mastering-ml-w-python-in-six-steps/refs/heads/master/Chapter_2_Code/Data/mtcars.csv"
+cars = pd.read_csv(mtcars)
+
+#Creating plot
+plt.scatter(x = cars['hp'],y = cars['mpg'])
+plt.title("Car horsepower against mpg")
+plt.show()
