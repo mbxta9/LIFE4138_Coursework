@@ -1,3 +1,4 @@
+'''
 #Question 1
 import pandas as pd #Loading Requirements
 
@@ -90,3 +91,17 @@ print(most_tall)
 #Find the lowest mass (Ratts Tyerell)
 lowest_mass = starwars.sort_values(by='mass', ascending=True).head(1)
 print(lowest_mass)
+'''
+
+#Question 7
+#Loading requirements
+import pandas as pd
+import seaborn as sns
+life_expectancy = sns.load_dataset('healthexp')
+
+#Unique number of countries
+print(f"Unique number of countries: {life_expectancy['Country'].nunique()}")
+
+#Country and year with highest life expectancy
+highest = life_expectancy.max()
+print(f"Country with the highest life expectancy was: {highest['Country']} in the year {highest['Year']}")
