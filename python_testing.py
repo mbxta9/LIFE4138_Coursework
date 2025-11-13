@@ -109,7 +109,6 @@ print(f"Country with the highest life expectancy was: {highest_life['Country']} 
 #Calculate year with the highest total expenditure
 highest_expenditure = life_expectancy.groupby('Year')['Spending_USD'].sum().idxmax()
 print(f"The year with the highest total expenditure was: {highest_expenditure}")
-'''
 
 #Question 8
 #Loading requirements
@@ -128,8 +127,68 @@ plt.show()
 
 #Histogram of prices
 plt.hist(x=diamonds['price'], color = 'blue')
+plt.title("Histogram of quantity of diamonds by price")
+plt.xlabel("Price (Dollars)")
+plt.ylabel("Frequency")
+plt.grid(True, linestyle = '--', alpha = 0.1) #Adds grid in background
+plt.tight_layout()
 plt.show()
 
 #Boxplot of cut vs price
 diamonds.boxplot(column = 'price', by = 'cut', color = 'blue')
+plt.title("Boxplot of cut of diamond against price")
+plt.xlabel("Cut of Diamond")
+plt.ylabel("Price (Dollars)")
+plt.grid(True, linestyle = '--', alpha = 0.1) #Adds grid in background
+plt.tight_layout()
 plt.show()
+
+#Question 9
+#Loading requirements
+import seaborn as sns
+diamonds = sns.load_dataset('diamonds')
+
+#Find max and minimum diamond price
+print(f"The highest priced diamond is: {diamonds['price'].max()}")
+print(f"The lowest priced diamond is: {diamonds['price'].min()}")
+'''
+
+#Question 10
+#SOLUTION IF SEPERATE PARTS
+import seaborn as sns
+diamonds = sns.load_dataset('diamonds')
+def carat_conversion(carat,unit):
+    try:
+        if unit =='grams':
+            return(carat*0.2)
+        elif unit == 'milligrams':
+            return(carat*200)
+        else:
+            return("Error: Choose a valid unit ('grams' or 'milligrams')") 
+    except:
+        raise Exception("Please enter a valid carat value")
+    
+print(carat_conversion(200,'grams'))
+
+#SOLUTION IF ONE FUNCTION
+import seaborn as sns
+diamonds = sns.load_dataset('diamonds')
+
+def carat_conversion_max(dataset,unit):
+    '''
+    Function to convert the carat column in a dataset to grams or milligrams.
+    Takes a dataset as a dataframe and unit as either 'grams' or 'milligrams'.
+    '''
+    mass = []
+    if unit.lower() =='grams': #Adds all converted weights to list
+        for i in dataset['carat']:
+            mass.append(i*0.2)
+    elif unit.lower() =='milligrams':
+        for i in dataset['carat']:
+            mass.append(i*200)
+    else:
+        return("Error: Choose a valid unit ('grams' or 'milligrams')") #Error Handling
+    dataset[f"weight_in_{unit}"] = mass #Adds new column of weights to dataframe
+    print(f"Heaviest diamond weighs: {diamonds[f"weight_in_{unit}"].max()} {unit}") #Finds heaviest diamond from new column
+
+carat_conversion_max(diamonds,'grams') 
