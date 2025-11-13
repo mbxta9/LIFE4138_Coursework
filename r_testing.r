@@ -27,7 +27,6 @@ for (i in 200:300) {
 
 # Method 3 - sapply
 values <- 200:300
-values
 sapply(values, print)
 
 # Question 4

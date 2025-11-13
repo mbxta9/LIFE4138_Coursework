@@ -94,14 +94,20 @@ print(lowest_mass)
 '''
 
 #Question 7
-#Loading requirements
+#Loading requirements. 
 import pandas as pd
 import seaborn as sns
 life_expectancy = sns.load_dataset('healthexp')
 
 #Unique number of countries
-print(f"Unique number of countries: {life_expectancy['Country'].nunique()}")
+#print(f"Unique number of countries: {life_expectancy['Country'].nunique()}")
 
 #Country and year with highest life expectancy
-highest = life_expectancy.max()
-print(f"Country with the highest life expectancy was: {highest['Country']} in the year {highest['Year']}")
+highest_life = life_expectancy.loc[life_expectancy['Life_Expectancy'].idxmax()] #Gets the row with highest Life Expectancy
+print(f"Country with the highest life expectancy was: {highest_life['Country']} in the year {highest_life['Year']}")
+
+#Calculate year with the highest total expenditure
+highest_expenditure = life_expectancy.groupby('Year')['Spending_USD'].sum().idxmax()
+print(f"The year with the highest total expenditure was: {highest_expenditure}")
+
+#Question 8
