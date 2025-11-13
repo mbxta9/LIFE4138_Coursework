@@ -155,26 +155,34 @@ print(f"The lowest priced diamond is: {diamonds['price'].min()}")
 
 #Question 10
 #SOLUTION IF SEPERATE PARTS
+#Importing Requirements
 import seaborn as sns
 diamonds = sns.load_dataset('diamonds')
-def carat_conversion(carat,unit):
-    try:
+
+
+def carat_conversion(carat:float, unit:str):
+    '''
+    Function to convert a carat value to either grams or milligrams.
+    Takes a carat as a float or integer and unit as a string either 'grams' or 'milligrams'.
+    '''
+    try: #Tries conversion
         if unit =='grams':
             return(carat*0.2)
         elif unit == 'milligrams':
             return(carat*200)
-        else:
+        else: #Error handling
             return("Error: Choose a valid unit ('grams' or 'milligrams')") 
-    except:
-        raise Exception("Please enter a valid carat value")
+    except: #Exception to account for invalid characters
+        print(f"Please enter a valid carat value")
     
 print(carat_conversion(200,'grams'))
 
 #SOLUTION IF ONE FUNCTION
+#Importing requirements
 import seaborn as sns
 diamonds = sns.load_dataset('diamonds')
 
-def carat_conversion_max(dataset,unit):
+def carat_conversion_max(dataset,unit: str):
     '''
     Function to convert the carat column in a dataset to grams or milligrams.
     Takes a dataset as a dataframe and unit as either 'grams' or 'milligrams'.
@@ -191,4 +199,4 @@ def carat_conversion_max(dataset,unit):
     dataset[f"weight_in_{unit}"] = mass #Adds new column of weights to dataframe
     print(f"Heaviest diamond weighs: {diamonds[f"weight_in_{unit}"].max()} {unit}") #Finds heaviest diamond from new column
 
-carat_conversion_max(diamonds,'grams') 
+carat_conversion_max(diamonds,'grams') #Calling function
