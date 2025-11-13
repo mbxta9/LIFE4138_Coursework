@@ -91,7 +91,7 @@ print(most_tall)
 #Find the lowest mass (Ratts Tyerell)
 lowest_mass = starwars.sort_values(by='mass', ascending=True).head(1)
 print(lowest_mass)
-'''
+
 
 #Question 7
 #Loading requirements. 
@@ -109,5 +109,27 @@ print(f"Country with the highest life expectancy was: {highest_life['Country']} 
 #Calculate year with the highest total expenditure
 highest_expenditure = life_expectancy.groupby('Year')['Spending_USD'].sum().idxmax()
 print(f"The year with the highest total expenditure was: {highest_expenditure}")
+'''
 
 #Question 8
+#Loading requirements
+import seaborn as sns
+import matplotlib.pyplot as plt
+diamonds = sns.load_dataset('diamonds')
+
+#Carat vs Price Scatterplot
+plt.scatter(x=diamonds['carat'],y=diamonds['price'], color = 'blue',alpha=0.25)
+plt.title("Scatterplot of relationship between Carat of diamonds and Price")
+plt.xlabel("Carat (Weight of diamond)")
+plt.ylabel("Price (Dollars)")
+plt.grid(True, linestyle = '--', alpha = 0.1) #Adds grid in background
+plt.tight_layout()
+plt.show()
+
+#Histogram of prices
+plt.hist(x=diamonds['price'], color = 'blue')
+plt.show()
+
+#Boxplot of cut vs price
+diamonds.boxplot(column = 'price', by = 'cut', color = 'blue')
+plt.show()
