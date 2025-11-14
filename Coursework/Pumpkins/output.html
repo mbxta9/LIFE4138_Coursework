@@ -119,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="task-1---read-in-the-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="task-1---read-in-the-dataset">Task 1 - Read in the dataset 🔍</h2>
 <p>The first task involved reading in the <code>pumpkins.csv</code> file. To do this the following <code>import_dataset</code> function was made.</p>
-<div id="ef63501a" class="cell" data-execution_count="1">
+<div id="91406837" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -143,7 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <p>This could then be called using the filepath of the .csv file. It is assigned here to the variable <code>pumpkins</code> for ease of use later.</p>
-<div id="2e20975f" class="cell" data-execution_count="2">
+<div id="e4b6af02" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pumpkins <span class="op">=</span> import_dataset(<span class="st">'pumpkins_datasets/pumpkins_02.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Dataset imported successfully!</code></pre>
@@ -155,7 +155,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Next was to identify the heaviest pumpkin and data about it including: weight, variety, where it was from and when it was grown.</p>
 <p>To do this the <code>find_highest</code> function was created to get the row with a highest value in a specific column.</p>
 <p>The code for this function can be seen here:</p>
-<div id="fdc97504" class="cell" data-execution_count="3">
+<div id="e1740567" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_highest(dataframe: pd,column: <span class="bu">str</span>):</span>
@@ -178,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <p>This function was called and we can see general information about the pumpkin below.</p>
-<div id="7b28cbb1" class="cell" data-execution_count="4">
+<div id="4cb13dd2" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>heaviest_pumpkin <span class="op">=</span> find_highest(pumpkins,<span class="st">'weight_lbs'</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The heaviest pumpkin was a </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">'variety'</span>]<span class="sc">}</span><span class="ss"> from </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">'city'</span>]<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">'state_prov'</span>]<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">'country'</span>]<span class="sc">}</span><span class="ss">.</span><span class="ch">\n</span><span class="ss">It weighed </span><span class="sc">{</span><span class="bu">round</span>(heaviest_pumpkin[<span class="st">'weight_lbs'</span>],<span class="dv">2</span>)<span class="sc">}</span><span class="ss">lbs and was grown in the year </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">'id'</span>]<span class="sc">.</span>removesuffix(<span class="st">'-P'</span>)<span class="sc">}</span><span class="ss">."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -192,7 +192,7 @@ It weighed 2727.22lbs and was grown in the year 2021.</code></pre>
 <section id="converting-pounds-to-kilograms" class="level3">
 <h3 class="anchored" data-anchor-id="converting-pounds-to-kilograms">Converting pounds to kilograms</h3>
 <p>The function <code>lbs_to_kg</code> was created to convert a value in lbs to kg, allowing it to be applied on mass in the next part.</p>
-<div id="612b6511" class="cell" data-execution_count="5">
+<div id="ec872a34" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lbs_to_kg(value: <span class="bu">float</span><span class="op">|</span><span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Function to convert a value in lbs to kg</span></span>
@@ -209,9 +209,9 @@ It weighed 2727.22lbs and was grown in the year 2021.</code></pre>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Please enter a valid value"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can test this works using known values of lbs and kgs. For example, 2.20462 lbs is equal to 1kg and running the function should return <code>1.0</code>.</p>
-<div id="f7ece02a" class="cell" data-execution_count="6">
+<div id="f4b9f2f2" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>lbs_to_kg(<span class="fl">2.20462</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="1054">
+<div class="cell-output cell-output-display" data-execution_count="1076">
 <pre><code>1.0</code></pre>
 </div>
 </div>
@@ -220,11 +220,11 @@ It weighed 2727.22lbs and was grown in the year 2021.</code></pre>
 <h3 class="anchored" data-anchor-id="creating-a-new-column">Creating a new column</h3>
 <p>Now that this function is verified to work it can be used to create new column of weight in kilograms.</p>
 <p>The following line of code was ran that created a new column and called the previously created function</p>
-<div id="ecca4aa8" class="cell" data-execution_count="7">
+<div id="14754101" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pumpkins[<span class="ss">f"weight_in_kg"</span>] <span class="op">=</span> [(lbs_to_kg(i)) <span class="cf">for</span> i <span class="kw">in</span> pumpkins[<span class="st">'weight_lbs'</span>]] <span class="co">#Creates new column using values by calling conversion function in list</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now we can take a look at the new column in the dataset:</p>
-<div id="f02d9098" class="cell" data-execution_count="8">
+<div id="d7d68d77" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pumpkins.head(<span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       id place  weight_lbs grower_name     city  state_prov        country  \
@@ -238,7 +238,7 @@ It weighed 2727.22lbs and was grown in the year 2021.</code></pre>
 </div>
 </div>
 <p>We can re-run the code from earlier on the new column to find the value in kg for the heaviest pumpkin</p>
-<div id="7526e793" class="cell" data-execution_count="9">
+<div id="9b1e87b7" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>heaviest_pumpkin <span class="op">=</span> find_highest(pumpkins,<span class="st">'weight_in_kg'</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The heaviest pumpkin was a </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">'variety'</span>]<span class="sc">}</span><span class="ss"> from </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">'city'</span>]<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">'state_prov'</span>]<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">'country'</span>]<span class="sc">}</span><span class="ss">.</span><span class="ch">\n</span><span class="ss">It weighed </span><span class="sc">{</span><span class="bu">round</span>(heaviest_pumpkin[<span class="st">'weight_in_kg'</span>],<span class="dv">2</span>)<span class="sc">}</span><span class="ss">kg and was grown in the year </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">'id'</span>]<span class="sc">.</span>removesuffix(<span class="st">'-P'</span>)<span class="sc">}</span><span class="ss">."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -275,7 +275,7 @@ It weighed 1237.05kg and was grown in the year 2021.</code></pre>
 </tbody>
 </table>
 <p>This column was created using the following code.</p>
-<div id="294233b7" class="cell" data-execution_count="10">
+<div id="dc683268" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>classes <span class="op">=</span> []</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> pumpkins[<span class="st">'weight_in_kg'</span>]:</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">&lt;</span><span class="dv">250</span>:</span>
@@ -287,7 +287,7 @@ It weighed 1237.05kg and was grown in the year 2021.</code></pre>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>pumpkins[<span class="st">"weight_class"</span>] <span class="op">=</span> classes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can see the <code>weight_class</code> values for the first three rows below</p>
-<div id="988254d8" class="cell" data-execution_count="11">
+<div id="f6be4fd5" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pumpkins[[<span class="st">'weight_in_kg'</span>,<span class="st">'weight_class'</span>]].head(<span class="dv">3</span>))   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   weight_in_kg weight_class

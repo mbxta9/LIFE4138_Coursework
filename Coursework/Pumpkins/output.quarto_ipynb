@@ -2,7 +2,7 @@
  "cells": [
   {
    "cell_type": "raw",
-   "id": "b358e243",
+   "id": "0646284c",
    "metadata": {},
    "source": [
     "---\n",
@@ -19,7 +19,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "0c4543f3",
+   "id": "cbf87697",
    "metadata": {},
    "source": [
     "This document contains all the results from and code used to complete the 'Pumpkins' portion of the LIFE4138 Coursework."
@@ -27,7 +27,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "c9f6eeef",
+   "id": "da4dc23b",
    "metadata": {},
    "source": [
     "---\n",
@@ -38,7 +38,7 @@
   {
    "cell_type": "code",
    "execution_count": 1,
-   "id": "ef63501a",
+   "id": "91406837",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -66,7 +66,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "ea6dcbb3",
+   "id": "52d4cb5d",
    "metadata": {},
    "source": [
     "This could then be called using the filepath of the .csv file. It is assigned here to the variable `pumpkins` for ease of use later."
@@ -75,7 +75,7 @@
   {
    "cell_type": "code",
    "execution_count": 2,
-   "id": "2e20975f",
+   "id": "e4b6af02",
    "metadata": {},
    "outputs": [
     {
@@ -93,7 +93,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "c0d24088",
+   "id": "665bd690",
    "metadata": {},
    "source": [
     "## Task 2 - Identifying the heaviest pumpkin ⚖️\n",
@@ -107,7 +107,7 @@
   {
    "cell_type": "code",
    "execution_count": 3,
-   "id": "fdc97504",
+   "id": "e1740567",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -134,7 +134,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "8ffa226f",
+   "id": "0f5dc491",
    "metadata": {},
    "source": [
     "This function was called and we can see general information about the pumpkin below."
@@ -143,7 +143,7 @@
   {
    "cell_type": "code",
    "execution_count": 4,
-   "id": "7b28cbb1",
+   "id": "4cb13dd2",
    "metadata": {},
    "outputs": [
     {
@@ -163,7 +163,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "be63a4aa",
+   "id": "cb08ad13",
    "metadata": {},
    "source": [
     "## Task 3 - Conversion and Creation 📏\n",
@@ -174,7 +174,7 @@
   {
    "cell_type": "code",
    "execution_count": 5,
-   "id": "612b6511",
+   "id": "ec872a34",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -197,7 +197,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "53691dc4",
+   "id": "f385a118",
    "metadata": {},
    "source": [
     "We can test this works using known values of lbs and kgs. For example, 2.20462 lbs is equal to 1kg and running the function should return `1.0`."
@@ -206,7 +206,7 @@
   {
    "cell_type": "code",
    "execution_count": 6,
-   "id": "f7ece02a",
+   "id": "f4b9f2f2",
    "metadata": {},
    "outputs": [
     {
@@ -215,7 +215,7 @@
        "1.0"
       ]
      },
-     "execution_count": 1054,
+     "execution_count": 1076,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -227,7 +227,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "c40d95a2",
+   "id": "3659022a",
    "metadata": {},
    "source": [
     "### Creating a new column\n",
@@ -239,7 +239,7 @@
   {
    "cell_type": "code",
    "execution_count": 7,
-   "id": "ecca4aa8",
+   "id": "14754101",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -249,7 +249,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "51c1482f",
+   "id": "ea31cc6e",
    "metadata": {},
    "source": [
     "Now we can take a look at the new column in the dataset:"
@@ -258,7 +258,7 @@
   {
    "cell_type": "code",
    "execution_count": 8,
-   "id": "f02d9098",
+   "id": "d7d68d77",
    "metadata": {},
    "outputs": [
     {
@@ -283,7 +283,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "ba155400",
+   "id": "9513e4ae",
    "metadata": {},
    "source": [
     "We can re-run the code from earlier on the new column to find the value in kg for the heaviest pumpkin"
@@ -292,7 +292,7 @@
   {
    "cell_type": "code",
    "execution_count": 9,
-   "id": "7526e793",
+   "id": "9b1e87b7",
    "metadata": {},
    "outputs": [
     {
@@ -312,7 +312,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "851a9d51",
+   "id": "7386f3c4",
    "metadata": {},
    "source": [
     "## Task 4 - Weight class 🏋🏼‍♂️\n",
@@ -333,7 +333,7 @@
   {
    "cell_type": "code",
    "execution_count": 10,
-   "id": "294233b7",
+   "id": "dc683268",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -351,7 +351,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "02eb24ef",
+   "id": "3127b4c4",
    "metadata": {},
    "source": [
     "We can see the `weight_class` values for the first three rows below"
@@ -360,7 +360,7 @@
   {
    "cell_type": "code",
    "execution_count": 11,
-   "id": "988254d8",
+   "id": "f6be4fd5",
    "metadata": {},
    "outputs": [
     {
