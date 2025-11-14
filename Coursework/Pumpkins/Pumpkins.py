@@ -80,8 +80,19 @@ def main():
 
     #Create a column of weight in kg
     pumpkins[f"weight_in_kg"] = [(lbs_to_kg(i)) for i in pumpkins['weight_lbs']] #Creates new column using values by calling conversion function in list
-    print(pumpkins)
 
+
+    #Create a weight class column
+    classes = []
+    for i in pumpkins['weight_in_kg']:
+        if i<250:
+            classes.append('light')
+        elif i<500:
+            classes.append('medium')
+        else:
+            classes.append('heavy')
+    pumpkins["weight_class"] = classes
+    print(pumpkins)           
 
 if __name__ == '__main__': #Ensures script runs
     main()

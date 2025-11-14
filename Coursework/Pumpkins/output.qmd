@@ -5,7 +5,8 @@ format:
         toc: true
         toc-title: "Contents"
         embed-resources: true
-        theme: cosmo
+        page-layout: full
+        theme: simplex
 ---
 This document contains all the results from and code used to complete the 'Pumpkins' portion of the LIFE4138 Coursework.
 ---
@@ -97,11 +98,10 @@ We can test this works using known values of lbs and kgs. For example, 2.20462 l
 #| echo: true
 lbs_to_kg(2.20462)
 ```
-***
 ### Creating a new column
 Now that this function is verified to work it can be used to create new column of weight in kilograms.
 
-The following line of code was ran that 
+The following line of code was ran that created a new column and called the previously created function
 ```{python}
 #| echo: true
 pumpkins[f"weight_in_kg"] = [(lbs_to_kg(i)) for i in pumpkins['weight_lbs']] #Creates new column using values by calling conversion function in list
@@ -116,4 +116,34 @@ We can re-run the code from earlier on the new column to find the value in kg fo
 #|echo: true
 heaviest_pumpkin = find_highest(pumpkins,'weight_in_kg')
 print(f"The heaviest pumpkin was a {heaviest_pumpkin['variety']} from {heaviest_pumpkin['city']}, {heaviest_pumpkin['state_prov']}, {heaviest_pumpkin['country']}.\nIt weighed {round(heaviest_pumpkin['weight_in_kg'],2)}kg and was grown in the year {heaviest_pumpkin['id'].removesuffix('-P')}.")
+```
+## Task 4 - Weight class 🏋🏼‍♂️
+This task required creating another new column, with three classes of weight: light, medium and heavy.
+
+The thresholds decided for these were as follows:
+
+| Threshold | Weight (kg) |
+|-----------|-------------|
+| light     | <250        |
+| medium    | 250-500     |
+| heavy     | >500        |
+
+
+This column was created using the following code.
+```{python}
+#| echo: true
+classes = []
+for i in pumpkins['weight_in_kg']:
+    if i<250:
+        classes.append('light')
+    elif i<500:
+        classes.append('medium')
+    else:
+        classes.append('heavy')
+pumpkins["weight_class"] = classes
+```
+We can see the `weight_class` values for the first three rows below
+```{python}
+#| echo: true
+print(pumpkins[['weight_in_kg','weight_class']].head(3))   
 ```
