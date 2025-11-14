@@ -1,9 +1,19 @@
 #!/usr/bin/env python3
 
+'''
+==================================================================================================================================================
+
+Script: Pumpkins.py
+Author: Tahir Ansari
+Created: 14-11-2025
+
+Description: A python script to run analysis on the pumpkins dataset available in the github repo: https://github.com/mbxta9/LIFE4138_Coursework
+
+==================================================================================================================================================
+'''
+
 #Importing requirements
 import pandas as pd
-
-#Importing student dataset
 
 def import_dataset(path :str): 
     '''
@@ -17,6 +27,7 @@ def import_dataset(path :str):
     '''
     try:
         dataset = pd.read_csv(path)
+        print('Dataset imported successfully!')
         return dataset
     except FileNotFoundError:
         print("File not found, please enter a valid path")
@@ -40,25 +51,20 @@ def find_highest(dataframe: pd,column: str):
     except AttributeError:
         print('Please enter a valid argument type')
 
-def convert_weight_column_to_kg(dataframe: pd,column='weight'):
+def lbs_to_kg(value: float|int) -> float:
     '''
-    Function to create a new column of weight values in kg in a dataframe
+    Function to convert a value in lbs to kg
     Takes a column input of values in lbs
 
     Arguments:
-    dataframe: the dataframe to add column to
-    column: the column of lbs values.
+    value: a value to be converted
 
-    Returns: original dataframe with new column 'weight_in_kg'
+    Returns: new value as a float
     '''
     try:
-        dataframe[f"weight_in_kg"] = [(i/2.20462) for i in dataframe[column]] #Create new column based on list of weight using lbs to kg equation
-        return dataframe #return dataframe if needed to assign to variable
+        return ((float(value))/2.20462) #return converted value
     except KeyError:
         print("Please use a valid column name")
-        
-
-
 
 def main():
     '''
@@ -73,7 +79,9 @@ def main():
     print(f"The heaviest pumpkin was a {heaviest_pumpkin['variety']} from {heaviest_pumpkin['city']}, {heaviest_pumpkin['state_prov']}, {heaviest_pumpkin['country']}. It weighed {round(heaviest_pumpkin['weight_lbs'],2)}lbs and was grown in the year {heaviest_pumpkin['id']}")
 
     #Create a column of weight in kg
-    convert_weight_column_to_kg(pumpkins, 'weight_lbs')
+    pumpkins[f"weight_in_kg"] = [(i/2.20462) for i in pumpkins['weight_lbs']] #Creates new column using values by calling conversion function in list
     print(pumpkins)
+
+
 if __name__ == '__main__': #Ensures script runs
     main()

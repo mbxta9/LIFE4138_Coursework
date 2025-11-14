@@ -1,0 +1,70 @@
+---
+title: "The Pumpkins Dataset Output 🎃"
+format:
+    html:
+        toc: true
+---
+This document contains all the results from and code used to complete the 'Pumpkins' portion of the LIFE4138 Coursework.
+---
+## Task 1 - Read in the dataset 🔍
+The first task involved reading in the `pumpkins.csv` file. To do this the following `import_dataset` function was made.
+```{python}
+#| echo: true
+#| code-fold: true
+import pandas as pd
+
+def import_dataset(path :str): 
+    '''
+    Function to import a csv dataset from its filepath or url
+    Checks to see if 
+    Arguments:
+    path: Takes a string of a url or filepath of a csv file to import.
+
+    Returns:
+    dataset - returns a pandas dataframe
+    '''
+    try:
+        dataset = pd.read_csv(path)
+        print('Dataset imported successfully!')
+        return dataset
+    except FileNotFoundError:
+        print("File not found, please enter a valid path")
+```
+This could then be called using the filepath of the .csv file. It is assigned here to the variable `pumpkins` for ease of use later.
+```{python}
+#| echo: true
+pumpkins = import_dataset('pumpkins_datasets/pumpkins_02.csv')
+```
+## Task 2 - Identifying the heaviest pumpkin ⚖️
+Next was to identify the heaviest pumpkin and data about it including: weight, variety, where it was from and when it was grown.
+
+To do this the `find_highest` function was created to get the row with a highest value in a specific column.
+
+The code for this function can be seen here:
+```{python}
+#| code-fold: true
+#| echo: true
+def find_highest(dataframe: pd,column: str):
+    '''
+    Function to get the row information of the highest value in a column
+
+    Arguments:
+    dataframe: the dataframe to search through
+    column: the column to search through for the highest value
+    '''
+    try:
+        highest_row = dataframe.loc[dataframe[column].idxmax()]
+        return highest_row
+    except KeyError:
+        print("Please use a valid column name")
+    except NameError:
+        print('Please provide a valid variable')
+    except AttributeError:
+        print('Please enter a valid argument type')
+```
+This function was called and we can see general information about the pumpkin below.
+```{python}
+#| echo: true
+heaviest_pumpkin = find_highest(pumpkins,'weight_lbs')
+print(f"The heaviest pumpkin was a {heaviest_pumpkin['variety']} from {heaviest_pumpkin['city']}, {heaviest_pumpkin['state_prov']}, {heaviest_pumpkin['country']}.\nIt weighed {round(heaviest_pumpkin['weight_lbs'],2)}lbs and was grown in the year {heaviest_pumpkin['id']}")
+```
