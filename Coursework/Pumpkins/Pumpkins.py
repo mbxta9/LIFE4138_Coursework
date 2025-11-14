@@ -63,8 +63,8 @@ def lbs_to_kg(value: float|int) -> float:
     '''
     try:
         return ((float(value))/2.20462) #return converted value
-    except KeyError:
-        print("Please use a valid column name")
+    except:
+        print("Please enter a valid value")
 
 def main():
     '''
@@ -79,7 +79,7 @@ def main():
     print(f"The heaviest pumpkin was a {heaviest_pumpkin['variety']} from {heaviest_pumpkin['city']}, {heaviest_pumpkin['state_prov']}, {heaviest_pumpkin['country']}. It weighed {round(heaviest_pumpkin['weight_lbs'],2)}lbs and was grown in the year {heaviest_pumpkin['id']}")
 
     #Create a column of weight in kg
-    pumpkins[f"weight_in_kg"] = [(i/2.20462) for i in pumpkins['weight_lbs']] #Creates new column using values by calling conversion function in list
+    pumpkins[f"weight_in_kg"] = [(lbs_to_kg(i)) for i in pumpkins['weight_lbs']] #Creates new column using values by calling conversion function in list
     print(pumpkins)
 
 

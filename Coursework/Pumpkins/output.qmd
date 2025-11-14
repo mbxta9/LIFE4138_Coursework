@@ -3,6 +3,9 @@ title: "The Pumpkins Dataset Output 🎃"
 format:
     html:
         toc: true
+        toc-title: "Contents"
+        embed-resources: true
+        theme: cosmo
 ---
 This document contains all the results from and code used to complete the 'Pumpkins' portion of the LIFE4138 Coursework.
 ---
@@ -66,5 +69,51 @@ This function was called and we can see general information about the pumpkin be
 ```{python}
 #| echo: true
 heaviest_pumpkin = find_highest(pumpkins,'weight_lbs')
-print(f"The heaviest pumpkin was a {heaviest_pumpkin['variety']} from {heaviest_pumpkin['city']}, {heaviest_pumpkin['state_prov']}, {heaviest_pumpkin['country']}.\nIt weighed {round(heaviest_pumpkin['weight_lbs'],2)}lbs and was grown in the year {heaviest_pumpkin['id']}")
+print(f"The heaviest pumpkin was a {heaviest_pumpkin['variety']} from {heaviest_pumpkin['city']}, {heaviest_pumpkin['state_prov']}, {heaviest_pumpkin['country']}.\nIt weighed {round(heaviest_pumpkin['weight_lbs'],2)}lbs and was grown in the year {heaviest_pumpkin['id'].removesuffix('-P')}.")
+```
+## Task 3 - Conversion and Creation 📏
+### Converting pounds to kilograms
+The function `lbs_to_kg` was created to convert a value in lbs to kg, allowing it to be applied on mass in the next part.
+```{python}
+#| echo: true
+def lbs_to_kg(value: float|int) -> float:
+    '''
+    Function to convert a value in lbs to kg
+    Takes a column input of values in lbs
+
+    Arguments:
+    value: a value to be converted
+
+    Returns: new value as a float
+    '''
+    try:
+        return ((float(value))/2.20462) #return converted value
+    except:
+        print("Please enter a valid value")
+
+```
+We can test this works using known values of lbs and kgs. For example, 2.20462 lbs is equal to 1kg and running the function should return `1.0`.
+```{python}
+#| echo: true
+lbs_to_kg(2.20462)
+```
+***
+### Creating a new column
+Now that this function is verified to work it can be used to create new column of weight in kilograms.
+
+The following line of code was ran that 
+```{python}
+#| echo: true
+pumpkins[f"weight_in_kg"] = [(lbs_to_kg(i)) for i in pumpkins['weight_lbs']] #Creates new column using values by calling conversion function in list
+```
+Now we can take a look at the new column in the dataset:
+```{python}
+#| echo: true
+print(pumpkins.head(1))
+```
+We can re-run the code from earlier on the new column to find the value in kg for the heaviest pumpkin
+```{python}
+#|echo: true
+heaviest_pumpkin = find_highest(pumpkins,'weight_in_kg')
+print(f"The heaviest pumpkin was a {heaviest_pumpkin['variety']} from {heaviest_pumpkin['city']}, {heaviest_pumpkin['state_prov']}, {heaviest_pumpkin['country']}.\nIt weighed {round(heaviest_pumpkin['weight_in_kg'],2)}kg and was grown in the year {heaviest_pumpkin['id'].removesuffix('-P')}.")
 ```
