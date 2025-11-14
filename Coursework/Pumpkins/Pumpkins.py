@@ -40,13 +40,31 @@ def find_highest(dataframe: pd,column: str):
     except AttributeError:
         print('Please enter a valid argument type')
 
+def convert_weight_column_to_kg(dataframe: pd,column='weight'):
+    '''
+    Function to create a new column of weight values in kg in a dataframe
+    Takes a column input of values in lbs
+
+    Arguments:
+    dataframe: the dataframe to add column to
+    column: the column of lbs values.
+
+    Returns: original dataframe with new column 'weight_in_kg'
+    '''
+    try:
+        dataframe[f"weight_in_kg"] = [(i/2.20462) for i in dataframe[column]] #Create new column based on list of weight using lbs to kg equation
+        return dataframe #return dataframe if needed to assign to variable
+    except KeyError:
+        print("Please use a valid column name")
+        
 
 
 
 def main():
     '''
-    Main script to run analysis
+    Main script to run analysis on pumpkins dataset
     '''
+
     #Importing dataset
     pumpkins = import_dataset('Coursework/Pumpkins/pumpkins_datasets/pumpkins_02.csv')
 
@@ -54,5 +72,8 @@ def main():
     heaviest_pumpkin = find_highest(pumpkins,'weight_lbs')
     print(f"The heaviest pumpkin was a {heaviest_pumpkin['variety']} from {heaviest_pumpkin['city']}, {heaviest_pumpkin['state_prov']}, {heaviest_pumpkin['country']}. It weighed {round(heaviest_pumpkin['weight_lbs'],2)}lbs and was grown in the year {heaviest_pumpkin['id']}")
 
+    #Create a column of weight in kg
+    convert_weight_column_to_kg(pumpkins, 'weight_lbs')
+    print(pumpkins)
 if __name__ == '__main__': #Ensures script runs
     main()
