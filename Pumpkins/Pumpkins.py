@@ -113,7 +113,7 @@ def main():
     plot_area_2.set_ylabel('Actual Weight (lbs)'); #Adding y axis label
 
     figure_1.savefig("pumpkins_weight_relationship.png") #Saves the first figure to disk.
-    plt.show() #Shows the graphs when ran from terminal
+    plt.show() #Shows the figures when ran from terminal
 
 if __name__ == '__main__': #Ensures script runs
     main()
