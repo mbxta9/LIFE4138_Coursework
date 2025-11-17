@@ -114,5 +114,11 @@ def main():
     figure_1.savefig("pumpkins_weight_relationship.png") #Saves the first figure to disk.
     plt.show() #Shows the figures when ran from terminal
 
+    #Subsetting 3 countries and saving as csv
+    filtered_pumpkins = pumpkins[pumpkins['country'.isin(['United Kingdom', 'Japan', 'Italy'])]]
+    print(filtered_pumpkins.head())
+    filtered_pumpkins.to_csv('pumpkins_filtered.csv')
+
+
 if __name__ == '__main__': #Ensures script runs
     main()
