@@ -55,7 +55,7 @@ To do this the `find_highest` function was created to get the row with a highest
 The code for this function can be seen here:
 ```{python}
 #| echo: true
-def find_highest(dataframe: pd,column: str):
+def find_highest(dataframe: pd.DataFrame,column: str):
     '''
     Function to get the row information of the highest value in a column
 
@@ -63,15 +63,19 @@ def find_highest(dataframe: pd,column: str):
     dataframe: the dataframe to search through
     column: the column to search through for the highest value
     '''
+    if (isinstance(dataframe, pd.DataFrame)) == False:
+        print(f"First argument must be a pandas dataframe")
+        return None
     try:
         highest_row = dataframe.loc[dataframe[column].idxmax()]
         return highest_row
     except KeyError:
-        print("Please use a valid column name")
+        print(f"{column} does not exist in the dataframe")
     except NameError:
         print('Please provide a valid variable')
     except AttributeError:
         print('Please enter a valid argument type')
+    return None
 ```
 This function was called and we can see general information about the pumpkin below.
 ```{python}
@@ -96,8 +100,12 @@ def lbs_to_kg(value: float|int) -> float:
     '''
     try:
         return ((float(value))/2.20462) #return converted value
-    except:
-        print("Please enter a valid value")
+    except ValueError: #Error if not a number
+        print("Please enter a valid number")
+        return None
+    except TypeError: #Error if no value provided
+        print("Please pass a number into the function")
+        return None
 
 ```
 We can test this works using known values of lbs and kgs. For example, 2.20462 lbs is equal to 1kg and running the function should return `1.0`.
@@ -238,3 +246,5 @@ The filtered data can be easily saved to disk using:
 #| echo: true
 filtered_pumpkins.to_csv('pumpkins_filtered.csv')
 ```
+
+## Summarising the filtered data 🧮

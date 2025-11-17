@@ -42,7 +42,7 @@ def import_dataset(path :str):
     return None
 
 
-def find_highest(dataframe: pd,column: str):
+def find_highest(dataframe: pd.DataFrame,column: str):
     '''
     Function to get the row information of the highest value in a column
 
@@ -50,15 +50,19 @@ def find_highest(dataframe: pd,column: str):
     dataframe: the dataframe to search through
     column: the column to search through for the highest value
     '''
+    if (isinstance(dataframe, pd.DataFrame)) == False:
+        print(f"First argument must be a pandas dataframe")
+        return None
     try:
         highest_row = dataframe.loc[dataframe[column].idxmax()]
         return highest_row
     except KeyError:
-        print("Please use a valid column name")
+        print(f"{column} does not exist in the dataframe")
     except NameError:
         print('Please provide a valid variable')
     except AttributeError:
         print('Please enter a valid argument type')
+    return None
 
 def lbs_to_kg(value: float|int) -> float:
     '''
@@ -72,8 +76,13 @@ def lbs_to_kg(value: float|int) -> float:
     '''
     try:
         return ((float(value))/2.20462) #return converted value
-    except:
-        print("Please enter a valid value")
+    except ValueError: #Error if not a number
+        print("Please enter a valid number")
+        return None
+    except TypeError: #Error if no value provided
+        print("Please pass a number into the function")
+        return None
+    
 
 def main():
     '''
@@ -125,8 +134,9 @@ def main():
     #Subsetting 3 countries and saving as csv
     filter_vars = [country in ['United Kingdom', 'Japan', 'Italy'] for country in pumpkins['country']] #Checks if country in list, creates list of true and false values
     filtered_pumpkins = pumpkins[filter_vars] #Creates list by adding the row if filter_vars returns True
-    filtered_pumpkins.to_csv('pumpkins_filtered.csv')
+    filtered_pumpkins.to_csv('pumpkins_filtered.csv') #Saves the filtered data to disk
 
-
+    #Summarising filtered data
+    
 if __name__ == '__main__': #Ensures script runs
     main()
