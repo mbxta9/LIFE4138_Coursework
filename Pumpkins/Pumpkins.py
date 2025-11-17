@@ -26,12 +26,20 @@ def import_dataset(path :str):
     Returns:
     dataset - returns a pandas dataframe
     '''
+    if path.lower().endswith('.csv') == False: #Error if not .csv file
+        print("File is not a csv file")
+        return None
     try:
-        dataset = pd.read_csv(path)
+        dataset = pd.read_csv(path) #Imports the dataset
         print('Dataset imported successfully!')
         return dataset
-    except FileNotFoundError:
+    except FileNotFoundError: #Error if file doesnt exist
         print("File not found, please enter a valid path")
+    except pd.errors.EmptyDataError: #Error if file empty
+        print("The provided file is empty.")
+    except pd.errors.ParserError: #Error if not in csv format inside
+        print("Please check if this in .csv format")
+    return None
 
 
 def find_highest(dataframe: pd,column: str):
@@ -117,7 +125,6 @@ def main():
     #Subsetting 3 countries and saving as csv
     filter_vars = [country in ['United Kingdom', 'Japan', 'Italy'] for country in pumpkins['country']] #Checks if country in list, creates list of true and false values
     filtered_pumpkins = pumpkins[filter_vars] #Creates list by adding the row if filter_vars returns True
-    print(filtered_pumpkins['country'])
     filtered_pumpkins.to_csv('pumpkins_filtered.csv')
 
 

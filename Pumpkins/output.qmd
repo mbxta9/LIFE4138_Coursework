@@ -27,12 +27,20 @@ def import_dataset(path :str):
     Returns:
     dataset - returns a pandas dataframe
     '''
+    if path.lower().endswith('.csv') == False: #Error if not .csv file
+        print("File is not a csv file")
+        return None
     try:
-        dataset = pd.read_csv(path)
+        dataset = pd.read_csv(path) #Imports the dataset
         print('Dataset imported successfully!')
         return dataset
-    except FileNotFoundError:
+    except FileNotFoundError: #Error if file doesnt exist
         print("File not found, please enter a valid path")
+    except pd.errors.EmptyDataError: #Error if file empty
+        print("The provided file is empty.")
+    except pd.errors.ParserError: #Error if not in csv format inside
+        print("Please check if this in .csv format")
+    return None
 ```
 This could then be called using the filepath of the .csv file. It is assigned here to the variable `pumpkins` for ease of use later.
 ```{python}
@@ -214,4 +222,19 @@ As the estimated weight increases beyond ~800kg, the spread of the points show t
 
 The three countries chosen for this exercise were the United Kingdom, Japan and Italy.
 
-Firstly, a subset of the dataset was created by checking if the 
+### Filtering the data
+
+Firstly, a subset of the dataset was created by checking if the country value was in a predefined list.
+```{python}
+#| echo: true
+filter_vars = [country in ['United Kingdom', 'Japan', 'Italy'] for country in pumpkins['country']] #Checks if country in list, creates list of true and false values
+
+filtered_pumpkins = pumpkins[filter_vars] #Creates list by adding the row if filter_vars returns True
+```
+
+### Saving the filtered data
+The filtered data can be easily saved to disk using:
+```{python}
+#| echo: true
+filtered_pumpkins.to_csv('pumpkins_filtered.csv')
+```
