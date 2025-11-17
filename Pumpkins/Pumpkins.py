@@ -57,11 +57,11 @@ def find_highest(dataframe: pd.DataFrame,column: str):
     try:
         highest_row = dataframe.loc[dataframe[column].idxmax()]
         return highest_row
-    except KeyError:
+    except KeyError: #Error if column doesn't exist
         print(f"{column} does not exist in the dataframe")
-    except NameError:
+    except NameError: #Error if not dataframe
         print('Please provide a valid variable')
-    except AttributeError:
+    except AttributeError: #Error if not right variable type
         print('Please enter a valid argument type')
     return None
 
@@ -150,16 +150,30 @@ def main():
     plot_area_3 = figure_3.add_subplot() #Creates new plotting area in figure
     filtered_pumpkins.boxplot(column = 'weight_in_kg', by = 'country', ax = plot_area_3)
     plt.suptitle("") #Removes pandas title so I can add my own
-    plot_area_3.set_title("Boxplot of Weight distribution by country")
+    plot_area_3.set_title("Boxplot of Weight distribution by Country")
     plot_area_3.set_xlabel('Country')
     plot_area_3.set_ylabel('Pumpkin Weight (kg)')
-    figure_3.savefig("filtered_boxplot.png", dpi = 300) #Saves the third figure (boxplot) to disk.
-    plt.show()
+    figure_3.savefig("filtered_boxplot.png", bbox_inches='tight', dpi = 300) #Saves the third figure (boxplot) to disk.
 
     #Facetplot previous graph
-    figure_4 = plt.figure()
-    plot_area_4 = figure_4.add_subplot()
+    figure_4 = plt.figure(figsize = (10,6), constrained_layout = True) #Creates new figure to draw on with bigger size and tight spacing
+    plot_area_4 = figure_4.add_subplot() #Creates subplot to plot on
+    facetplot = sns.boxplot( #have to use catplot as boxplot has no facetting
+        data = filtered_pumpkins, #Chooses filtered dataset
+        x = 'country', #Chooses axis for data
+        y = 'weight_in_kg', #Chooses axis for data
+        hue = 'variety', #Creates coloured subplots based on variety
+        ax = plot_area_4, #Masks to created matplot figure
+        palette = 'colorblind' #Changes palette to be *colourblind friendly*
+    )
+    plot_area_4.set_xlabel('Country') #Add axis labels and title
+    plot_area_4.set_ylabel('Pumpkin Weight (kg)')
+    plot_area_4.set_title('Boxplot of Pumpkin Weight by Variety and Country')
+    plot_area_4.grid(True, linestyle = '--',alpha = 0.75, axis = 'y') #Adds gridlines only on y axis
+    plot_area_4.legend(bbox_to_anchor=(1,1)) #Moves legend to the side
+    figure_4.savefig("filtered_facet_boxplot.png", bbox_inches='tight', dpi = 300) #Saves figure 4 to disk.
 
+    plt.show() #Displays all the created figures.
 
 if __name__ == '__main__': #Ensures script runs
     main()

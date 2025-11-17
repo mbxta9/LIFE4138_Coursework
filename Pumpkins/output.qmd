@@ -10,7 +10,7 @@ format:
 ---
 This document contains all the results from and code used to complete the 'Pumpkins' portion of the LIFE4138 Coursework.
 ---
-## Task 1 - Read in the dataset 🔍
+## Task 1 - Read in the dataset 🔍 {#Task-1}
 The first task involved reading in the `pumpkins.csv` file. To do this the following `import_dataset` function was made.
 ```{python}
 #| echo: true
@@ -47,7 +47,7 @@ This could then be called using the filepath of the .csv file. It is assigned he
 #| echo: true
 pumpkins = import_dataset('pumpkins_datasets/pumpkins_02.csv')
 ```
-## Task 2 - Identifying the heaviest pumpkin ⚖️
+## Task 2 - Identifying the heaviest pumpkin ⚖️ {#Task-2}
 Next was to identify the heaviest pumpkin and data about it including: weight, variety, where it was from and when it was grown.
 
 To do this the `find_highest` function was created to get the row with a highest value in a specific column.
@@ -83,7 +83,7 @@ This function was called and we can see general information about the pumpkin be
 heaviest_pumpkin = find_highest(pumpkins,'weight_lbs')
 print(f"The heaviest pumpkin was a {heaviest_pumpkin['variety']} from {heaviest_pumpkin['city']}, {heaviest_pumpkin['state_prov']}, {heaviest_pumpkin['country']}.\nIt weighed {round(heaviest_pumpkin['weight_lbs'],2)}lbs and was grown in the year {heaviest_pumpkin['id'].removesuffix('-P')}.")
 ```
-## Task 3 - Conversion and Creation 📏
+## Task 3 - Conversion and Creation 📏 {#Task-3}
 ### Converting pounds to kilograms
 The function `lbs_to_kg` was created to convert a value in lbs to kg, allowing it to be applied on mass in the next part.
 ```{python}
@@ -132,7 +132,7 @@ We can re-run the code from earlier on the new column to find the value in kg fo
 heaviest_pumpkin = find_highest(pumpkins,'weight_in_kg')
 print(f"The heaviest pumpkin was a {heaviest_pumpkin['variety']} from {heaviest_pumpkin['city']}, {heaviest_pumpkin['state_prov']}, {heaviest_pumpkin['country']}.\nIt weighed {round(heaviest_pumpkin['weight_in_kg'],2)}kg and was grown in the year {heaviest_pumpkin['id'].removesuffix('-P')}.")
 ```
-## Task 4 - Weight class 🏋🏼‍♂️
+## Task 4 - Weight class 🏋🏼‍♂️ {#Task-4}
 This task required creating another new column, with three classes of weight: light, medium and heavy.
 
 The thresholds decided for these were as follows:
@@ -163,11 +163,11 @@ We can see the `weight_class` values for the first three rows below
 print(pumpkins[['weight_in_kg','weight_class']].head(3))   
 ```
 
-## Task 5 - Estimated vs Actual Weight plotting 📈
+## Task 5 - Estimated vs Actual Weight plotting 📈 {#Task-5}
 ### Standardising Units
 Next was to create a plot of the estimated weight of the pumpkins against the actual weights.
 
-This can be done in a number of ways but the important thing to note is that both axis require the same units. One could plot the `est_weight` against the `weight` in lbs using the data already available in the dataset, but to make use of the function created in task 3, the values were plotted in kilograms.
+This can be done in a number of ways but the important thing to note is that both axis require the same units. One could plot the `est_weight` against the `weight` in lbs using the data already available in the dataset, but to make use of the function created in [task 3](#Task-3), the values were plotted in kilograms.
 
 A new column in the dataset was created called `est_weight_kg` using the code below.
 ```{python}
@@ -226,7 +226,7 @@ There are many outliers such as the large cluster at Estimated Weight = 0, this 
 
 As the estimated weight increases beyond ~800kg, the spread of the points show that weight was less reliably estimated.
 
-## Task 6 - Selecting three countries 🇬🇧 🇯🇵 🇮🇹
+## Task 6 - Selecting three countries 🇬🇧 🇯🇵 🇮🇹 {#Task-6}
 
 The three countries chosen for this exercise were the United Kingdom, Japan and Italy.
 
@@ -247,7 +247,7 @@ The filtered data can be easily saved to disk using:
 filtered_pumpkins.to_csv('pumpkins_filtered.csv')
 ```
 
-## Task 7 - Summarising the filtered data 🧮
+## Task 7 - Summarising the filtered data 🧮 {#Task-7}
 Next was to summarise the filtered data, with two key tasks. Finding the mean weight per country and finding the mean weight for each variety per country.
 This exercise was done using the previously calculated kilogram values.
 
@@ -275,7 +275,7 @@ lowest_mean_value = mean_variety_country.min() #Gets lowest mean weight value
 print(f"The lowest mean weight was '{lowest_mean_row[1]}' from {lowest_mean_row[0]}, weighing {round(lowest_mean_value,2)}kg.")
 ```
 
-## Task 8 - Weight Distribution Boxplot 📊
+## Task 8 - Weight Distribution Boxplot 📊  {#Task-8}
 
 ### Creating a boxplot
 ```{python}
@@ -309,5 +309,47 @@ low variability. Japan also has the least number of outliers.
 
 The United Kingdom produces pumpkins weighted in between the other countries based on its median value. It has a similar number of outliers to Italy but at lower weights.
 
-## Task 9 - Facet Plot 📉
+## Task 9 - Facet Plot 📉 {#Task-9}
+
+### Creating the facet plot
 To create a facet plot from the plot in Task 8, the seaborn module was imported and used.
+```{python}
+#| echo: true
+import seaborn as sns
+```
+
+Next a facet plot can be made using seaborn as follows:
+```{python}
+#| echo: true
+#| label: fig-facet_boxplot
+#| fig-cap: A boxplot showing distribution of pumpkin weight by variety and country from the filtered pumpkin competitions dataset.
+figure_4 = plt.figure(figsize = (10,6), constrained_layout = True) #Creates new figure to draw on with bigger size and tight spacing
+plot_area_4 = figure_4.add_subplot() #Creates subplot to plot on
+
+facetplot = sns.boxplot( #have to use catplot as boxplot has no facetting
+    data = filtered_pumpkins, #Chooses filtered dataset
+    x = 'country', #Chooses axis for data
+    y = 'weight_in_kg', #Chooses axis for data
+    hue = 'variety', #Creates coloured subplots based on variety
+    ax = plot_area_4, #Masks to created matplot figure
+    palette = 'colorblind' #Changes palette to be *colourblind friendly*
+)
+
+plot_area_4.set_xlabel('Country') #Add axis labels and title
+plot_area_4.set_ylabel('Pumpkin Weight (kg)')
+plot_area_4.set_title('Boxplot of Pumpkin Weight by Variety and Country')
+plot_area_4.grid(True, linestyle = '--',alpha = 0.75, axis = 'y') #Adds gridlines only on y axis
+plot_area_4.legend(bbox_to_anchor=(1,1)) #Moves legend to the side
+```
+
+### Saving the plot
+This facet boxplot can now be saved by running:
+```{python}
+#| echo: true
+figure_4.savefig("filtered_facet_boxplot.png",bbox_inches='tight', dpi = 300) #Saves the third figure (boxplot) to disk. Increased dpi to improve readability.
+#bbox_inches reduces whitespace making it easier to read
+```
+
+### What does the facet boxplot show?
+@fig-facet_boxplot shows a similar pattern to @fig-weight_boxplot, but with greater breakdown of the varieties contributing to the patterns observed previously.
+It still shows a similar pattern of Japan being, generally, the lowest median weight for pumpkins, followed by the United Kingdom and Italy.
