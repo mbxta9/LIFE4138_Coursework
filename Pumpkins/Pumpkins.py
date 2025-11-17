@@ -15,6 +15,7 @@ Description: A python script to run analysis on the pumpkins dataset available i
 #Importing requirements
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 def import_dataset(path :str): 
     '''
@@ -128,8 +129,8 @@ def main():
     plot_area_2.set_xlabel('Estimated Weight (lbs)') #Adding x axis label
     plot_area_2.set_ylabel('Actual Weight (lbs)'); #Adding y axis label
 
-    figure_1.savefig("pumpkins_weight_relationship.png") #Saves the first figure to disk.
-    plt.show() #Shows the figures when ran from terminal
+    figure_1.savefig("pumpkins_weight_relationship.png", dpi = 300) #Saves the first figure to disk.
+    #plt.show() #Shows the figures when ran from terminal
 
     #Subsetting 3 countries and saving as csv
     filter_vars = [country in ['United Kingdom', 'Japan', 'Italy'] for country in pumpkins['country']] #Checks if country in list, creates list of true and false values
@@ -138,7 +139,27 @@ def main():
 
     #Summarising filtered data
     print(filtered_pumpkins.groupby('country')['weight_in_kg'].mean()) #Groups by country and filters to only weight and calculates mean
-    print(filtered_pumpkins.groupby(['country','variety'])['weight_in_kg'].mean()) #Groups by country and variety to calculate mean
+    mean_variety_country = filtered_pumpkins.groupby(['country','variety'])['weight_in_kg'].mean() #Groups by country and variety to calculate mean
+    print(mean_variety_country) 
+    lowest_mean_row = mean_variety_country.idxmin() #Gets lowest row (country, variety)
+    lowest_mean_value = mean_variety_country.min() #Gets lowest mean weight value
+    print(f"The lowest mean weight in kg was {lowest_mean_row[1]} from {lowest_mean_row[0]}, weighing {round(lowest_mean_value,2)}kg.")
+
+    #Weight distribution boxplot
+    figure_3 = plt.figure() #Creates a new figure
+    plot_area_3 = figure_3.add_subplot() #Creates new plotting area in figure
+    filtered_pumpkins.boxplot(column = 'weight_in_kg', by = 'country', ax = plot_area_3)
+    plt.suptitle("") #Removes pandas title so I can add my own
+    plot_area_3.set_title("Boxplot of Weight distribution by country")
+    plot_area_3.set_xlabel('Country')
+    plot_area_3.set_ylabel('Pumpkin Weight (kg)')
+    figure_3.savefig("filtered_boxplot.png", dpi = 300) #Saves the third figure (boxplot) to disk.
+    plt.show()
+
+    #Facetplot previous graph
+    figure_4 = plt.figure()
+    plot_area_4 = figure_4.add_subplot()
+
 
 if __name__ == '__main__': #Ensures script runs
     main()

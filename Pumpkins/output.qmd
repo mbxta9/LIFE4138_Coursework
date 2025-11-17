@@ -215,10 +215,10 @@ As can be seen above, the two graphs have identical patterns, meaning there were
 Next we can save this graph as a file by running:
 ```{python}
 #| echo: true
-figure_1.savefig("pumpkins_weight_relationship.png") #Saves the first figure to disk.
+figure_1.savefig("pumpkins_weight_relationship.png", dpi = 300) #Saves the first figure to disk. Increased DPI to improve readability.
 ```
 
-### What does Figure 1 show?
+### What does the scatterplot show?
 
 As seen in @fig-estimated_vs_actual there is a strong positive relationship between the estimated and actual weight. 
 
@@ -263,6 +263,51 @@ print(filtered_pumpkins.groupby('country')['weight_in_kg'].mean()) #Groups by co
 ### Finding mean weight per variety per country
 ```{python}
 #| echo: true
-print(filtered_pumpkins.groupby(['country','variety'])['weight_in_kg'].mean()) #Groups by country and 
-#then calculates mean values
+mean_variety_country = filtered_pumpkins.groupby(['country','variety'])['weight_in_kg'].mean()
+print(mean_variety_country) #Groups by country and calculates mean value and then prints
 ```
+
+Next to get the lowest mean weight variety we can do:
+```{python}
+#| echo: true
+lowest_mean_row = mean_variety_country.idxmin() #Gets lowest row (country, variety)
+lowest_mean_value = mean_variety_country.min() #Gets lowest mean weight value
+print(f"The lowest mean weight was '{lowest_mean_row[1]}' from {lowest_mean_row[0]}, weighing {round(lowest_mean_value,2)}kg.")
+```
+
+## Task 8 - Weight Distribution Boxplot 📊
+
+### Creating a boxplot
+```{python}
+#| echo: true
+#| label: fig-weight_boxplot
+#| fig-cap: A boxplot showing the distribution of pumpkin weight of three countries from the filtered pumpkin competitions dataset.
+figure_3 = plt.figure() #Creates a new figure
+plot_area_3 = figure_3.add_subplot() #Creates new plotting area in figure
+filtered_pumpkins.boxplot(column = 'weight_in_kg', by = 'country', ax = plot_area_3)
+plt.suptitle("") #Removes pandas title so I can add my own
+plot_area_3.set_title("Boxplot of Weight distribution by country")
+plot_area_3.set_xlabel('Country')
+plot_area_3.set_ylabel('Pumpkin Weight (kg)');
+```
+
+### Saving the boxplot
+This boxplot can now be saved by running:
+```{python}
+#| echo: true
+figure_3.savefig("filtered_boxplot.png", dpi = 300) #Saves the third figure (boxplot) to disk. Increased dpi to improve readability.
+```
+
+### What does the boxplot show?
+In @fig-weight_boxplot the distribution of pumpkin weight in kg of the three countries (United Kingdom, Japan and Italy) can be seen. 
+
+Looking at the three boxes, it is seen that Italy produced the heighest overall weighted pumpkins, as its median is higher than both Japan and the United Kingdom.
+Italy also has a large number of outliers
+
+Japan produces the lowest weighted pumpkins as its median is below both of the other countries. It also has the lowest interquartile range of the countries, showing
+low variability. Japan also has the least number of outliers.
+
+The United Kingdom produces pumpkins weighted in between the other countries based on its median value. It has a similar number of outliers to Italy but at lower weights.
+
+## Task 9 - Facet Plot 📉
+To create a facet plot from the plot in Task 8, the seaborn module was imported and used.
