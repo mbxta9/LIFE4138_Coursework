@@ -115,8 +115,9 @@ def main():
     plt.show() #Shows the figures when ran from terminal
 
     #Subsetting 3 countries and saving as csv
-    filtered_pumpkins = pumpkins[pumpkins['country'.isin(['United Kingdom', 'Japan', 'Italy'])]]
-    print(filtered_pumpkins.head())
+    filter_vars = [country in ['United Kingdom', 'Japan', 'Italy'] for country in pumpkins['country']] #Checks if country in list, creates list of true and false values
+    filtered_pumpkins = pumpkins[filter_vars] #Creates list by adding the row if filter_vars returns True
+    print(filtered_pumpkins['country'])
     filtered_pumpkins.to_csv('pumpkins_filtered.csv')
 
 

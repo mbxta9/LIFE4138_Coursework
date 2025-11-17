@@ -214,4 +214,4 @@ As the estimated weight increases beyond ~800kg, the spread of the points show t
 
 The three countries chosen for this exercise were the United Kingdom, Japan and Italy.
 
-Firstly, a subset of the dataset was created
+Firstly, a subset of the dataset was created by checking if the 
