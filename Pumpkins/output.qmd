@@ -171,6 +171,8 @@ Next a plot of the two columns can be created.
 Note: The `plt.figure` command was used here as it makes my later comparison easier to deal with.
 ```{python}
 #| echo: true
+#| label: fig-estimated_vs_actual
+#| fig-cap: A Scatterplot of the relationship between the estimated weight and the actual weight of pumpkins from the pumpkin competitions dataset.
 figure_1 = plt.figure() #Creates a new figure to draw graph on
 plot_area_1 = figure_1.add_subplot() #Creates a new plotting area inside figure_1 to make axes
 plot_area_1.scatter(x = pumpkins['est_weight_kg'],y = pumpkins['weight_in_kg'],alpha = 0.25, color = 'blue') #Creating the relationship graph
@@ -197,5 +199,19 @@ As can be seen above, the two graphs have identical patterns, meaning there were
 Next we can save this graph as a file by running:
 ```{python}
 #| echo: true
-
+figure_1.savefig("pumpkins_weight_relationship.png") #Saves the first figure to disk.
 ```
+
+### What does Figure 1 show?
+
+As seen in @fig-estimated_vs_actual there is a strong positive relationship between the estimated and actual weight. 
+
+There are many outliers such as the large cluster at Estimated Weight = 0, this is most likely due to there not being an estimated weight value for these entries. 
+
+As the estimated weight increases beyond ~800kg, the spread of the points show that weight was less reliably estimated.
+
+## Task 6 - Selecting three countries 🇬🇧 🇯🇵 🇮🇹
+
+The three countries chosen for this exercise were the United Kingdom, Japan and Italy.
+
+Firstly, a subset of the dataset was created

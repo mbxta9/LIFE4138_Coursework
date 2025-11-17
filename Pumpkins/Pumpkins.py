@@ -96,7 +96,6 @@ def main():
 
     #Plot Estimated weight against actual weight in kgs
     pumpkins[f"est_weight_kg"] = [(lbs_to_kg(i)) for i in pumpkins['est_weight']] #Create new column of estimted weight in kg
-    print(pumpkins[['est_weight_kg','est_weight']])
     
     figure_1 = plt.figure() #Creates a new figure to draw graph on
     plot_area_1 = figure_1.add_subplot() #Creates a new plotting area inside figure_1 to make axes
