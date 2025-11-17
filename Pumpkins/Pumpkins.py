@@ -74,7 +74,7 @@ def main():
     '''
 
     #Importing dataset
-    pumpkins = import_dataset('Pumpkins/pumpkins_datasets/pumpkins_02.csv')
+    pumpkins = import_dataset('pumpkins_datasets/pumpkins_02.csv')
 
     #Finding heaviest pumpkin
     heaviest_pumpkin = find_highest(pumpkins,'weight_lbs')
@@ -105,7 +105,6 @@ def main():
     plot_area_1.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
     plot_area_1.set_xlabel('Estimated Weight (kg)') #Adding x axis label
     plot_area_1.set_ylabel('Actual Weight (kg)'); #Adding y axis label
-    figure_1.show()
 
     figure_2 = plt.figure() #Creates a second figure to draw graph on
     plot_area_2 = figure_2.add_subplot() #Creates a new plotting area inside figure_2 to make axes
@@ -113,9 +112,9 @@ def main():
     plot_area_2.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
     plot_area_2.set_xlabel('Estimated Weight (lbs)') #Adding x axis label
     plot_area_2.set_ylabel('Actual Weight (lbs)'); #Adding y axis label
-    figure_2.show()
 
-    figure_1.savefig("pumpkins_weight_relationship.png")
-    print('figure saved')
+    figure_1.savefig("pumpkins_weight_relationship.png") #Saves the first figure to disk.
+    plt.show() #Shows the graphs when ran from terminal
+
 if __name__ == '__main__': #Ensures script runs
     main()
