@@ -46,7 +46,6 @@ To do this the `find_highest` function was created to get the row with a highest
 
 The code for this function can be seen here:
 ```{python}
-#| code-fold: true
 #| echo: true
 def find_highest(dataframe: pd,column: str):
     '''
@@ -134,16 +133,65 @@ This column was created using the following code.
 #| echo: true
 classes = []
 for i in pumpkins['weight_in_kg']:
-    if i<250:
+    if i<250: #Light weight class if weight <250
         classes.append('light')
-    elif i<500:
+    elif i<500: #Medium weight class if weight >250 but <500
         classes.append('medium')
-    else:
+    else:#Heavy weight class if weight >500
         classes.append('heavy')
-pumpkins["weight_class"] = classes
+pumpkins["weight_class"] = classes #Create new column from classes list
 ```
 We can see the `weight_class` values for the first three rows below
 ```{python}
 #| echo: true
 print(pumpkins[['weight_in_kg','weight_class']].head(3))   
+```
+
+## Task 5 - Estimated vs Actual Weight plotting 📈
+### Standardising Units
+Next was to create a plot of the estimated weight of the pumpkins against the actual weights.
+
+This can be done in a number of ways but the important thing to note is that both axis require the same units. One could plot the `est_weight` against the `weight` in lbs using the data already available in the dataset, but to make use of the function created in task 3, the values were plotted in kilograms.
+
+A new column in the dataset was created called `est_weight_kg` using the code below.
+```{python}
+#| echo: true
+pumpkins[f"est_weight_kg"] = [(lbs_to_kg(i)) for i in pumpkins['est_weight']]
+```
+This new set column of data (`est_weight_kg`) can be plotted against the `weight_in_kg` column to see the relationship.
+
+### Creating the graph
+The module matplotlib is used to create graphs and is imported.
+```{python}
+#| echo: true
+import matplotlib.pyplot as plt
+```
+Next a plot of the two columns can be created. 
+
+Note: The `plt.figure` command was used here as it makes my later comparison easier to deal with.
+```{python}
+#| echo: true
+figure_1 = plt.figure() #Creates a new figure to draw graph on
+plot_area_1 = figure_1.add_subplot() #Creates a new plotting area inside figure_1 to make axes
+plot_area_1.scatter(x = pumpkins['est_weight_kg'],y = pumpkins['weight_in_kg'],alpha = 0.25, color = 'blue') #Creating the relationship graph
+plot_area_1.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
+plot_area_1.set_xlabel('Estimated Weight (kg)') #Adding x axis label
+plot_area_1.set_ylabel('Actual Weight (kg)'); #Adding y axis label
+#figure_1.show() - This line is commented as it does not function corectly in markdown
+```
+The pattern observed should be the same as if the estimated and actual weight values were plotted in lbs, which can be seen below.
+```{python}
+#| echo: true
+figure_2 = plt.figure() #Creates a second figure to draw graph on
+plot_area_2 = figure_2.add_subplot() #Creates a new plotting area inside figure_2 to make axes
+plot_area_2.scatter(x = pumpkins['est_weight'],y = pumpkins['weight_lbs'],alpha = 0.25, color = 'red') #Creating the graph in lbs for checking
+plot_area_2.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title
+plot_area_2.set_xlabel('Estimated Weight (lbs)') #Adding x axis label
+plot_area_2.set_ylabel('Actual Weight (lbs)'); #Adding y axis label
+#figure_2.show() - This line is commented as it does not function corectly in markdown
+```
+Next we can save this graph as a file by running:
+```{python}
+#| echo: true
+
 ```
