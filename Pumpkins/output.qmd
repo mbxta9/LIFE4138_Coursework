@@ -182,6 +182,7 @@ plot_area_1.set_ylabel('Actual Weight (kg)'); #Adding y axis label
 The pattern observed should be the same as if the estimated and actual weight values were plotted in lbs, which can be seen below.
 ```{python}
 #| echo: true
+#| code-fold: true
 figure_2 = plt.figure() #Creates a second figure to draw graph on
 plot_area_2 = figure_2.add_subplot() #Creates a new plotting area inside figure_2 to make axes
 plot_area_2.scatter(x = pumpkins['est_weight'],y = pumpkins['weight_lbs'],alpha = 0.25, color = 'red') #Creating the graph in lbs for checking
@@ -190,6 +191,9 @@ plot_area_2.set_xlabel('Estimated Weight (lbs)') #Adding x axis label
 plot_area_2.set_ylabel('Actual Weight (lbs)'); #Adding y axis label
 #figure_2.show() - This line is commented as it does not function corectly in markdown
 ```
+As can be seen above, the two graphs have identical patterns, meaning there were no issues when converting to kilograms.
+
+### Saving the graph
 Next we can save this graph as a file by running:
 ```{python}
 #| echo: true

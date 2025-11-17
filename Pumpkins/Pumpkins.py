@@ -74,7 +74,7 @@ def main():
     '''
 
     #Importing dataset
-    pumpkins = import_dataset('Coursework/Pumpkins/pumpkins_datasets/pumpkins_02.csv')
+    pumpkins = import_dataset('Pumpkins/pumpkins_datasets/pumpkins_02.csv')
 
     #Finding heaviest pumpkin
     heaviest_pumpkin = find_highest(pumpkins,'weight_lbs')
@@ -104,7 +104,7 @@ def main():
     plot_area_1.scatter(x = pumpkins['est_weight_kg'],y = pumpkins['weight_in_kg'],alpha = 0.25, color = 'blue') #Creating the relationship graph
     plot_area_1.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
     plot_area_1.set_xlabel('Estimated Weight (kg)') #Adding x axis label
-    plot_area_1.set_ylabel('Actual Weight (kg)') #Adding y axis label
+    plot_area_1.set_ylabel('Actual Weight (kg)'); #Adding y axis label
     figure_1.show()
 
     figure_2 = plt.figure() #Creates a second figure to draw graph on
@@ -112,7 +112,7 @@ def main():
     plot_area_2.scatter(x = pumpkins['est_weight'],y = pumpkins['weight_lbs'],alpha = 0.25, color = 'red') #Creating the graph in lbs for checking
     plot_area_2.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
     plot_area_2.set_xlabel('Estimated Weight (lbs)') #Adding x axis label
-    plot_area_2.set_ylabel('Actual Weight (lbs)') #Adding y axis label
+    plot_area_2.set_ylabel('Actual Weight (lbs)'); #Adding y axis label
     figure_2.show()
 
     figure_1.savefig("pumpkins_weight_relationship.png")
