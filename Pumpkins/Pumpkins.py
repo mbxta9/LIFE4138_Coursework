@@ -14,7 +14,6 @@ Description: A python script to run analysis on the pumpkins dataset available i
 
 #Importing requirements
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 
 def import_dataset(path :str): 
