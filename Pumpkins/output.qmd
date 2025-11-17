@@ -247,4 +247,22 @@ The filtered data can be easily saved to disk using:
 filtered_pumpkins.to_csv('pumpkins_filtered.csv')
 ```
 
-## Summarising the filtered data 🧮
+## Task 7 - Summarising the filtered data 🧮
+Next was to summarise the filtered data, with two key tasks. Finding the mean weight per country and finding the mean weight for each variety per country.
+This exercise was done using the previously calculated kilogram values.
+
+### Finding mean weight per country
+This was done by grouping the `filtered_pumpkins` dataframe by `country` and then selecting the `weight_in_kg` column and calculating the mean.
+The mean values for each country can be seen below.
+```{python}
+#| echo: true
+print(filtered_pumpkins.groupby('country')['weight_in_kg'].mean()) #Groups by country and 
+#filters to only weight and calculates mean
+```
+
+### Finding mean weight per variety per country
+```{python}
+#| echo: true
+print(filtered_pumpkins.groupby(['country','variety'])['weight_in_kg'].mean()) #Groups by country and 
+#then calculates mean values
+```

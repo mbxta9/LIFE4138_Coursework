@@ -137,6 +137,8 @@ def main():
     filtered_pumpkins.to_csv('pumpkins_filtered.csv') #Saves the filtered data to disk
 
     #Summarising filtered data
-    
+    print(filtered_pumpkins.groupby('country')['weight_in_kg'].mean()) #Groups by country and filters to only weight and calculates mean
+    print(filtered_pumpkins.groupby(['country','variety'])['weight_in_kg'].mean()) #Groups by country and variety to calculate mean
+
 if __name__ == '__main__': #Ensures script runs
     main()
