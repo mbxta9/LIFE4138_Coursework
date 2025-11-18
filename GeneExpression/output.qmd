@@ -1,0 +1,69 @@
+---
+title: "Gene Expression Dataset Output 🧬"
+format:
+    html:
+        toc: true
+        toc-title: "Contents"
+        embed-resources: true
+        page-layout: full
+        theme: simplex
+        code-tools: false
+        code-line-numbers: true
+knitr:
+  opts_chunk:
+    collapse: true
+    message: false
+    warning: false
+
+---
+This document contains all the results from and code used to complete the 'Gene Expression' portion of the LIFE4138 Coursework.
+
+# Importing the data 📊
+First the data is imported using the readr module from tidyverse. This creates two dataframes, `a_vs_b` and `a_vs_d`.
+```{r}
+#| echo: true
+library(tidyverse)
+a_vs_b <- read_tsv("Datasets/set_2/A_vs_B.deseq2.results.tsv")
+a_vs_d <- read_tsv("Datasets/set_2/A_vs_D.deseq2.results.tsv")
+```
+
+# Creating Summary Statistics 📏
+
+## Finding significantly up and down-regulated genes
+To get a new dataframe of all the significantly upregulated and downregulated genes, the following functions were used:
+```{r}
+#| echo: true
+#Number of significantly upregulated genes
+find_sig_upreg <- function(dataset) {
+    changed <- subset(dataset, log2FoldChange >= 1 & padj <= 0.05)
+    return(changed)
+}
+
+#Number of significantly downregulated genes
+find_sig_downreg <- function(dataset) {
+    changed <- subset(dataset, log2FoldChange <= -1 & padj <= 0.05)
+    return(changed)
+}
+```
+This can then be ran on the two datasets to get two new dataframes of only the genes with a statistically significant (<0.05 p value) log2FoldChange.
+
+```{r}
+#| echo: true
+library(DT)
+sig_a_b_up <- find_sig_upreg(a_vs_b)
+sig_a_b_down <- find_sig_downreg(a_vs_b)
+sig_a_d_up <- find_sig_upreg(a_vs_d)
+sig_a_d_down <- find_sig_downreg(a_vs_d)
+```
+From these dataframes, we can find the number of siginificantly changed genes:
+```{r}
+#| echo: true
+#| code-fold: true
+library(knitr)
+up_down <- data.frame(Dataset_Name=c('A vs B','A vs D'),
+    Upregulated_genes=c(nrow(sig_a_b_up), nrow(sig_a_d_up)),
+    Downregulated_genes = c(nrow(sig_a_b_down), nrow(sig_a_d_down)))
+kable(up_down)
+```
+
+Next we need to create a summary table of the p values and log fold changes.
