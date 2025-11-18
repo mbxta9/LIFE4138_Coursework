@@ -49,10 +49,23 @@ up_down <- data.frame(Dataset_Name=c('A vs B','A vs D'),
     Downregulated_genes = c(nrow(sig_a_b_down), nrow(sig_a_d_down)))
 kable(up_down)
 
-summary_variables <- c('mean','median','min','max')
-p_value <- c(mean(a_vs_b[["pvalue"],rm.NA = True]),median(a_vs_b[["pvalue"]],rm.NA = True))
-
-mean(a_vs_b[["pvalue"]],rm.NA=TRUE)
-print(a_vs_b[["pvalue"]])
-output_a_b <- data.frame(summary_variables,p_value)
+#Table of summary stats
+stat_names = c('Min','Max','Mean','Median','Lower Quartile', 'Upper Quartile')
+p_value <- c(
+    min(a_vs_b[["pvalue"]],na.rm = TRUE),
+    max(a_vs_b[["pvalue"]],na.rm = TRUE),
+    mean(a_vs_b[["pvalue"]],na.rm = TRUE),
+    median(a_vs_b[["pvalue"]],na.rm = TRUE),
+    quantile(a_vs_b[["pvalue"]],0.25, na.rm = TRUE),
+    quantile(a_vs_b[["pvalue"]],0.75, na.rm = TRUE)
+    )
+log2fold <- c(
+    min(a_vs_b[["log2FoldChange"]],na.rm = TRUE),
+    max(a_vs_b[["log2FoldChange"]],na.rm = TRUE),
+    mean(a_vs_b[["log2FoldChange"]],na.rm = TRUE),
+    median(a_vs_b[["log2FoldChange"]],na.rm = TRUE),
+    quantile(a_vs_b[["log2FoldChange"]],0.25, na.rm = TRUE),
+    quantile(a_vs_b[["log2FoldChange"]],0.75, na.rm = TRUE)
+    )
+output_a_b <- data.frame(stat_names, p_value, log2fold)
 kable(output_a_b)

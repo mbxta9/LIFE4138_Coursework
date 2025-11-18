@@ -67,3 +67,26 @@ kable(up_down)
 ```
 
 Next we need to create a summary table of the p values and log fold changes.
+```{r}
+#| echo: true
+#| code-fold: true
+stat_names = c('Min','Max','Mean','Median','Lower Quartile', 'Upper Quartile')
+p_value <- c(
+    min(a_vs_b[["pvalue"]],na.rm = TRUE),
+    max(a_vs_b[["pvalue"]],na.rm = TRUE),
+    mean(a_vs_b[["pvalue"]],na.rm = TRUE),
+    median(a_vs_b[["pvalue"]],na.rm = TRUE),
+    quantile(a_vs_b[["pvalue"]],0.25, na.rm = TRUE),
+    quantile(a_vs_b[["pvalue"]],0.75, na.rm = TRUE)
+    )
+log2fold <- c(
+    min(a_vs_b[["log2FoldChange"]],na.rm = TRUE),
+    max(a_vs_b[["log2FoldChange"]],na.rm = TRUE),
+    mean(a_vs_b[["log2FoldChange"]],na.rm = TRUE),
+    median(a_vs_b[["log2FoldChange"]],na.rm = TRUE),
+    quantile(a_vs_b[["log2FoldChange"]],0.25, na.rm = TRUE),
+    quantile(a_vs_b[["log2FoldChange"]],0.75, na.rm = TRUE)
+    )
+output_a_b <- data.frame(stat_names, p_value, log2fold)
+kable(output_a_b)
+```
