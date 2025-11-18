@@ -1,0 +1,7 @@
+R
+tidyverse
+DT
+knitr
+ggrepel
+RColorBrewer
+plotly

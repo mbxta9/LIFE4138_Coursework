@@ -66,27 +66,88 @@ up_down <- data.frame(Dataset_Name=c('A vs B','A vs D'),
 kable(up_down)
 ```
 
-Next we need to create a summary table of the p values and log fold changes.
+## Creating a summary table
+Next we need to create a summary table of the p values and log fold changes. The following function was used to generate the summary statistics for each column and dataset wanted.
+```{r}
+#| echo: true
+#| code-fold: false
+generate_summary <- function(dataset,column) {
+    summary <- c(
+        min(dataset[[column]],na.rm = TRUE),
+        max(dataset[[column]],na.rm = TRUE),
+        mean(dataset[[column]],na.rm = TRUE),
+        median(dataset[[column]],na.rm = TRUE),
+        quantile(dataset[[column]],0.25, na.rm = TRUE),
+        quantile(dataset[[column]],0.75, na.rm = TRUE)
+    )
+    return(summary)
+}
+```
+This can be used to create a dataframe for the `pvalue` and `Log2FoldChange` columns for each dataset.
+```{r}
+#| echo: true
+stat_names = c('Min','Max','Mean','Median','Lower Quartile', 'Upper Quartile')
+p_value <- generate_summary(a_vs_b,'pvalue')
+log2fold <- generate_summary(a_vs_b,'log2FoldChange')
+output_a_b <- data.frame(stat_names,p_value,log2fold)
+kable(output_a_b, col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 1: Summary statistics on the A vs B Dataset")
+p_value <- generate_summary(a_vs_d,'pvalue')
+log2fold <- generate_summary(a_vs_d,'log2FoldChange')
+output_a_d <- data.frame(stat_names,p_value,log2fold)
+kable(output_a_d, col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 2: Summary statistics on the A vs D Dataset")
+```
+
+# Volcano Plots 🌋
+Here are the volcano plots for the two datasets.
+
 ```{r}
 #| echo: true
 #| code-fold: true
-stat_names = c('Min','Max','Mean','Median','Lower Quartile', 'Upper Quartile')
-p_value <- c(
-    min(a_vs_b[["pvalue"]],na.rm = TRUE),
-    max(a_vs_b[["pvalue"]],na.rm = TRUE),
-    mean(a_vs_b[["pvalue"]],na.rm = TRUE),
-    median(a_vs_b[["pvalue"]],na.rm = TRUE),
-    quantile(a_vs_b[["pvalue"]],0.25, na.rm = TRUE),
-    quantile(a_vs_b[["pvalue"]],0.75, na.rm = TRUE)
-    )
-log2fold <- c(
-    min(a_vs_b[["log2FoldChange"]],na.rm = TRUE),
-    max(a_vs_b[["log2FoldChange"]],na.rm = TRUE),
-    mean(a_vs_b[["log2FoldChange"]],na.rm = TRUE),
-    median(a_vs_b[["log2FoldChange"]],na.rm = TRUE),
-    quantile(a_vs_b[["log2FoldChange"]],0.25, na.rm = TRUE),
-    quantile(a_vs_b[["log2FoldChange"]],0.75, na.rm = TRUE)
-    )
-output_a_b <- data.frame(stat_names, p_value, log2fold)
-kable(output_a_b)
+#| label: fig-a_vs_b_volcano
+#| fig-cap: A volcano plot showing the log2fold changes and up or down-regulation of genes in A vs B
+library(plotly)
+#Creating a new column for colouring in A vs B
+a_vs_b$diffexpressed <- "NO"
+a_vs_b$diffexpressed[a_vs_b$log2FoldChange >= 0.5 & a_vs_b$pvalue < 0.05] <- "UP"
+a_vs_b$diffexpressed[a_vs_b$log2FoldChange <= -0.5 & a_vs_b$pvalue < 0.05] <- "DOWN"
+
+#Creating the volcano plot (A vs B)
+a_vs_b_volcano <- ggplot(data = a_vs_b, aes(x = log2FoldChange, y = -log10(pvalue), color = diffexpressed, text = gene_id)) +
+    geom_point() +
+    scale_color_manual(values = c("red", "grey", "blue"), labels = c('Downregulated', 'Not Significant', 'Upregulated')) +
+    coord_cartesian(ylim = c(0, 20), xlim = c(-5, 5)) +
+    labs(
+        x = "Log 2 Fold Change",
+        y = "-log10(pvalue)",
+        title = "Volcano plot of A vs B",
+        color = "Regulation"
+    ) +
+    theme_light() +
+    theme(plot.title = element_text(hjust = 0.5))
+ggplotly(a_vs_b_volcano)
+```
+```{r}
+#| echo: true
+#| code-fold: true
+#| label: fig-a_vs_d_volcano
+#| fig-cap: A volcano plot showing the log2fold changes and up or down-regulation of genes in A vs D
+#Creating a new column for colouring in A vs D
+a_vs_d$diffexpressed <- "NO"
+a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 0.5 & a_vs_d$pvalue < 0.05] <- "UP"
+a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= -0.5 & a_vs_d$pvalue < 0.05] <- "DOWN"
+
+#Creating the volcano plot (A vs B)
+a_vs_d_volcano <- ggplot(data = a_vs_d, aes(x = log2FoldChange, y = -log10(pvalue), color = diffexpressed, text = gene_id)) +
+    geom_point() +
+    scale_color_manual(values = c("red", "grey", "blue"), labels = c('Downregulated', 'Not Significant', 'Upregulated')) +
+    coord_cartesian(ylim = c(0, 40), xlim = c(-10, 10)) +
+    labs(
+        x = "Log 2 Fold Change",
+        y = "-log10(pvalue)",
+        title = "Volcano plot of A vs D",
+        color = "Significance"
+    ) +
+    theme_light() +
+    theme(plot.title = element_text(hjust = 0.5))
+ggplotly(a_vs_d_volcano)
 ```
