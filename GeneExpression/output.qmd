@@ -6,42 +6,69 @@ format:
         toc-title: "Contents"
         embed-resources: true
         page-layout: full
-        theme: simplex
+        theme: united
         code-tools: false
         code-line-numbers: true
+        title-block-banner: "#4A7AB5"
 knitr:
   opts_chunk:
     collapse: true
     message: false
     warning: false
-
 ---
-This document contains all the results from and code used to complete the 'Gene Expression' portion of the LIFE4138 Coursework.
 
-# Importing the data 📊
-First the data is imported using the readr module from tidyverse. This creates two dataframes, `a_vs_b` and `a_vs_d`.
+```{=html}
+<style>
+  body { background-color: #AFC4DE; }
+</style>
+```
+::: {.column-screen-inset-left}
+This document contains all the results from and code used to complete the 'Gene Expression' portion of the LIFE4138 Coursework.
+:::
+
+# Importing the data 📊 {.column-screen-inset-left}
+::: {.column-screen-inset-left}
+First the data is imported using the `readr` module from `tidyverse`. This creates two dataframes, `a_vs_b` and `a_vs_d`.
 ```{r}
 #| echo: true
 library(tidyverse)
 a_vs_b <- read_tsv("Datasets/set_2/A_vs_B.deseq2.results.tsv")
 a_vs_d <- read_tsv("Datasets/set_2/A_vs_D.deseq2.results.tsv")
 ```
+:::
 
-# Creating Summary Statistics 📏
+# Creating Summary Statistics 📏 {.column-screen-inset-left}
 
-## Finding significantly up and down-regulated genes
-To get a new dataframe of all the significantly upregulated and downregulated genes, the following functions were used:
+## Finding significantly up and down-regulated genes {.column-screen-inset-left}
+To find the significantly up and down-regulated genes, there were two steps involved, firstly deciding on appropriate thresholds for what is considered 
+up or down regulated and what is considered significant. 
+
+The table below outlines the thresholds used.
+
+|   Threshold     | log2FoldChange | Adjusted P Value |
+|-----------------|----------------|------------------|
+| Upregulated     |    >=0.5       | <0.05
+| Downregulated   |    <=0.5       | <0.05
+: {.hover}
+
+Next a set of functions was created to find these genes in the datasets.
 ```{r}
 #| echo: true
 #Number of significantly upregulated genes
 find_sig_upreg <- function(dataset) {
-    changed <- subset(dataset, log2FoldChange >= 1 & padj <= 0.05)
+    #Function to take a dataframe of Deseq2 results and return a new dataframe
+    #Calculates upregulated genes based on the threshold of log2fold change >0.5
+    #and adjusted p value < 0.05
+    changed <- subset(dataset, log2FoldChange >= 0.5 & padj < 0.05)
     return(changed)
 }
 
 #Number of significantly downregulated genes
 find_sig_downreg <- function(dataset) {
-    changed <- subset(dataset, log2FoldChange <= -1 & padj <= 0.05)
+    #Function to take a dataframe of Deseq2 results and return a new dataframe
+    #Calculates downregulated genes based on the threshold of log2fold change <-0.5
+    #and adjusted p value < 0.05
+    changed <- subset(dataset, log2FoldChange <= -0.5 & padj < 0.05)
     return(changed)
 }
 ```
@@ -66,7 +93,7 @@ up_down <- data.frame(Dataset_Name=c('A vs B','A vs D'),
 kable(up_down)
 ```
 
-## Creating a summary table
+## Creating a summary table {.column-screen-inset-left}
 Next we need to create a summary table of the p values and log fold changes. The following function was used to generate the summary statistics for each column and dataset wanted.
 ```{r}
 #| echo: true
@@ -97,9 +124,22 @@ output_a_d <- data.frame(stat_names,p_value,log2fold)
 kable(output_a_d, col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 2: Summary statistics on the A vs D Dataset")
 ```
 
-# Volcano Plots 🌋
+
+# Plotting the data 📉 {.column-screen-inset}
+
+::: {.column-screen-inset-left}
+Next was to create plots of the data including, Volcano plots, MA plots, histograms and heatmaps.
+:::
+
+::: {.callout-warning .column-body-outset-left}
+**Please ensure the page is maximised before viewing graphs as they are placed left and right for easier comparisons.**
+:::
+All the graphs below are interactive through `plotly`.
+
+## Volcano Plots 🌋 {.column-screen-inset}
 Here are the volcano plots for the two datasets.
 
+::: {layout-ncol=2 .quarto-full-width}
 ```{r}
 #| echo: true
 #| code-fold: true
@@ -126,6 +166,7 @@ a_vs_b_volcano <- ggplot(data = a_vs_b, aes(x = log2FoldChange, y = -log10(pvalu
     theme(plot.title = element_text(hjust = 0.5))
 ggplotly(a_vs_b_volcano)
 ```
+
 ```{r}
 #| echo: true
 #| code-fold: true
@@ -136,7 +177,7 @@ a_vs_d$diffexpressed <- "NO"
 a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 0.5 & a_vs_d$pvalue < 0.05] <- "UP"
 a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= -0.5 & a_vs_d$pvalue < 0.05] <- "DOWN"
 
-#Creating the volcano plot (A vs B)
+#Creating the volcano plot (A vs D)
 a_vs_d_volcano <- ggplot(data = a_vs_d, aes(x = log2FoldChange, y = -log10(pvalue), color = diffexpressed, text = gene_id)) +
     geom_point() +
     scale_color_manual(values = c("red", "grey", "blue"), labels = c('Downregulated', 'Not Significant', 'Upregulated')) +
@@ -151,3 +192,106 @@ a_vs_d_volcano <- ggplot(data = a_vs_d, aes(x = log2FoldChange, y = -log10(pvalu
     theme(plot.title = element_text(hjust = 0.5))
 ggplotly(a_vs_d_volcano)
 ```
+:::
+
+::: {.column-screen-inset-left}
+@fig-a_vs_b_volcano shows a large number of genes with down and up regulation, with not a lot of spread in the points.
+
+@fig-a_vs_d_volcano on the other hand has a very large spread of points and with higher -log10(pvalue) scores, showing higher statistical 
+significance of the change.
+:::
+
+## MA Plots 📉 {.column-screen-inset}
+
+::: {.column-screen-inset}
+
+MA plots were created of the two datasets using the `ggpubr` module. The plots can be used to interpret the differential expression and the expression level of the genes in A vs B and A vs D.
+
+:::
+
+::: {layout-ncol=2 .column-screen-inset}
+```{r}
+#| echo: true
+#| code-fold: true
+#| label: fig-a_vs_b_ma
+#| fig-cap: A MA plot showing the log2fold changes and Log2 Mean Expression of A vs B
+library(ggpubr)
+
+a_vs_b_MA <- ggmaplot(data = a_vs_b
+    )+
+coord_cartesian(ylim = c(-10, 10)) +
+labs(
+    x = "Log2 Mean Expression",
+    y = "Log 2 Fold Change",
+    title = "MA plot of A vs B",
+    color = "Significance"
+) +
+theme_light() +
+theme(plot.title = element_text(hjust = 0.5))
+ggplotly(a_vs_b_MA)
+```
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| label: fig-a_vs_d_ma
+#| fig-cap: A MA plot showing the log2fold changes and Log2 Mean Expression of A vs D
+a_vs_d_MA <- ggmaplot(data = a_vs_d
+    )+
+coord_cartesian(ylim = c(-10, 10)) +
+labs(
+    x = "Log2 Mean Expression",
+    y = "Log 2 Fold Change",
+    title = "MA plot of A vs D",
+    color = "Significance"
+) +
+theme_light() +
+theme(plot.title = element_text(hjust = 0.5))
+ggplotly(a_vs_d_MA)
+```
+
+:::
+
+Commentary of @fig-a_vs_d_ma MA plot here...
+
+
+## Histograms 📊 {.column-screen-inset}
+Histograms of the `pvalue` were created for each of the datasets. These along with the code, can be seen below.
+
+::: {layout-ncol=2 .column-screen-inset}
+```{r}
+#| echo: true
+#| code-fold: true
+#Histogram of A vs B
+a_vs_b_histogram <- ggplot(aes(x = pvalue), data = a_vs_b) + 
+    geom_histogram(
+        binwidth = 0.1,
+        colour = "black",
+        fill = "blue"
+    ) +
+    labs(
+        x = "P value",
+        y = "Frequency",
+        title = "Histogram of P value in A vs B"  
+    ) + 
+    theme_light() + 
+    theme(plot.title = element_text(hjust = 0.5))
+ggplotly(a_vs_b_histogram)
+
+#Histogram of A vs D
+a_vs_d_histogram <- ggplot(aes(x = pvalue), data = a_vs_d) + 
+    geom_histogram(
+        binwidth = 0.1,
+        colour = "black",
+        fill = "blue"
+    ) +
+    labs(
+        x = "P value",
+        y = "Frequency",
+        title = "Histogram of P value in A vs D"  
+    ) + 
+    theme_light() + 
+    theme(plot.title = element_text(hjust = 0.5))
+ggplotly(a_vs_d_histogram)
+```
+:::

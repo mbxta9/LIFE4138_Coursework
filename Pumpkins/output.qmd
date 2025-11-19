@@ -1,15 +1,17 @@
 ---
 title: "The Pumpkins Dataset Output 🎃"
+description: "This document contains all the results from and code used to complete the 'Pumpkins' portion of the LIFE4138 Coursework."
 format:
     html:
         toc: true
         toc-title: "Contents"
         embed-resources: true
         page-layout: full
-        theme: simplex
+        theme: united
+        title-block-banner: true
+        
 ---
-This document contains all the results from and code used to complete the 'Pumpkins' portion of the LIFE4138 Coursework.
----
+
 ## Task 1 - Read in the dataset 🔍 {#Task-1}
 The first task involved reading in the `pumpkins.csv` file. To do this the following `import_dataset` function was made.
 ```{python}
