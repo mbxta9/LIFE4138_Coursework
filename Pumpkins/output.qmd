@@ -1,6 +1,8 @@
 ---
-title: "The Pumpkins Dataset Output 🎃"
+title: "Pumpkins Dataset Output 🎃"
 description: "This document contains all the results from and code used to complete the 'Pumpkins' portion of the LIFE4138 Coursework."
+author: "Tahir Ansari"
+date: "12 November 2025"
 format:
     html:
         toc: true

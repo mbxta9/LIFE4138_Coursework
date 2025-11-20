@@ -16,12 +16,12 @@
 #install.packages("DT")
 #install.packages("knitr")
 library(tidyverse)
-library(DT)
-library(knitr)
+library(DT) #For interactive tables
+library(knitr) #For table viewing
 library(ggrepel)
-library(RColorBrewer)
-library(plotly)
-library(ggpubr)
+library(RColorBrewer) #For colouring on graphs
+library(plotly) #For interactive graphs
+library(ggpubr) #For MA plots
 
 
 # Loading the datasets
@@ -64,12 +64,12 @@ kable(up_down) #Shows table
 #Table of summary stats
 generate_summary <- function(dataset,column) {
     summary <- c( #Creates vector of values
-        min(dataset[[column]],na.rm = TRUE),
-        max(dataset[[column]],na.rm = TRUE),
-        mean(dataset[[column]],na.rm = TRUE),
-        median(dataset[[column]],na.rm = TRUE),
-        quantile(dataset[[column]],0.25, na.rm = TRUE),
-        quantile(dataset[[column]],0.75, na.rm = TRUE)
+        min(dataset[[column]],na.rm = TRUE), #Min value
+        max(dataset[[column]],na.rm = TRUE), #Max value
+        mean(dataset[[column]],na.rm = TRUE), #Mean
+        median(dataset[[column]],na.rm = TRUE), #Median
+        quantile(dataset[[column]],0.25, na.rm = TRUE), #First Quartile
+        quantile(dataset[[column]],0.75, na.rm = TRUE) #Third Quartile
     )
     return(summary) #Returns vector of stats
 }
@@ -79,45 +79,45 @@ stat_names = c('Min','Max','Mean','Median','Lower Quartile', 'Upper Quartile') #
 p_value <- generate_summary(a_vs_b,'pvalue') #Generates the summary stats on the p value column
 log2fold <- generate_summary(a_vs_b,'log2FoldChange') #Generates the summary stats on the log2fold change column
 output_a_b <- data.frame(stat_names,p_value,log2fold) #Creates a dataframe for outputting
-kable(output_a_b, col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 1: Summary statistics on the A vs B Dataset")
+kable(output_a_b, col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 1: Summary statistics on the A vs B Dataset") #Shows Table
 
 #A vs D table
-p_value <- generate_summary(a_vs_d,'pvalue')
-log2fold <- generate_summary(a_vs_d,'log2FoldChange')
-output_a_d <- data.frame(stat_names,p_value,log2fold)
-kable(output_a_d, col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 1: Summary statistics on the A vs D Dataset")
+p_value <- generate_summary(a_vs_d,'pvalue') #Generates stats for P value
+log2fold <- generate_summary(a_vs_d,'log2FoldChange') #Generates stats for log2foldchange
+output_a_d <- data.frame(stat_names,p_value,log2fold) #Creates dataframe for outputting
+kable(output_a_d, col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 1: Summary statistics on the A vs D Dataset") #Shows table
 
 #Volcano plot
-#Creating a new column for colouring
-a_vs_b$diffexpressed <- "NO"
-a_vs_b$diffexpressed[a_vs_b$log2FoldChange >= 0.5 & a_vs_b$padj < 0.05] <- "UP"
-a_vs_b$diffexpressed[a_vs_b$log2FoldChange <= -0.5 & a_vs_b$padj < 0.05] <- "DOWN"
+#Creating a new column for colouring in A vs B
+a_vs_b$diffexpressed <- "NO" #Creates new column and assigns NO to all values
+a_vs_b$diffexpressed[a_vs_b$log2FoldChange >= 0.5 & a_vs_b$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
+a_vs_b$diffexpressed[a_vs_b$log2FoldChange <= -0.5 & a_vs_b$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
 
 #Creating the volcano plot
-a_vs_b_volcano <- ggplot(data = a_vs_b, aes(x = log2FoldChange, y = -log10(pvalue), color = diffexpressed, text = gene_id)) +
+a_vs_b_volcano <- ggplot(data = a_vs_b, aes(x = log2FoldChange, y = -log10(pvalue), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
     geom_point() +
-    scale_color_manual(values = c("red", "grey", "blue"), labels = c('Downregulated', 'Not Significant', 'Upregulated')) +
-    coord_cartesian(ylim = c(0, 20), xlim = c(-5, 5)) +
-    labs(
+    scale_color_manual(values = c("blue", "grey", "red"), labels = c('Downregulated', 'Not Significant', 'Upregulated')) + #Creates colour scheme based on labels
+    coord_cartesian(ylim = c(0, 20), xlim = c(-5, 5)) + #Crops the graph
+    labs( #Adds labels
         x = "Log 2 Fold Change",
         y = "-log10(pvalue)",
         title = "Volcano plot of A vs B",
         color = "Significance"
     ) +
     theme_light() +
-    theme(plot.title = element_text(hjust = 0.5))
+    theme(plot.title = element_text(hjust = 0.5)) #Centres title
 ggplotly(a_vs_b_volcano)
 
-#Creating a new column for colouring
-a_vs_d$diffexpressed <- "NO"
-a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 0.5 & a_vs_d$padj < 0.05] <- "UP"
-a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= -0.5 & a_vs_d$padj < 0.05] <- "DOWN"
+#Creating a new column for colouring in A vs D
+a_vs_d$diffexpressed <- "NO" #Creates new column and assigns NO to all values
+a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 0.5 & a_vs_d$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
+a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= -0.5 & a_vs_d$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
 
 #Creating the volcano plot
-a_vs_d_volcano <- ggplot(data = a_vs_d, aes(x = log2FoldChange, y = -log10(pvalue), color = diffexpressed, text = gene_id)) +
+a_vs_d_volcano <- ggplot(data = a_vs_d, aes(x = log2FoldChange, y = -log10(pvalue), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
     geom_point() +
-    scale_color_manual(values = c("red", "grey", "blue"), labels = c('Downregulated', 'Not Significant', 'Upregulated')) +
-    coord_cartesian(ylim = c(0, 20), xlim = c(-10, 10)) +
+    scale_color_manual(values = c("blue", "grey", "red"), labels = c('Downregulated', 'Not Significant', 'Upregulated')) + #Creates colour scheme based on labels
+    coord_cartesian(ylim = c(0, 20), xlim = c(-10, 10)) + #Crops the graph
     labs(
         x = "Log 2 Fold Change",
         y = "-log10(pvalue)",
@@ -125,76 +125,76 @@ a_vs_d_volcano <- ggplot(data = a_vs_d, aes(x = log2FoldChange, y = -log10(pvalu
         color = "Significance"
     ) +
     theme_light() +
-    theme(plot.title = element_text(hjust = 0.5))
+    theme(plot.title = element_text(hjust = 0.5)) #Centres title
 ggplotly(a_vs_d_volcano)
 
 
 #MA PLOT
 #A vs B
-a_vs_b_MA <- ggmaplot(data = a_vs_b
+a_vs_b_MA <- ggmaplot(data = a_vs_b #Creates an MA plot
     )+
-coord_cartesian(ylim = c(-10, 10)) +
-labs(
+coord_cartesian(ylim = c(-10, 10)) + #Crops graph
+labs( #Adds labels
     x = "Log2 Mean Expression",
     y = "Log 2 Fold Change",
     title = "MA plot of A vs B",
     color = "Significance"
 ) +
 theme_light() +
-theme(plot.title = element_text(hjust = 0.5))
+theme(plot.title = element_text(hjust = 0.5)) #Centres title
 ggplotly(a_vs_b_MA)
 
 #A vs D
-a_vs_d_MA <- ggmaplot(data = a_vs_d
+a_vs_d_MA <- ggmaplot(data = a_vs_d #Creates an MA plot
     )+
-coord_cartesian(ylim = c(-10, 10)) +
-labs(
+coord_cartesian(ylim = c(-10, 10)) + #Crops graph
+labs( #Adding labels
     x = "Log2 Mean Expression",
     y = "Log 2 Fold Change",
     title = "MA plot of A vs D",
     color = "Significance"
 ) +
 theme_light() +
-theme(plot.title = element_text(hjust = 0.5))
+theme(plot.title = element_text(hjust = 0.5)) #Centres title
 ggplotly(a_vs_d_MA)
 
 
 #Histogram of A vs B
-a_vs_b_histogram <- ggplot(aes(x = pvalue), data = a_vs_b) + 
+a_vs_b_histogram <- ggplot(aes(x = pvalue), data = a_vs_b) +  #Creates histogram
     geom_histogram(
         binwidth = 0.1,
         colour = "black",
         fill = "blue",
-        na.rm = TRUE
+        na.rm = TRUE #Removing any NAs to prevent errors
     ) +
-    xlim(0, 1) +
-    ylim(0,1000) +
+    xlim(0, 1) + #Cropping along x axis
+    ylim(0,1000) + #Cropping along y axis
     labs(
         x = "P value",
         y = "Frequency",
         title = "Histogram of P value in A vs B"  
     ) + 
     theme_light() + 
-    theme(plot.title = element_text(hjust = 0.5))
+    theme(plot.title = element_text(hjust = 0.5)) #Centres title
 ggplotly(a_vs_b_histogram)
 
 #Histogram of A vs D
-a_vs_d_histogram <- ggplot(aes(x = pvalue), data = a_vs_d) + 
+a_vs_d_histogram <- ggplot(aes(x = pvalue), data = a_vs_d) + #Creates histogram
     geom_histogram(
         binwidth = 0.1,
         colour = "black",
         fill = "blue",
-        na.rm = TRUE
+        na.rm = TRUE #Removing any NAs to prevent errors
     ) +
-    xlim(0, 1) +
-    ylim(0,1000) +
+    xlim(0, 1) + #Cropping along x axis
+    ylim(0,1000) + #Cropping along y axis
     labs(
         x = "P value",
         y = "Frequency",
         title = "Histogram of P value in A vs D"  
     ) + 
     theme_light() + 
-    theme(plot.title = element_text(hjust = 0.5))
+    theme(plot.title = element_text(hjust = 0.5)) #Centres title
 ggplotly(a_vs_d_histogram)
 
 #Heatmap
@@ -230,8 +230,8 @@ labs(
 )+
 theme_minimal() +
 theme(
-    panel.grid = element_blank(),
-    plot.title = element_text(hjust = 0.5, size = 11)
+    panel.grid = element_blank(), #Removes gridlines
+    plot.title = element_text(hjust = 0.5, size = 11) #Centres title and makes it fit
 )
 
 ggplotly(heatmap_plot)
