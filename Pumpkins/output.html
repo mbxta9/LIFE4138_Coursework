@@ -2295,7 +2295,7 @@ body { background-color: #FFF4E6; }
 <section id="Task-1" class="level2">
 <h2 class="anchored" data-anchor-id="Task-1">Task 1 - Read in the dataset 🔍</h2>
 <p>The first task involved reading in the <code>pumpkins.csv</code> file. To do this the following <code>import_dataset</code> function was made.</p>
-<div id="673941f9" class="cell" data-execution_count="1">
+<div id="9b69eaeb" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2327,7 +2327,7 @@ body { background-color: #FFF4E6; }
 </details>
 </div>
 <p>This could then be called using the filepath of the .csv file. It is assigned here to the variable <code>pumpkins</code> for ease of use later.</p>
-<div id="4edd8d1a" class="cell" data-execution_count="2">
+<div id="12020c02" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pumpkins <span class="op">=</span> import_dataset(<span class="st">&#39;pumpkins_datasets/pumpkins_02.csv&#39;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Dataset imported successfully!</code></pre>
@@ -2339,7 +2339,7 @@ body { background-color: #FFF4E6; }
 <p>Next was to identify the heaviest pumpkin and data about it including: weight, variety, where it was from and when it was grown.</p>
 <p>To do this the <code>find_highest</code> function was created to get the row with a highest value in a specific column.</p>
 <p>The code for this function can be seen here:</p>
-<div id="836e99b2" class="cell" data-execution_count="3">
+<div id="e4cdc2f6" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_highest(dataframe: pd.DataFrame,column: <span class="bu">str</span>):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;&#39;&#39;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Function to get the row information of the highest value in a column</span></span>
@@ -2363,7 +2363,7 @@ body { background-color: #FFF4E6; }
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This function was called and we can see general information about the pumpkin below.</p>
-<div id="6ac55ae5" class="cell" data-execution_count="4">
+<div id="17f29bcf" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>heaviest_pumpkin <span class="op">=</span> find_highest(pumpkins,<span class="st">&#39;weight_lbs&#39;</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;The heaviest pumpkin was a </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">&#39;variety&#39;</span>]<span class="sc">}</span><span class="ss"> from </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">&#39;city&#39;</span>]<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">&#39;state_prov&#39;</span>]<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">&#39;country&#39;</span>]<span class="sc">}</span><span class="ss">.</span><span class="ch">\n</span><span class="ss">It weighed </span><span class="sc">{</span><span class="bu">round</span>(heaviest_pumpkin[<span class="st">&#39;weight_lbs&#39;</span>],<span class="dv">2</span>)<span class="sc">}</span><span class="ss">lbs and was grown in the year </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">&#39;id&#39;</span>]<span class="sc">.</span>removesuffix(<span class="st">&#39;-P&#39;</span>)<span class="sc">}</span><span class="ss">.&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -2377,7 +2377,7 @@ It weighed 2727.22lbs and was grown in the year 2021.</code></pre>
 <section id="converting-pounds-to-kilograms" class="level3">
 <h3 class="anchored" data-anchor-id="converting-pounds-to-kilograms">Converting pounds to kilograms</h3>
 <p>The function <code>lbs_to_kg</code> was created to convert a value in lbs to kg, allowing it to be applied on mass in the next part.</p>
-<div id="ba3a50c0" class="cell" data-execution_count="5">
+<div id="45e87cb8" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lbs_to_kg(value: <span class="bu">float</span><span class="op">|</span><span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&#39;&#39;&#39;</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Function to convert a value in lbs to kg</span></span>
@@ -2398,9 +2398,9 @@ It weighed 2727.22lbs and was grown in the year 2021.</code></pre>
 <span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can test this works using known values of lbs and kgs. For example, 2.20462 lbs is equal to 1kg and running the function should return <code>1.0</code>.</p>
-<div id="c28af05b" class="cell" data-execution_count="6">
+<div id="f0a859ff" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>lbs_to_kg(<span class="fl">2.20462</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="162">
+<div class="cell-output cell-output-display" data-execution_count="32">
 <pre><code>1.0</code></pre>
 </div>
 </div>
@@ -2409,11 +2409,11 @@ It weighed 2727.22lbs and was grown in the year 2021.</code></pre>
 <h3 class="anchored" data-anchor-id="creating-a-new-column">Creating a new column</h3>
 <p>Now that this function is verified to work it can be used to create new column of weight in kilograms.</p>
 <p>The following line of code was ran that created a new column and called the previously created function</p>
-<div id="a8f3c94c" class="cell" data-execution_count="7">
+<div id="21d48c18" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pumpkins[<span class="ss">f&quot;weight_in_kg&quot;</span>] <span class="op">=</span> [(lbs_to_kg(i)) <span class="cf">for</span> i <span class="kw">in</span> pumpkins[<span class="st">&#39;weight_lbs&#39;</span>]] <span class="co">#Creates new column using values by calling conversion function in list</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now we can take a look at the new column in the dataset:</p>
-<div id="2ee8eca5" class="cell" data-execution_count="8">
+<div id="ecd0ee3a" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pumpkins.head(<span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       id place  weight_lbs grower_name     city  state_prov        country  \
@@ -2427,7 +2427,7 @@ It weighed 2727.22lbs and was grown in the year 2021.</code></pre>
 </div>
 </div>
 <p>We can re-run the code from earlier on the new column to find the value in kg for the heaviest pumpkin</p>
-<div id="e1b576a4" class="cell" data-execution_count="9">
+<div id="77656a4e" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>heaviest_pumpkin <span class="op">=</span> find_highest(pumpkins,<span class="st">&#39;weight_in_kg&#39;</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;The heaviest pumpkin was a </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">&#39;variety&#39;</span>]<span class="sc">}</span><span class="ss"> from </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">&#39;city&#39;</span>]<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">&#39;state_prov&#39;</span>]<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">&#39;country&#39;</span>]<span class="sc">}</span><span class="ss">.</span><span class="ch">\n</span><span class="ss">It weighed </span><span class="sc">{</span><span class="bu">round</span>(heaviest_pumpkin[<span class="st">&#39;weight_in_kg&#39;</span>],<span class="dv">2</span>)<span class="sc">}</span><span class="ss">kg and was grown in the year </span><span class="sc">{</span>heaviest_pumpkin[<span class="st">&#39;id&#39;</span>]<span class="sc">.</span>removesuffix(<span class="st">&#39;-P&#39;</span>)<span class="sc">}</span><span class="ss">.&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -2464,7 +2464,7 @@ It weighed 1237.05kg and was grown in the year 2021.</code></pre>
 </tbody>
 </table>
 <p>This column was created using the following code.</p>
-<div id="8da7f778" class="cell" data-execution_count="10">
+<div id="98ca6acd" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>classes <span class="op">=</span> []</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> pumpkins[<span class="st">&#39;weight_in_kg&#39;</span>]:</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">&lt;</span><span class="dv">250</span>: <span class="co">#Light weight class if weight &lt;250</span></span>
@@ -2476,7 +2476,7 @@ It weighed 1237.05kg and was grown in the year 2021.</code></pre>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>pumpkins[<span class="st">&quot;weight_class&quot;</span>] <span class="op">=</span> classes <span class="co">#Create new column from classes list</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can see the <code>weight_class</code> values for the first three rows below</p>
-<div id="f4e8345a" class="cell" data-execution_count="11">
+<div id="3b19ef14" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pumpkins[[<span class="st">&#39;weight_in_kg&#39;</span>,<span class="st">&#39;weight_class&#39;</span>]].head(<span class="dv">3</span>))   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   weight_in_kg weight_class
@@ -2493,7 +2493,7 @@ It weighed 1237.05kg and was grown in the year 2021.</code></pre>
 <p>Next was to create a plot of the estimated weight of the pumpkins against the actual weights.</p>
 <p>This can be done in a number of ways but the important thing to note is that both axis require the same units. One could plot the <code>est_weight</code> against the <code>weight</code> in lbs using the data already available in the dataset, but to make use of the function created in <a href="#Task-3">task 3</a>, the values were plotted in kilograms.</p>
 <p>A new column in the dataset was created called <code>est_weight_kg</code> using the code below.</p>
-<div id="b1c31e27" class="cell" data-execution_count="12">
+<div id="85cf5181" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pumpkins[<span class="ss">f&quot;est_weight_kg&quot;</span>] <span class="op">=</span> [(lbs_to_kg(i)) <span class="cf">for</span> i <span class="kw">in</span> pumpkins[<span class="st">&#39;est_weight&#39;</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This new set column of data (<code>est_weight_kg</code>) can be plotted against the <code>weight_in_kg</code> column to see the relationship.</p>
@@ -2501,7 +2501,7 @@ It weighed 1237.05kg and was grown in the year 2021.</code></pre>
 <section id="creating-the-graph" class="level3">
 <h3 class="anchored" data-anchor-id="creating-the-graph">Creating the graph</h3>
 <p>The module matplotlib is used to create graphs and is imported.</p>
-<div id="fec71798" class="cell" data-execution_count="13">
+<div id="9b9782e8" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next a plot of the two columns can be created.</p>
@@ -2557,7 +2557,7 @@ Figure 2: A Scatterplot of the relationship between the estimated weight and th
 <section id="saving-the-graph" class="level3">
 <h3 class="anchored" data-anchor-id="saving-the-graph">Saving the graph</h3>
 <p>Next we can save this graph as a file by running:</p>
-<div id="e0a701fd" class="cell" data-execution_count="16">
+<div id="1ca298e4" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>figure_1.savefig(<span class="st">&quot;pumpkins_weight_relationship.png&quot;</span>, dpi <span class="op">=</span> <span class="dv">300</span>) <span class="co">#Saves the first figure to disk. Increased DPI to improve readability.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
@@ -2574,7 +2574,7 @@ Figure 2: A Scatterplot of the relationship between the estimated weight and th
 <section id="filtering-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="filtering-the-data">Filtering the data</h3>
 <p>Firstly, a subset of the dataset was created by checking if the country value was in a predefined list.</p>
-<div id="d4fff7bb" class="cell" data-execution_count="17">
+<div id="2e532527" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>filter_vars <span class="op">=</span> [country <span class="kw">in</span> [<span class="st">&#39;United Kingdom&#39;</span>, <span class="st">&#39;Japan&#39;</span>, <span class="st">&#39;Italy&#39;</span>] <span class="cf">for</span> country <span class="kw">in</span> pumpkins[<span class="st">&#39;country&#39;</span>]] <span class="co">#Checks if country in list, creates list of true and false values</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>filtered_pumpkins <span class="op">=</span> pumpkins[filter_vars] <span class="co">#Creates list by adding the row if filter_vars returns True</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -2583,7 +2583,7 @@ Figure 2: A Scatterplot of the relationship between the estimated weight and th
 <section id="saving-the-filtered-data" class="level3">
 <h3 class="anchored" data-anchor-id="saving-the-filtered-data">Saving the filtered data</h3>
 <p>The filtered data can be easily saved to disk using:</p>
-<div id="fe58048a" class="cell" data-execution_count="18">
+<div id="19eb8ea8" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>filtered_pumpkins.to_csv(<span class="st">&#39;pumpkins_filtered.csv&#39;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
@@ -2594,7 +2594,7 @@ Figure 2: A Scatterplot of the relationship between the estimated weight and th
 <section id="finding-mean-weight-per-country" class="level3">
 <h3 class="anchored" data-anchor-id="finding-mean-weight-per-country">Finding mean weight per country</h3>
 <p>This was done by grouping the <code>filtered_pumpkins</code> dataframe by <code>country</code> and then selecting the <code>weight_in_kg</code> column and calculating the mean. The mean values for each country can be seen below.</p>
-<div id="94e82e4f" class="cell" data-execution_count="19">
+<div id="107d1fcb" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filtered_pumpkins.groupby(<span class="st">&#39;country&#39;</span>)[<span class="st">&#39;weight_in_kg&#39;</span>].mean()) <span class="co">#Groups by country and </span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co">#filters to only weight and calculates mean</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -2608,7 +2608,7 @@ Name: weight_in_kg, dtype: float64</code></pre>
 </section>
 <section id="finding-mean-weight-per-variety-per-country" class="level3">
 <h3 class="anchored" data-anchor-id="finding-mean-weight-per-variety-per-country">Finding mean weight per variety per country</h3>
-<div id="14286a36" class="cell" data-execution_count="20">
+<div id="d3ea4cc8" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>mean_variety_country <span class="op">=</span> filtered_pumpkins.groupby([<span class="st">&#39;country&#39;</span>,<span class="st">&#39;variety&#39;</span>])[<span class="st">&#39;weight_in_kg&#39;</span>].mean()</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mean_variety_country) <span class="co">#Groups by country and calculates mean value and then prints</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -2668,7 +2668,7 @@ Name: weight_in_kg, dtype: float64</code></pre>
 </div>
 </div>
 <p>Next to get the lowest mean weight variety we can do:</p>
-<div id="ccb3af8d" class="cell" data-execution_count="21">
+<div id="f0d4901e" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>lowest_mean_row <span class="op">=</span> mean_variety_country.idxmin() <span class="co">#Gets lowest row (country, variety)</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>lowest_mean_value <span class="op">=</span> mean_variety_country.<span class="bu">min</span>() <span class="co">#Gets lowest mean weight value</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;The lowest mean weight was &#39;</span><span class="sc">{</span>lowest_mean_row[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">&#39; from </span><span class="sc">{</span>lowest_mean_row[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">, weighing </span><span class="sc">{</span><span class="bu">round</span>(lowest_mean_value,<span class="dv">2</span>)<span class="sc">}</span><span class="ss">kg.&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -2707,7 +2707,7 @@ Figure 3: A boxplot showing the distribution of pumpkin weight of three countri
 <section id="saving-the-boxplot" class="level3">
 <h3 class="anchored" data-anchor-id="saving-the-boxplot">Saving the boxplot</h3>
 <p>This boxplot can now be saved by running:</p>
-<div id="38234a79" class="cell" data-execution_count="23">
+<div id="a2aeeaab" class="cell" data-execution_count="23">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>figure_3.savefig(<span class="st">&quot;filtered_boxplot.png&quot;</span>, dpi <span class="op">=</span> <span class="dv">300</span>) <span class="co">#Saves the third figure (boxplot) to disk. Increased dpi to improve readability.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
@@ -2724,7 +2724,7 @@ Figure 3: A boxplot showing the distribution of pumpkin weight of three countri
 <section id="creating-the-facet-plot" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="creating-the-facet-plot">Creating the facet plot</h3>
 <p>To create a facet plot from the plot in Task 8, the seaborn module was imported and used.</p>
-<div id="f6a0815d" class="cell" data-execution_count="24">
+<div id="ec3e564e" class="cell" data-execution_count="24">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next a facet plot can be made using seaborn as follows:</p>
@@ -2739,7 +2739,7 @@ Figure 3: A boxplot showing the distribution of pumpkin weight of three countri
 <span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>        palette <span class="op">=</span> <span class="st">&#39;colorblind&#39;</span> <span class="co">#Changes palette to be *colourblind friendly*</span></span>
 <span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>facetplot.set_xticklabels(rotation<span class="op">=</span><span class="dv">90</span>)</span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>facetplot.tight_layout(rect<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.95</span>]) <span class="co">#Creates whitespace at top of graph</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>facetplot.figure.tight_layout(rect<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.95</span>]) <span class="co">#Creates whitespace at top of graph</span></span>
 <span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>facetplot.set_axis_labels(<span class="st">&quot;Variety&quot;</span>,<span class="st">&quot;Pumpkin Weight (kg)&quot;</span>) <span class="co">#Names x and y axis</span></span>
 <span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>facetplot.figure.suptitle(<span class="st">&quot;Boxplot of Pumpkin Weight by Variety and Country&quot;</span>, y<span class="op">=</span><span class="fl">0.98</span>) <span class="co">#Adds main figure title</span></span>
 <span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>facetplot.set_titles(<span class="st">&quot;</span><span class="sc">{col_name}</span><span class="st">&quot;</span>) <span class="co">#Gives each sub plot title</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -2760,8 +2760,8 @@ Figure 4: A boxplot showing distribution of pumpkin weight by variety and count
 <section id="saving-the-plot" class="level3">
 <h3 class="anchored" data-anchor-id="saving-the-plot">Saving the plot</h3>
 <p>This facet boxplot can now be saved by running:</p>
-<div id="cdcaa11f" class="cell" data-execution_count="26">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>facetplot.savefig(<span class="st">&quot;filtered_facet_boxplot.png&quot;</span>,bbox_inches<span class="op">=</span><span class="st">&#39;tight&#39;</span>, dpi <span class="op">=</span> <span class="dv">300</span>) <span class="co">#Saves facetplot to disk. to disk. Increased dpi to improve readability.</span></span>
+<div id="50e3482a" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>facetplot.figure.savefig(<span class="st">&quot;filtered_facet_boxplot.png&quot;</span>,bbox_inches<span class="op">=</span><span class="st">&#39;tight&#39;</span>, dpi <span class="op">=</span> <span class="dv">300</span>) <span class="co">#Saves facetplot to disk. to disk. Increased dpi to improve readability.</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co">#bbox_inches reduces whitespace making it easier to read</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>

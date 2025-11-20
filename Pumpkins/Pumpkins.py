@@ -166,11 +166,11 @@ def main():
         palette = 'colorblind' #Changes palette to be *colourblind friendly*
     )
     facetplot.set_xticklabels(rotation=90)
-    facetplot.tight_layout(rect=[0, 0, 1, 0.95]) #Creates whitespace at top of graph
+    facetplot.figure.tight_layout(rect=[0, 0, 1, 0.95]) #Creates whitespace at top of graph
     facetplot.set_axis_labels("Variety","Pumpkin Weight (kg)") #Names x and y axis
     facetplot.figure.suptitle("Boxplot of Pumpkin Weight by Variety and Country", y=0.98) #Adds main figure title
     facetplot.set_titles("{col_name}") #Gives each sub plot title
-    facetplot.savefig("filtered_facet_boxplot.png", bbox_inches='tight', dpi = 300) #Saves facetplot to disk. to disk. Increased dpi to improve readability.
+    facetplot.figure.savefig("filtered_facet_boxplot.png", bbox_inches='tight', dpi = 300) #Saves facetplot to disk. to disk. Increased dpi to improve readability.
     #bbox_inches reduces whitespace making it easier to read
     plt.show() #Displays all the created figures.
 
