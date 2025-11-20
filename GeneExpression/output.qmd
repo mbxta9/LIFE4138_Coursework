@@ -21,7 +21,7 @@ knitr:
 ---
 
 ```{=html}
-<style>#colours by diffexpressed and adds text to each point for plotly
+<style>
   body { background-color: #AFC4DE; }
 </style>
 ```
@@ -430,6 +430,7 @@ sig_a_b <- bind_rows( #Creates dataframe of combined top 25
 
 datatable(sig_a_b, rownames = FALSE, caption = "Table 3: Top 25 upregulated and top 25 downregulated genes in A vs B") #Shows output nicely
 ```
+And the table for A vs D is below.
 ```{r}
 #| echo: true
 #| code-fold: true
