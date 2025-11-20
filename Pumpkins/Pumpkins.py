@@ -156,23 +156,22 @@ def main():
     figure_3.savefig("filtered_boxplot.png", bbox_inches='tight', dpi = 300) #Saves the third figure (boxplot) to disk.
 
     #Facetplot previous graph
-    figure_4 = plt.figure(figsize = (10,6), constrained_layout = True) #Creates new figure to draw on with bigger size and tight spacing
-    plot_area_4 = figure_4.add_subplot() #Creates subplot to plot on
-    facetplot = sns.boxplot( #have to use catplot as boxplot has no facetting
+    facetplot = sns.catplot( #have to use catplot as boxplot has no facetting
         data = filtered_pumpkins, #Chooses filtered dataset
-        x = 'country', #Chooses axis for data
+        x = 'variety', #Chooses axis for data
         y = 'weight_in_kg', #Chooses axis for data
+        col = 'country',
+        kind = 'box',
         hue = 'variety', #Creates coloured subplots based on variety
-        ax = plot_area_4, #Masks to created matplot figure
         palette = 'colorblind' #Changes palette to be *colourblind friendly*
     )
-    plot_area_4.set_xlabel('Country') #Add axis labels and title
-    plot_area_4.set_ylabel('Pumpkin Weight (kg)')
-    plot_area_4.set_title('Boxplot of Pumpkin Weight by Variety and Country')
-    plot_area_4.grid(True, linestyle = '--',alpha = 0.75, axis = 'y') #Adds gridlines only on y axis
-    plot_area_4.legend(bbox_to_anchor=(1,1)) #Moves legend to the side
-    figure_4.savefig("filtered_facet_boxplot.png", bbox_inches='tight', dpi = 300) #Saves figure 4 to disk.
-
+    facetplot.set_xticklabels(rotation=90)
+    facetplot.tight_layout(rect=[0, 0, 1, 0.95]) #Creates whitespace at top of graph
+    facetplot.set_axis_labels("Variety","Pumpkin Weight (kg)") #Names x and y axis
+    facetplot.figure.suptitle("Boxplot of Pumpkin Weight by Variety and Country", y=0.98) #Adds main figure title
+    facetplot.set_titles("{col_name}") #Gives each sub plot title
+    facetplot.savefig("filtered_facet_boxplot.png", bbox_inches='tight', dpi = 300) #Saves facetplot to disk. to disk. Increased dpi to improve readability.
+    #bbox_inches reduces whitespace making it easier to read
     plt.show() #Displays all the created figures.
 
 if __name__ == '__main__': #Ensures script runs
