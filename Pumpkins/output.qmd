@@ -11,7 +11,8 @@ format:
         page-layout: full
         theme: united
         title-block-banner: true
-        
+        smooth-scroll: true
+        number-sections: true
 ---
 
 ```{=html}
@@ -336,7 +337,7 @@ Next a facet plot can be made using seaborn as follows:
 #| echo: true
 #| label: fig-facet_boxplot
 #| fig-cap: A boxplot showing distribution of pumpkin weight by variety and country from the filtered pumpkin competitions dataset.
-#| column: screen-inset-left
+#| column: screen-inset
 facetplot = sns.catplot( #have to use catplot as boxplot has no facetting
         data = filtered_pumpkins, #Chooses filtered dataset
         x = 'variety', #Chooses axis for data
