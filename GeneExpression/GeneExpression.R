@@ -90,8 +90,8 @@ kable(output_a_d, col.names=c("Statistic","P Value","Log2FoldChange"),caption = 
 #Volcano plot
 #Creating a new column for colouring
 a_vs_b$diffexpressed <- "NO"
-a_vs_b$diffexpressed[a_vs_b$log2FoldChange >= 0.5 & a_vs_b$pvalue < 0.05] <- "UP"
-a_vs_b$diffexpressed[a_vs_b$log2FoldChange <= -0.5 & a_vs_b$pvalue < 0.05] <- "DOWN"
+a_vs_b$diffexpressed[a_vs_b$log2FoldChange >= 0.5 & a_vs_b$padj < 0.05] <- "UP"
+a_vs_b$diffexpressed[a_vs_b$log2FoldChange <= -0.5 & a_vs_b$padj < 0.05] <- "DOWN"
 
 #Creating the volcano plot
 a_vs_b_volcano <- ggplot(data = a_vs_b, aes(x = log2FoldChange, y = -log10(pvalue), color = diffexpressed, text = gene_id)) +
@@ -110,8 +110,8 @@ ggplotly(a_vs_b_volcano)
 
 #Creating a new column for colouring
 a_vs_d$diffexpressed <- "NO"
-a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 0.5 & a_vs_d$pvalue < 0.05] <- "UP"
-a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= -0.5 & a_vs_d$pvalue < 0.05] <- "DOWN"
+a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 0.5 & a_vs_d$padj < 0.05] <- "UP"
+a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= -0.5 & a_vs_d$padj < 0.05] <- "DOWN"
 
 #Creating the volcano plot
 a_vs_d_volcano <- ggplot(data = a_vs_d, aes(x = log2FoldChange, y = -log10(pvalue), color = diffexpressed, text = gene_id)) +
@@ -164,8 +164,11 @@ a_vs_b_histogram <- ggplot(aes(x = pvalue), data = a_vs_b) +
     geom_histogram(
         binwidth = 0.1,
         colour = "black",
-        fill = "blue"
+        fill = "blue",
+        na.rm = TRUE
     ) +
+    xlim(0, 1) +
+    ylim(0,1000) +
     labs(
         x = "P value",
         y = "Frequency",
@@ -180,8 +183,11 @@ a_vs_d_histogram <- ggplot(aes(x = pvalue), data = a_vs_d) +
     geom_histogram(
         binwidth = 0.1,
         colour = "black",
-        fill = "blue"
+        fill = "blue",
+        na.rm = TRUE
     ) +
+    xlim(0, 1) +
+    ylim(0,1000) +
     labs(
         x = "P value",
         y = "Frequency",
@@ -190,3 +196,42 @@ a_vs_d_histogram <- ggplot(aes(x = pvalue), data = a_vs_d) +
     theme_light() + 
     theme(plot.title = element_text(hjust = 0.5))
 ggplotly(a_vs_d_histogram)
+
+#Heatmap
+heat_ab <- a_vs_b %>%
+    arrange(padj) %>%
+    slice_head(n = 20) %>% #Arrange by adjusted p value and take only top 20
+    select(gene_id,baseMean) %>%
+    mutate(Name = "A_vs_B") #Add column called Name to kno which dataset its from
+
+heat_ad <- a_vs_d %>%
+    arrange(padj) %>%
+    slice_head(n = 20) %>% #Arrange by adjusted p value and take only top 20
+    select(gene_id,baseMean) %>%
+    mutate(Name = "A_vs_D") #Add column called Name to kno which dataset its from
+
+heatmap_data <- bind_rows(heat_ab, heat_ad) #Combine the two top 20 datasets
+heatmap_data <- heatmap_data %>%
+    complete(gene_id,Name, fill = list(baseMean = 0)) %>% #Fill blanks with 0 values
+    mutate(log_expression = log10(baseMean + 1)) #Create new column with log adjusted values
+
+
+heatmap_plot <- ggplot(heatmap_data, aes( #Creates the plot
+    x = Name, #Comparison of datasets
+    y = gene_id, #Gene list on y axis
+    fill = log_expression #Colours heatmap based on expression
+)) +
+geom_tile() +
+scale_fill_gradient(low="white", high="blue", name = "Log10(baseMean)") + #Chooses colours for map
+labs(
+    title = "Heatmap of expression of top 20 differentially expressed genes for A vs B and A vs D",
+    x = "Dataset Comparison",
+    y = "Gene ID"
+)+
+theme_minimal() +
+theme(
+    panel.grid = element_blank(),
+    plot.title = element_text(hjust = 0.5, size = 11)
+)
+
+ggplotly(heatmap_plot)

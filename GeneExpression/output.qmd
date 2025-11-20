@@ -10,6 +10,7 @@ format:
         code-tools: false
         code-line-numbers: true
         title-block-banner: "#4A7AB5"
+    ipynb: default
 knitr:
   opts_chunk:
     collapse: true
@@ -252,7 +253,7 @@ ggplotly(a_vs_d_MA)
 
 :::
 
-Commentary of @fig-a_vs_d_ma MA plot here...
+Commentary of @fig-a_vs_b_ma and @fig-a_vs_d_ma MA plot here...
 
 
 ## Histograms 📊 {.column-screen-inset}
@@ -262,13 +263,19 @@ Histograms of the `pvalue` were created for each of the datasets. These along wi
 ```{r}
 #| echo: true
 #| code-fold: true
+#| label: fig-a_vs_b_histogram
+#| fig-cap: "Histogram plot of p-values in the A vs B comparison. "
+#| code-summary: "Show the histogram code"
 #Histogram of A vs B
 a_vs_b_histogram <- ggplot(aes(x = pvalue), data = a_vs_b) + 
     geom_histogram(
         binwidth = 0.1,
         colour = "black",
-        fill = "blue"
+        fill = "blue",
+        na.rm = TRUE
     ) +
+    xlim(0, 1) +
+    ylim(0,1000) +
     labs(
         x = "P value",
         y = "Frequency",
@@ -277,14 +284,22 @@ a_vs_b_histogram <- ggplot(aes(x = pvalue), data = a_vs_b) +
     theme_light() + 
     theme(plot.title = element_text(hjust = 0.5))
 ggplotly(a_vs_b_histogram)
-
+```
+```{r}
+#| echo: true
+#| code-fold: true
+#| label: fig-a_vs_d_histogram
+#| code-summary: "Show the histogram code"
 #Histogram of A vs D
 a_vs_d_histogram <- ggplot(aes(x = pvalue), data = a_vs_d) + 
     geom_histogram(
         binwidth = 0.1,
         colour = "black",
-        fill = "blue"
+        fill = "blue",
+        na.rm = TRUE
     ) +
+    xlim(0, 1) +
+    ylim(0,1000) +
     labs(
         x = "P value",
         y = "Frequency",
@@ -295,3 +310,62 @@ a_vs_d_histogram <- ggplot(aes(x = pvalue), data = a_vs_d) +
 ggplotly(a_vs_d_histogram)
 ```
 :::
+Commentary of @fig-a_vs_b_histogram and @fig-a_vs_d_histogram here...
+
+## Heatmap ♨️ {.column-screen-inset-left}
+A heatmap was made for the top 20 differentially expressed genes from each dataset (A vs B and A vs D).
+
+The genes with the lowest adjusted p values were selected. 
+
+These genes had their `baseMean` value log transformed for comparison and the code and the heatmap can be seen below.
+
+::: {layout-ncol=2 .column-screen-inset}
+```{r}
+#| echo: true
+#| code-fold: true
+#| label: fig-heatmap
+#| fig-cap: Heatmap of top 20 genes
+#| column: screen-inset-left
+#| code-summary: "Show the heatmap code"
+#Heatmap
+heat_ab <- a_vs_b %>%
+    arrange(padj) %>%
+    slice_head(n = 20) %>% #Arrange by adjusted p value and take only top 20
+    select(gene_id,baseMean) %>%
+    mutate(Name = "A_vs_B") #Add column called Name to kno which dataset its from
+
+heat_ad <- a_vs_d %>%
+    arrange(padj) %>%
+    slice_head(n = 20) %>% #Arrange by adjusted p value and take only top 20
+    select(gene_id,baseMean) %>%
+    mutate(Name = "A_vs_D") #Add column called Name to kno which dataset its from
+
+heatmap_data <- bind_rows(heat_ab, heat_ad) #Combine the two top 20 datasets
+heatmap_data <- heatmap_data %>%
+    complete(gene_id,Name, fill = list(baseMean = 0)) %>% #Fill blanks with 0 values
+    mutate(log_expression = log10(baseMean + 1)) #Create new column with log adjusted values
+
+
+heatmap_plot <- ggplot(heatmap_data, aes( #Creates the plot
+    x = Name, #Comparison of datasets
+    y = gene_id, #Gene list on y axis
+    fill = log_expression #Colours heatmap based on expression
+)) +
+geom_tile() +
+scale_fill_gradient(low="white", high="blue", name = "Log10(baseMean)") + #Chooses colours for map
+labs(
+    title = "Heatmap of expression of top 20 differentially expressed genes for A vs B and A vs D",
+    x = "Dataset Comparison",
+    y = "Gene ID"
+)+
+theme_minimal() +
+theme(
+    panel.grid = element_blank(),
+    plot.title = element_text(hjust = 0.5, size = 11)
+)
+
+ggplotly(heatmap_plot)
+```
+:::
+
+@fig-heatmap shows 
