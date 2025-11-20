@@ -14,6 +14,12 @@ format:
         
 ---
 
+```{=html}
+<style>
+  body { background-color: #FFF4E6; }
+</style>
+```
+
 ## Task 1 - Read in the dataset 🔍 {#Task-1}
 The first task involved reading in the `pumpkins.csv` file. To do this the following `import_dataset` function was made.
 ```{python}
@@ -192,7 +198,7 @@ Note: The `plt.figure` command was used here as it makes my later comparison eas
 ```{python}
 #| echo: true
 #| label: fig-estimated_vs_actual
-#| fig-cap: A Scatterplot of the relationship between the estimated weight and the actual weight of pumpkins from the pumpkin competitions dataset.
+#| fig-cap: A Scatterplot of the relationship between the estimated weight and the actual weight, in kilograms, of pumpkins from the pumpkin competitions dataset.
 figure_1 = plt.figure() #Creates a new figure to draw graph on
 plot_area_1 = figure_1.add_subplot() #Creates a new plotting area inside figure_1 to make axes
 plot_area_1.scatter(x = pumpkins['est_weight_kg'],y = pumpkins['weight_in_kg'],alpha = 0.25, color = 'blue') #Creating the relationship graph
@@ -205,6 +211,8 @@ The pattern observed should be the same as if the estimated and actual weight va
 ```{python}
 #| echo: true
 #| code-fold: true
+#| label: fig-estimated_vs_actual_lbs
+#| fig-cap: A Scatterplot of the relationship between the estimated weight and the actual weight, in lbs, of pumpkins from the pumpkin competitions dataset.
 figure_2 = plt.figure() #Creates a second figure to draw graph on
 plot_area_2 = figure_2.add_subplot() #Creates a new plotting area inside figure_2 to make axes
 plot_area_2.scatter(x = pumpkins['est_weight'],y = pumpkins['weight_lbs'],alpha = 0.25, color = 'red') #Creating the graph in lbs for checking
@@ -213,6 +221,7 @@ plot_area_2.set_xlabel('Estimated Weight (lbs)') #Adding x axis label
 plot_area_2.set_ylabel('Actual Weight (lbs)'); #Adding y axis label
 #figure_2.show() - This line is commented as it does not function corectly in markdown
 ```
+
 As can be seen above, the two graphs have identical patterns, meaning there were no issues when converting to kilograms.
 
 ### Saving the graph
