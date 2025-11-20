@@ -235,3 +235,19 @@ theme(
 )
 
 ggplotly(heatmap_plot)
+
+#Significance Table A vs B
+sig_a_b <- bind_rows( #Creates dataframe of combined top 25
+    sig_a_b_up %>%
+        arrange(padj) %>% #Sort by lowest padj
+        slice_head(n = 25) %>% #Take top 25
+        mutate(Regulation = "Upregulated"), #Add new column to show regulation
+
+    sig_a_b_down %>%
+        arrange(padj) %>% #Sort by lowest padj
+        slice_head(n = 25) %>% #Take top 25
+        mutate(Regulation = "Downregulated") #Add new column to show regulation
+) %>%
+    select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets all columns needed for output
+
+datatable(sig_a_b, rownames = FALSE) #Shows output nicely

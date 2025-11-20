@@ -144,6 +144,7 @@ Here are the volcano plots for the two datasets.
 #| echo: true
 #| code-fold: true
 #| label: fig-a_vs_b_volcano
+#| code-summary: "Show the volcano plot code"
 #| fig-cap: A volcano plot showing the log2fold changes against -log10(pvalue) for the genes in A vs B. Up regulated genes are shown in red (log2FC ≥ 0.5, padj < 0.05), down regulated genes are shown in blue (log2FC ≤ –0.5, padj < 0.05), while non-significant genes are shown in grey. Plots further from the centre and further from the x axis show greater significance and stronger expression.
 library(plotly)
 #Creating a new column for colouring in A vs B
@@ -172,6 +173,7 @@ ggplotly(a_vs_b_volcano)
 #| code-fold: true
 #| label: fig-a_vs_d_volcano
 #| fig-cap: A volcano plot showing the log2fold changes against -log10(pvalue) for the genes in A vs D. Up regulated genes are shown in red (log2FC ≥ 0.5, padj < 0.05), down regulated genes are shown in blue (log2FC ≤ –0.5, padj < 0.05), while non-significant genes are shown in grey. Plots further from the centre and further from the x axis show greater significance and stronger expression.
+#| code-summary: "Show the volcano plot code"
 #Creating a new column for colouring in A vs D
 a_vs_d$diffexpressed <- "NO" #Creates new column and assigns NO to all values
 a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 0.5 & a_vs_d$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
@@ -213,6 +215,7 @@ MA plots were created of the two datasets using the `ggpubr` module. The plots c
 ```{r}
 #| echo: true
 #| code-fold: true
+#| code-summary: "Show the MA plot code"
 #| label: fig-a_vs_b_ma
 #| fig-cap: MA plot of the A vs B comparison, showing Log2 Fold Change against the Log2 Mean Expression. Plots in red indicate genes that are significantly upregulated (log2FC ≥ 0.5, padj < 0.05), plots in blue indicate genes that significantly downregulated (log2FC ≤ –0.5, padj < 0.05), while plots in grey indicate genes that are not significant.
 library(ggpubr) #Loads ggpubr for creating MA plots
@@ -233,6 +236,7 @@ ggplotly(a_vs_b_MA)
 ```{r}
 #| echo: true
 #| code-fold: true
+#| code-summary: "Show the MA plot code"
 #| label: fig-a_vs_d_ma
 #| fig-cap: MA plot of the A vs D comparison, showing Log2 Fold Change against the Log2 Mean Expression. Plots in red indicate genes that are significantly upregulated (log2FC ≥ 0.5, padj < 0.05), plots in blue indicate genes that significantly downregulated (log2FC ≤ –0.5, padj < 0.05), while plots in grey indicate genes that are not significant.
 a_vs_d_MA <- ggmaplot(data = a_vs_d #Creates an MA plot
@@ -379,3 +383,41 @@ Many genes can be seen to show high expression in one set with low expression in
 An exception to this is `Q0055` which showed high levels of expression in both sets.
 :::
 :::
+
+# Significant Gene Tables 🧬 {.column-screen-inset-left}
+
+Tables were generated to showcase the genes with significant differential expression for each of the two datasets. Significant genes were those that fit the same significance criteria outlined above and can be seen once again in the table below.
+
+|   Threshold     | log2FoldChange | Adjusted P Value |
+|-----------------|----------------|------------------|
+| Upregulated     |    >=0.5       | <0.05
+| Downregulated   |    <=0.5       | <0.05
+: {.hover}
+
+Seperate tables were created for each dataset and they can be seen below.
+
+::: {.callout-warning .column-body-outset-left}
+**Only the top 25 of upregulated and downregulated genes are shown as the dataset is too large, the full list of genes is available in the document 'Sig_A_vs_B.csv'**
+:::
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Show the significance table code"
+
+#Significance Table A vs B
+sig_a_b <- bind_rows( #Creates dataframe of combined top 25
+    sig_a_b_up %>%
+        arrange(padj) %>% #Sort by lowest padj
+        slice_head(n = 25) %>% #Take top 25
+        mutate(Regulation = "Upregulated"), #Add new column to show regulation
+
+    sig_a_b_down %>%
+        arrange(padj) %>% #Sort by lowest padj
+        slice_head(n = 25) %>% #Take top 25
+        mutate(Regulation = "Downregulated") #Add new column to show regulation
+) %>%
+    select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets all columns needed for output
+
+datatable(sig_a_b, rownames = FALSE) #Shows output nicely
+```
