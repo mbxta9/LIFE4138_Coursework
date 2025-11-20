@@ -194,7 +194,7 @@ ggplotly(a_vs_d_volcano)
 ```
 :::
 
-::: {.column-screen-inset-left}
+::: {.column-screen-inset-left .callout}
 The volcano plots show the significance and amount by which gene expression changes between conditions as well as across A vs B and A vs D. Both plots show that many genes are centred near a change of zero, with large sets showing up or down regulation.
 
 @fig-a_vs_b_volcano shows a large number of genes with down and up regulation, with not a lot of spread in the points, while
@@ -250,8 +250,10 @@ ggplotly(a_vs_d_MA)
 ```
 
 :::
-The MA plots in @fig-a_vs_b_ma and @fig-a_vs_d_ma, show the relationships between gene expression levels and log2 fold changes. In both MA plots, most plots are near zero, meaning that they have similar expression across the two conditions. There are distinct sets of plots that appear beyond the dashed lines, that represent significantly up and down regulated genes. @fig-a_vs_d_ma shows a greater number of these genes when compared to @fig-a_vs_b_ma, showing greater changes in gene expression in those two conditions.
-
+::: {.callout}
+The MA plots in @fig-a_vs_b_ma and @fig-a_vs_d_ma, show the relationships between gene expression levels and log2 fold changes. In both MA plots, most plots are near zero, meaning that they have similar expression across the two conditions.  
+There are distinct sets of plots that appear beyond the dashed lines, that represent significantly up and down regulated genes. @fig-a_vs_d_ma shows a greater number of these genes when compared to @fig-a_vs_b_ma, showing greater changes in gene expression in those two conditions.
+:::
 
 ## Histograms 📊 {.column-screen-inset}
 Histograms of the `pvalue` were created for each of the datasets. These along with the code, can be seen below.
@@ -308,7 +310,11 @@ a_vs_d_histogram <- ggplot(aes(x = pvalue), data = a_vs_d) + #Creates histogram
 ggplotly(a_vs_d_histogram)
 ```
 :::
-The histograms in @fig-a_vs_b_histogram and @fig-a_vs_d_histogram show the distribution of p values in each comparison. Both figures show that there is a large proportion of genes that show significant changes in expression because of the peak in frequency near zero. The overall distribution with large number of values near zero and many distributed across the rest of the range shows that many select genes were found to be important with lots showing no significance. DESeq2 results should show this pattern with a large number of values at zero and a uniform distribution across the rest of the range, showing that the results are what to be expected.
+::: {.callout}
+The histograms in @fig-a_vs_b_histogram and @fig-a_vs_d_histogram show the distribution of p values in each comparison. Both figures show that there is a large proportion of genes that show significant changes in expression because of the peak in frequency near zero.  
+The overall distribution with large number of values near zero and many distributed across the rest of the range shows that many select genes were found to be important with lots showing no significance.  
+DESeq2 results should show this pattern with a large number of values at zero and a uniform distribution across the rest of the range, showing that the results are what to be expected.
+:::
 
 ## Heatmap ♨️ {.column-screen-inset-left}
 A heatmap was made for the top 20 differentially expressed genes from each dataset (A vs B and A vs D).
@@ -322,7 +328,7 @@ These genes had their `baseMean` value log transformed for comparison and the co
 #| echo: true
 #| code-fold: true
 #| label: fig-heatmap
-#| fig-cap: Heatmap of top 20 genes
+#| fig-cap: Heatmap showing log10(baseMean+1) expression values for the top 20 differentially expressed genes from each dataset. Genes with the lowest adjusted p values were chosen and missing baseMean values were filled with zero values. Darker, "more blue" colours represent higher expression levels, while lighter, "more white" colours represent lower expression levels.
 #| column: screen-inset-left
 #| code-summary: "Show the heatmap code"
 #Heatmap
@@ -364,6 +370,12 @@ theme(
 
 ggplotly(heatmap_plot)
 ```
-:::
 
-@fig-heatmap shows 
+::: {.callout}
+@fig-heatmap shows the expression pattern for the most significantly expressed genes across the two datasets. A log10 transformation was applied to the `baseMean` values in order to normalise the heatmap and to make clearer distinctions in levels of expression.  
+
+Many genes can be seen to show high expression in one set with low expression in the other (e.g. high in A vs B but low in A vs D). Many genes show this pattern with generally low expression in one and not the other.  
+
+An exception to this is `Q0055` which showed high levels of expression in both sets.
+:::
+:::
