@@ -9,5 +9,7 @@ This folder has all the files for the pumpkins portion. Below is a brief outline
  - [.png](./) files - PNGs of the various plots produced by the program.
  - [pumpkins_datasets](pumpkins_datasets) - Folder containing only the dataset assigned to me, used in this exercise.
 
- # Python Notebook
+---
+
+ # Python Notebook 📓 
  This folder also contains the Python notebook with completed answers [here](Python_Coursework_Questions.ipynb)
