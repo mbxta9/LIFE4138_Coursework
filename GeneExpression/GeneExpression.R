@@ -236,6 +236,15 @@ theme(
 
 ggplotly(heatmap_plot)
 
+#Creating saved full list of A vs B
+sig_a_b <- bind_rows(
+    sig_a_b_up %>% mutate(Regulation = "Upregulated"), #Adds regulation label
+    sig_a_b_down %>% mutate(Regulation = "Downregulated") #Adds regulation label
+) %>%
+    select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets only columns needed for output
+
+write_csv(sig_a_b, "Sig_A_vs_B.csv") #Saves full list to file.
+
 #Significance Table A vs B
 sig_a_b <- bind_rows( #Creates dataframe of combined top 25
     sig_a_b_up %>%
@@ -250,4 +259,29 @@ sig_a_b <- bind_rows( #Creates dataframe of combined top 25
 ) %>%
     select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets all columns needed for output
 
-datatable(sig_a_b, rownames = FALSE) #Shows output nicely
+datatable(sig_a_b, rownames = FALSE, caption = "Table 3: Top 25 upregulated and top 25 downregulated genes in A vs B") #Shows output nicely
+
+#Creating saved full list of A vs D
+sig_a_d <- bind_rows(
+    sig_a_d_up %>% mutate(Regulation = "Upregulated"), #Adds regulation label
+    sig_a_d_down %>% mutate(Regulation = "Downregulated") #Adds regulation label
+) %>%
+    select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets only columns needed for output
+
+write_csv(sig_a_d, "Sig_A_vs_D.csv") #Saves full list to file.
+
+#Significance Table A vs D
+sig_a_d <- bind_rows( #Creates dataframe of combined top 25
+    sig_a_d_up %>%
+        arrange(padj) %>% #Sort by lowest padj
+        slice_head(n = 25) %>% #Take top 25
+        mutate(Regulation = "Upregulated"), #Add new column to show regulation
+
+    sig_a_d_down %>%
+        arrange(padj) %>% #Sort by lowest padj
+        slice_head(n = 25) %>% #Take top 25
+        mutate(Regulation = "Downregulated") #Add new column to show regulation
+) %>%
+    select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets all columns needed for output
+
+datatable(sig_a_d, rownames = FALSE, caption = "Table 4: Top 25 upregulated and top 25 downregulated genes in A vs D") #Shows output nicely

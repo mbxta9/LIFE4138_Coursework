@@ -26,7 +26,7 @@ knitr:
 </style>
 ```
 
-# Importing the data 📊 {.column-screen-inset-left}
+# Importing the data 📊 {.column-screen-inset-left #importing-data}
 ::: {.column-screen-inset-left}
 First the data is imported using the `readr` module from `tidyverse`. This creates two dataframes, `a_vs_b` and `a_vs_d`.
 ```{r}
@@ -37,9 +37,9 @@ a_vs_d <- read_tsv("Datasets/set_2/A_vs_D.deseq2.results.tsv")
 ```
 :::
 
-# Creating Summary Statistics 📏 {.column-screen-inset-left}
+# Creating Summary Statistics 📏 {.column-screen-inset-left #summary-statistics}
 
-## Finding significantly up and down-regulated genes {.column-screen-inset-left}
+## Finding significantly up and down-regulated genes {.column-screen-inset-left #finding-up-down-reg}
 To find the significantly up and down-regulated genes, there were two steps involved, firstly deciding on appropriate thresholds for what is considered 
 up or down regulated and what is considered significant. 
 
@@ -93,7 +93,7 @@ up_down <- data.frame(Dataset_Name=c('A vs B','A vs D'),
 kable(up_down) #Shows table
 ```
 
-## Creating a summary table {.column-screen-inset-left}
+## Creating a summary table {.column-screen-inset-left #creating-summary-table}
 Next we need to create a summary table of the p values and log fold changes. The following function was used to generate the summary statistics for each column and dataset wanted.
 ```{r}
 #| echo: true
@@ -128,7 +128,7 @@ kable(output_a_d, col.names=c("Statistic","P Value","Log2FoldChange"),caption = 
 **Please ensure the page is maximised before viewing the next section as they are placed left and right for easier comparisons.**
 :::
 
-# Plotting the data 📉 {.column-screen-inset}
+# Plotting the data 📉 {.column-screen-inset #plotting-data}
 
 ::: {.column-screen-inset-left}
 Next was to create plots of the data including, Volcano plots, MA plots, histograms and heatmaps.
@@ -136,7 +136,7 @@ Next was to create plots of the data including, Volcano plots, MA plots, histogr
 
 All the graphs below are interactive through `plotly`.
 
-## Volcano Plots 🌋 {.column-screen-inset}
+## Volcano Plots 🌋 {.column-screen-inset #volcano-plots}
 Here are the volcano plots for the two datasets.
 
 ::: {layout-ncol=2 .quarto-full-width}
@@ -203,7 +203,7 @@ The volcano plots show the significance and amount by which gene expression chan
 @fig-a_vs_d_volcano shows a greater number of positive and negative changes in expression, with a larger number of significant points compared to A vs B with a much bigger spread.
 :::
 
-## MA Plots 📉 {.column-screen-inset}
+## MA Plots 📉 {.column-screen-inset #ma-plots}
 
 ::: {.column-screen-inset}
 
@@ -259,7 +259,7 @@ The MA plots in @fig-a_vs_b_ma and @fig-a_vs_d_ma, show the relationships betwee
 There are distinct sets of plots that appear beyond the dashed lines, that represent significantly up and down regulated genes. @fig-a_vs_d_ma shows a greater number of these genes when compared to @fig-a_vs_b_ma, showing greater changes in gene expression in those two conditions.
 :::
 
-## Histograms 📊 {.column-screen-inset}
+## Histograms 📊 {.column-screen-inset #histograms}
 Histograms of the `pvalue` were created for each of the datasets. These along with the code, can be seen below.
 
 ::: {layout-ncol=2 .column-screen-inset}
@@ -320,7 +320,7 @@ The overall distribution with large number of values near zero and many distribu
 DESeq2 results should show this pattern with a large number of values at zero and a uniform distribution across the rest of the range, showing that the results are what to be expected.
 :::
 
-## Heatmap ♨️ {.column-screen-inset-left}
+## Heatmap ♨️ {.column-screen-inset-left #heatmap}
 A heatmap was made for the top 20 differentially expressed genes from each dataset (A vs B and A vs D).
 
 The genes with the lowest adjusted p values were selected. 
@@ -384,9 +384,9 @@ An exception to this is `Q0055` which showed high levels of expression in both s
 :::
 :::
 
-# Significant Gene Tables 🧬 {.column-screen-inset-left}
+# Significant Gene Tables 🧬 {.column-screen-inset-left #gene-tables}
 
-Tables were generated to showcase the genes with significant differential expression for each of the two datasets. Significant genes were those that fit the same significance criteria outlined above and can be seen once again in the table below.
+Tables were generated to showcase the genes with significant differential expression for each of the two datasets. Significant genes were those that fit the same significance criteria outlined [above](#finding-up-down-reg) and can be seen once again in the table below. The same variables from the [summary table](#finding-up-down-reg) were used here.
 
 |   Threshold     | log2FoldChange | Adjusted P Value |
 |-----------------|----------------|------------------|
@@ -397,13 +397,22 @@ Tables were generated to showcase the genes with significant differential expres
 Seperate tables were created for each dataset and they can be seen below.
 
 ::: {.callout-warning .column-body-outset-left}
-**Only the top 25 of upregulated and downregulated genes are shown as the dataset is too large, the full list of genes is available in the document 'Sig_A_vs_B.csv'**
+**Only the top 25 of upregulated and downregulated genes are shown as the dataset is too large, the full list of genes is available in the files: 'Sig_A_vs_B.csv' and 'Sig_A_vs_D.csv'**
 :::
 
 ```{r}
 #| echo: true
 #| code-fold: true
 #| code-summary: "Show the significance table code"
+
+#Creating saved full list of A vs B
+sig_a_b <- bind_rows(
+    sig_a_b_up %>% mutate(Regulation = "Upregulated"), #Adds regulation label
+    sig_a_b_down %>% mutate(Regulation = "Downregulated") #Adds regulation label
+) %>%
+    select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets only columns needed for output
+
+write_csv(sig_a_b, "Sig_A_vs_B.csv") #Saves full list to file.
 
 #Significance Table A vs B
 sig_a_b <- bind_rows( #Creates dataframe of combined top 25
@@ -419,5 +428,35 @@ sig_a_b <- bind_rows( #Creates dataframe of combined top 25
 ) %>%
     select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets all columns needed for output
 
-datatable(sig_a_b, rownames = FALSE) #Shows output nicely
+datatable(sig_a_b, rownames = FALSE, caption = "Table 3: Top 25 upregulated and top 25 downregulated genes in A vs B") #Shows output nicely
+```
+```{r}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Show the significance table code"
+
+#Creating saved full list of A vs D
+sig_a_d <- bind_rows(
+    sig_a_d_up %>% mutate(Regulation = "Upregulated"), #Adds regulation label
+    sig_a_d_down %>% mutate(Regulation = "Downregulated") #Adds regulation label
+) %>%
+    select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets only columns needed for output
+
+write_csv(sig_a_d, "Sig_A_vs_D.csv") #Saves full list to file.
+
+#Significance Table A vs D
+sig_a_d <- bind_rows( #Creates dataframe of combined top 25
+    sig_a_d_up %>%
+        arrange(padj) %>% #Sort by lowest padj
+        slice_head(n = 25) %>% #Take top 25
+        mutate(Regulation = "Upregulated"), #Add new column to show regulation
+
+    sig_a_d_down %>%
+        arrange(padj) %>% #Sort by lowest padj
+        slice_head(n = 25) %>% #Take top 25
+        mutate(Regulation = "Downregulated") #Add new column to show regulation
+) %>%
+    select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets all columns needed for output
+
+datatable(sig_a_d, rownames = FALSE, caption = "Table 4: Top 25 upregulated and top 25 downregulated genes in A vs D") #Shows output nicely
 ```
