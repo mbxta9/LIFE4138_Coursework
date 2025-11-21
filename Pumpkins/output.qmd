@@ -40,17 +40,22 @@ def import_dataset(path :str):
     '''
     if path.lower().endswith('.csv') == False: #Error if not .csv file
         print("File is not a csv file")
-        return None
+        quit() #Prevents script running if not valid file
     try:
         dataset = pd.read_csv(path) #Imports the dataset
         print('Dataset imported successfully!')
         return dataset
     except FileNotFoundError: #Error if file doesnt exist
         print("File not found, please enter a valid path")
+        quit() #Prevents script running if not valid file
     except pd.errors.EmptyDataError: #Error if file empty
         print("The provided file is empty.")
+        quit() #Prevents script running if not valid file
     except pd.errors.ParserError: #Error if not in csv format inside
-        print("Please check if this in .csv format")
+        print("Please check if this in .csv format") #Prevents script running if not valid file
+    except Exception as e: #Any other error
+        print(f"Unknown error: {e}")
+        quit() #Prevents script running if not valid file
     return None
 ```
 This could then be called using the filepath of the .csv file. It is assigned here to the variable `pumpkins` for ease of use later.
@@ -195,7 +200,7 @@ import matplotlib.pyplot as plt
 ```
 Next a plot of the two columns can be created. 
 
-Note: The `plt.figure` command was used here as it makes my later comparison easier to deal with.
+Note: The `sns` module was used here to aid in colouring.
 
 ::: {.column width = '95%'}
 
@@ -206,7 +211,12 @@ Note: The `plt.figure` command was used here as it makes my later comparison eas
 
 import seaborn as sns
 
-figure_1 = sns.scatterplot(data = pumpkins, x = 'est_weight_kg', y = 'weight_in_kg', hue = 'weight_class') #Creates a new figure to draw graph on
+figure_1 = sns.scatterplot( #Creates scatter plot
+    data = pumpkins, #Selects pumpkins
+    x = 'est_weight_kg', #x axis
+    y = 'weight_in_kg', #y axis
+    hue = 'weight_class', #colours by weight class
+    palette='colorblind') #colourblind friendly
 figure_1.figure.set_size_inches(7.8,5)
 figure_1.figure.tight_layout(rect=[0, 0.03, 0.80, 0.95])
 figure_1.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
@@ -222,7 +232,7 @@ The pattern observed should be the same as if the estimated and actual weight va
 #| fig-cap: A Scatterplot of the relationship between the estimated weight and the actual weight, in lbs, of pumpkins from the pumpkin competitions dataset.
 figure_2 = plt.figure() #Creates a second figure to draw graph on
 plot_area_2 = figure_2.add_subplot() #Creates a new plotting area inside figure_2 to make axes
-plot_area_2.scatter(x = pumpkins['est_weight'],y = pumpkins['weight_lbs'],alpha = 0.25, color = 'red') #Creating the graph in lbs for checking
+plot_area_2.scatter(x = pumpkins['est_weight'],y = pumpkins['weight_lbs'],alpha = 0.25, color = 'darkorange') #Creating the graph in lbs for checking
 plot_area_2.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title
 plot_area_2.set_xlabel('Estimated Weight (lbs)') #Adding x axis label
 plot_area_2.set_ylabel('Actual Weight (lbs)'); #Adding y axis label

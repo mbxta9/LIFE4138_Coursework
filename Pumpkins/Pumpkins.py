@@ -30,17 +30,22 @@ def import_dataset(path :str):
     '''
     if path.lower().endswith('.csv') == False: #Error if not .csv file
         print("File is not a csv file")
-        return None
+        quit() #Prevents script running if not valid file
     try:
         dataset = pd.read_csv(path) #Imports the dataset
         print('Dataset imported successfully!')
         return dataset
     except FileNotFoundError: #Error if file doesnt exist
         print("File not found, please enter a valid path")
+        quit() #Prevents script running if not valid file
     except pd.errors.EmptyDataError: #Error if file empty
         print("The provided file is empty.")
+        quit() #Prevents script running if not valid file
     except pd.errors.ParserError: #Error if not in csv format inside
-        print("Please check if this in .csv format")
+        print("Please check if this in .csv format") #Prevents script running if not valid file
+    except Exception as e: #Any other error
+        print(f"Unknown error: {e}")
+        quit() #Prevents script running if not valid file
     return None
 
 
@@ -118,7 +123,7 @@ def main():
     #Plot Estimated weight against actual weight in kgs
     pumpkins[f"est_weight_kg"] = [(lbs_to_kg(i)) for i in pumpkins['est_weight']] #Create new column of estimted weight in kg
     
-    figure_1 = sns.scatterplot(data = pumpkins, x = 'est_weight_kg', y = 'weight_in_kg', hue = 'weight_class') #Creates a new figure to draw graph on
+    figure_1 = sns.scatterplot(data = pumpkins, x = 'est_weight_kg', y = 'weight_in_kg', hue = 'weight_class', palette='colorblind') #Creates a new figure to draw graph on
     figure_1.figure.set_size_inches(10,6)
     figure_1.figure.tight_layout(rect=[0, 0.03, 0.85, 0.95])
     figure_1.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
