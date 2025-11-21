@@ -6,7 +6,7 @@ This folder has all the files for the gene expression portion. Below is a brief 
  - [output.html](output.html) - This file has the report with plots and tables and commentary.
     - [output.qmd](output.qmd) - This file is provided if needed to rebuild the .html file.
  - [/Datasets](Datasets) - Contains the datasets used in the code.
- - [/Outputs](Outputs) - Contains the CSV files outputted by the code.
+ - [/Significants](Significants) - Contains the CSV files of significant genes outputted by the code.
  
  ---
 
