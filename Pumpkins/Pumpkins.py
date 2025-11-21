@@ -16,6 +16,7 @@ Description: A python script to run analysis on the pumpkins dataset available i
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 def import_dataset(path :str): 
     '''
@@ -91,7 +92,7 @@ def main():
     '''
 
     #Importing dataset
-    pumpkins = import_dataset('pumpkins_datasets/pumpkins_02.csv')
+    pumpkins = import_dataset('pumpkins_datasets/blank.csv')
 
     #Finding heaviest pumpkin
     heaviest_pumpkin = find_highest(pumpkins,'weight_lbs')
@@ -108,19 +109,22 @@ def main():
             classes.append('light')
         elif i<500: #Medium weight class if weight >250 but <500
             classes.append('medium')
-        else: #Heavy weight class if weight >500
+        elif i>500: #Heavy weight class if weight >500
             classes.append('heavy')
+        else:
+            classes.append(np.nan) #Return NaN if not a valid number
     pumpkins["weight_class"] = classes #Create new column from classes list
 
     #Plot Estimated weight against actual weight in kgs
     pumpkins[f"est_weight_kg"] = [(lbs_to_kg(i)) for i in pumpkins['est_weight']] #Create new column of estimted weight in kg
     
-    figure_1 = plt.figure() #Creates a new figure to draw graph on
-    plot_area_1 = figure_1.add_subplot() #Creates a new plotting area inside figure_1 to make axes
-    plot_area_1.scatter(x = pumpkins['est_weight_kg'],y = pumpkins['weight_in_kg'],alpha = 0.25, color = 'blue') #Creating the relationship graph
-    plot_area_1.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
-    plot_area_1.set_xlabel('Estimated Weight (kg)') #Adding x axis label
-    plot_area_1.set_ylabel('Actual Weight (kg)'); #Adding y axis label
+    figure_1 = sns.scatterplot(data = pumpkins, x = 'est_weight_kg', y = 'weight_in_kg', hue = 'weight_class') #Creates a new figure to draw graph on
+    figure_1.figure.set_size_inches(10,6)
+    figure_1.figure.tight_layout(rect=[0, 0.03, 0.85, 0.95])
+    figure_1.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
+    figure_1.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    figure_1.set_xlabel('Estimated Weight (kg)') #Adding x axis label
+    figure_1.set_ylabel('Actual Weight (kg)'); #Adding y axis label
 
     figure_2 = plt.figure() #Creates a second figure to draw graph on
     plot_area_2 = figure_2.add_subplot() #Creates a new plotting area inside figure_2 to make axes
@@ -129,7 +133,7 @@ def main():
     plot_area_2.set_xlabel('Estimated Weight (lbs)') #Adding x axis label
     plot_area_2.set_ylabel('Actual Weight (lbs)'); #Adding y axis label
 
-    figure_1.savefig("pumpkins_weight_relationship.png", dpi = 300) #Saves the first figure to disk.
+    figure_1.figure.savefig("pumpkins_weight_relationship.png", dpi = 300) #Saves the first figure to disk.
     #plt.show() #Shows the figures when ran from terminal
 
     #Subsetting 3 countries and saving as csv
@@ -168,7 +172,7 @@ def main():
     facetplot.set_xticklabels(rotation=90)
     facetplot.figure.tight_layout(rect=[0, 0, 1, 0.95]) #Creates whitespace at top of graph
     facetplot.set_axis_labels("Variety","Pumpkin Weight (kg)") #Names x and y axis
-    facetplot.figure.suptitle("Boxplot of Pumpkin Weight by Variety and Country", y=0.98) #Adds main figure title
+    facetplot.figure.suptitle("Boxplot of Pumpkin Weight by Variety and Country") #Adds main figure title
     facetplot.set_titles("{col_name}") #Gives each sub plot title
     facetplot.figure.savefig("filtered_facet_boxplot.png", bbox_inches='tight', dpi = 300) #Saves facetplot to disk. to disk. Increased dpi to improve readability.
     #bbox_inches reduces whitespace making it easier to read
