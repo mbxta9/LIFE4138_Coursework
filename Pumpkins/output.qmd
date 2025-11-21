@@ -196,17 +196,23 @@ import matplotlib.pyplot as plt
 Next a plot of the two columns can be created. 
 
 Note: The `plt.figure` command was used here as it makes my later comparison easier to deal with.
+
+::: {.column width = '95%'}
+
 ```{python}
 #| echo: true
 #| label: fig-estimated_vs_actual
-#| fig-cap: A Scatterplot of the relationship between the estimated weight and the actual weight, in kilograms, of pumpkins from the pumpkin competitions dataset.
-figure_1 = plt.figure() #Creates a new figure to draw graph on
-plot_area_1 = figure_1.add_subplot() #Creates a new plotting area inside figure_1 to make axes
-plot_area_1.scatter(x = pumpkins['est_weight_kg'],y = pumpkins['weight_in_kg'],alpha = 0.25, color = 'blue') #Creating the relationship graph
-plot_area_1.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
-plot_area_1.set_xlabel('Estimated Weight (kg)') #Adding x axis label
-plot_area_1.set_ylabel('Actual Weight (kg)'); #Adding y axis label
-#figure_1.show() - This line is commented as it does not function corectly in markdown
+#| fig-cap: A Scatterplot of the relationship between the estimated weight and the actual weight, in kilograms, of pumpkins from the pumpkin competitions dataset. The different colours of plot represent the weight class of each point.
+
+import seaborn as sns
+
+figure_1 = sns.scatterplot(data = pumpkins, x = 'est_weight_kg', y = 'weight_in_kg', hue = 'weight_class') #Creates a new figure to draw graph on
+figure_1.figure.set_size_inches(7.8,5)
+figure_1.figure.tight_layout(rect=[0, 0.03, 0.80, 0.95])
+figure_1.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
+figure_1.legend(title = 'Weight Class', bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+figure_1.set_xlabel('Estimated Weight (kg)') #Adding x axis label
+figure_1.set_ylabel('Actual Weight (kg)'); #Adding y axis label
 ```
 The pattern observed should be the same as if the estimated and actual weight values were plotted in lbs, which can be seen below.
 ```{python}
@@ -223,13 +229,15 @@ plot_area_2.set_ylabel('Actual Weight (lbs)'); #Adding y axis label
 #figure_2.show() - This line is commented as it does not function corectly in markdown
 ```
 
+:::
+
 As can be seen above, the two graphs have identical patterns, meaning there were no issues when converting to kilograms.
 
 ### Saving the graph
 Next we can save this graph as a file by running:
 ```{python}
 #| echo: true
-figure_1.savefig("pumpkins_weight_relationship.png", dpi = 300) #Saves the first figure to disk. Increased DPI to improve readability.
+figure_1.figure.savefig("pumpkins_weight_relationship.png", dpi = 300) #Saves the first figure to disk. Increased DPI to improve readability.
 ```
 
 ### What does the scatterplot show?

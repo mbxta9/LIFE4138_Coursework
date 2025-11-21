@@ -92,7 +92,7 @@ def main():
     '''
 
     #Importing dataset
-    pumpkins = import_dataset('pumpkins_datasets/blank.csv')
+    pumpkins = import_dataset('pumpkins_datasets/pumpkins_02.csv')
 
     #Finding heaviest pumpkin
     heaviest_pumpkin = find_highest(pumpkins,'weight_lbs')
@@ -122,7 +122,7 @@ def main():
     figure_1.figure.set_size_inches(10,6)
     figure_1.figure.tight_layout(rect=[0, 0.03, 0.85, 0.95])
     figure_1.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
-    figure_1.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    figure_1.legend(title = 'Weight Class', bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     figure_1.set_xlabel('Estimated Weight (kg)') #Adding x axis label
     figure_1.set_ylabel('Actual Weight (kg)'); #Adding y axis label
 
