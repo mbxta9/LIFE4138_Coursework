@@ -243,7 +243,10 @@ sig_a_b <- bind_rows(
 ) %>%
     select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets only columns needed for output
 
-write_csv(sig_a_b, "Sig_A_vs_B.csv") #Saves full list to file.
+
+dir.create(file.path("Outputs"), showWarnings = FALSE) #Creates folder to keep files tidy
+
+write_csv(sig_a_b, "Outputs/Sig_A_vs_B.csv") #Saves full list to file.
 
 #Significance Table A vs B
 sig_a_b <- bind_rows( #Creates dataframe of combined top 25
@@ -268,7 +271,9 @@ sig_a_d <- bind_rows(
 ) %>%
     select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets only columns needed for output
 
-write_csv(sig_a_d, "Sig_A_vs_D.csv") #Saves full list to file
+dir.create(file.path("Outputs"), showWarnings = FALSE) #Creates folder to keep files tidy
+
+write_csv(sig_a_d, "Outputs/Sig_A_vs_D.csv") #Saves full list to file
 
 #Significance Table A vs D
 sig_a_d <- bind_rows( #Creates dataframe of combined top 25

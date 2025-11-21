@@ -5,9 +5,9 @@ This folder has all the files for the gene expression portion. Below is a brief 
  - [requirements.txt](requirements.txt) - Text file containing the list of requirements to run the report code.
  - [output.html](output.html) - This file has the report with plots and tables and commentary.
     - [output.qmd](output.qmd) - This file is provided if needed to rebuild the .html file.
- - [.csv files](./) - CSV files containing full lists of significant genes, produced by the code.
- - [Datasets](Datasets) - Contains the datasets used in the code.
-
+ - [/Datasets](Datasets) - Contains the datasets used in the code.
+ - [/Outputs](Outputs) - Contains the CSV files outputted by the code.
+ 
  ---
 
  # R Notebook 📓
