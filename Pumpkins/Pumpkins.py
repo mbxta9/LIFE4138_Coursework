@@ -17,6 +17,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import os
 
 def import_dataset(path :str): 
     '''
@@ -106,6 +107,9 @@ def main():
     #Create a column of weight in kg
     pumpkins[f"weight_in_kg"] = [(lbs_to_kg(i)) for i in pumpkins['weight_lbs']] #Creates new column using values by calling conversion function in list
 
+    #Creates an outputs folder for the script results
+    os.makedirs("outputs", exist_ok=True)
+
 
     #Create a weight class column
     classes = []
@@ -125,11 +129,17 @@ def main():
     
     figure_1 = sns.scatterplot(data = pumpkins, x = 'est_weight_kg', y = 'weight_in_kg', hue = 'weight_class', palette='colorblind') #Creates a new figure to draw graph on
     figure_1.figure.set_size_inches(10,6)
-    figure_1.figure.tight_layout(rect=[0, 0.03, 0.85, 0.95])
+    figure_1.figure.tight_layout(rect=[0, 0.05, 0.85, 0.95]) #Creates whitespace at top and bottom of graph
     figure_1.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
     figure_1.legend(title = 'Weight Class', bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     figure_1.set_xlabel('Estimated Weight (kg)') #Adding x axis label
     figure_1.set_ylabel('Actual Weight (kg)'); #Adding y axis label
+    figure_1.figure.text(
+    0.5, #Adjusts caption
+    0.02, #adjusts caption
+    "A Scatterplot of the relationship between the estimated weight and the actual weight, in kilograms, of pumpkins from the pumpkin competitions dataset. \nThe different colours of plot represent the weight class of each point.", 
+    ha = 'center', 
+    fontsize = 9)
 
     figure_2 = plt.figure() #Creates a second figure to draw graph on
     plot_area_2 = figure_2.add_subplot() #Creates a new plotting area inside figure_2 to make axes
@@ -138,31 +148,38 @@ def main():
     plot_area_2.set_xlabel('Estimated Weight (lbs)') #Adding x axis label
     plot_area_2.set_ylabel('Actual Weight (lbs)'); #Adding y axis label
 
-    figure_1.figure.savefig("pumpkins_weight_relationship.png", dpi = 300) #Saves the first figure to disk.
+    figure_1.figure.savefig("outputs/pumpkins_weight_relationship.png", dpi = 300) #Saves the first figure to disk.
     #plt.show() #Shows the figures when ran from terminal
 
     #Subsetting 3 countries and saving as csv
     filter_vars = [country in ['United Kingdom', 'Japan', 'Italy'] for country in pumpkins['country']] #Checks if country in list, creates list of true and false values
     filtered_pumpkins = pumpkins[filter_vars] #Creates list by adding the row if filter_vars returns True
-    filtered_pumpkins.to_csv('pumpkins_filtered.csv') #Saves the filtered data to disk
+    filtered_pumpkins.to_csv('outputs/pumpkins_filtered.csv') #Saves the filtered data to disk
 
     #Summarising filtered data
-    print(filtered_pumpkins.groupby('country')['weight_in_kg'].mean()) #Groups by country and filters to only weight and calculates mean
+    print(f"Mean pumpkin weight per country: \n{filtered_pumpkins.groupby('country')['weight_in_kg'].mean()}") #Groups by country and filters to only weight and calculates mean
     mean_variety_country = filtered_pumpkins.groupby(['country','variety'])['weight_in_kg'].mean() #Groups by country and variety to calculate mean
-    print(mean_variety_country) 
+    print(f"Mean weights of pumpkin by variety and country: \n {mean_variety_country}") 
     lowest_mean_row = mean_variety_country.idxmin() #Gets lowest row (country, variety)
     lowest_mean_value = mean_variety_country.min() #Gets lowest mean weight value
     print(f"The lowest mean weight in kg was {lowest_mean_row[1]} from {lowest_mean_row[0]}, weighing {round(lowest_mean_value,2)}kg.")
 
     #Weight distribution boxplot
-    figure_3 = plt.figure() #Creates a new figure
+    figure_3 = plt.figure(figsize=(8,6)) #Creates a new figure
     plot_area_3 = figure_3.add_subplot() #Creates new plotting area in figure
     filtered_pumpkins.boxplot(column = 'weight_in_kg', by = 'country', ax = plot_area_3)
     plt.suptitle("") #Removes pandas title so I can add my own
-    plot_area_3.set_title("Boxplot of Weight distribution by Country")
+    figure_3.subplots_adjust(bottom=0.18) #Adds space at bottom for caption
+    plot_area_3.set_title("Boxplot of Weight distribution by country")
     plot_area_3.set_xlabel('Country')
     plot_area_3.set_ylabel('Pumpkin Weight (kg)')
-    figure_3.savefig("filtered_boxplot.png", bbox_inches='tight', dpi = 300) #Saves the third figure (boxplot) to disk.
+    figure_3.text(
+    0.5, #Adjusts position of caption
+    0.02, #Adjusts caption position
+    "A boxplot showing the distribution of pumpkin weight of three countries from the filtered pumpkin competitions dataset.", 
+    ha = 'center', 
+    fontsize = 9)
+    figure_3.savefig("outputs/filtered_boxplot.png", bbox_inches='tight', dpi = 300) #Saves the third figure (boxplot) to disk.
 
     #Facetplot previous graph
     facetplot = sns.catplot( #have to use catplot as boxplot has no facetting
@@ -175,13 +192,21 @@ def main():
         palette = 'colorblind' #Changes palette to be *colourblind friendly*
     )
     facetplot.set_xticklabels(rotation=90)
-    facetplot.figure.tight_layout(rect=[0, 0, 1, 0.95]) #Creates whitespace at top of graph
+    facetplot.figure.tight_layout(rect=[0, 0.05, 1, 0.95]) #Creates whitespace at top and bottom of graph
+    facetplot.figure.set_size_inches(17,8)
     facetplot.set_axis_labels("Variety","Pumpkin Weight (kg)") #Names x and y axis
-    facetplot.figure.suptitle("Boxplot of Pumpkin Weight by Variety and Country") #Adds main figure title
+    facetplot.figure.suptitle("Boxplot of Pumpkin Weight by Variety and Country", y=0.98) #Adds main figure title
     facetplot.set_titles("{col_name}") #Gives each sub plot title
-    facetplot.figure.savefig("filtered_facet_boxplot.png", bbox_inches='tight', dpi = 300) #Saves facetplot to disk. to disk. Increased dpi to improve readability.
+    facetplot.figure.text(
+        0.5, #Adjusts caption
+        0.02, #adjusts caption
+        "A boxplot showing distribution of pumpkin weight by variety and country from the filtered pumpkin competitions dataset.", 
+        ha = 'center', 
+        fontsize = 9) #Saves facetplot to disk. to disk. Increased dpi to improve readability.
     #bbox_inches reduces whitespace making it easier to read
     plt.show() #Displays all the created figures.
+    facetplot.figure.savefig("outputs/filtered_facet_boxplot.png",bbox_inches='tight', dpi = 300) #Saves facetplot to disk. to disk. Increased dpi to improve readability.
+    #bbox_inches reduces whitespace making it easier to read
 
 if __name__ == '__main__': #Ensures script runs
     main()

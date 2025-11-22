@@ -202,7 +202,7 @@ Next a plot of the two columns can be created.
 
 Note: The `sns` module was used here to aid in colouring.
 
-::: {.column width = '95%'}
+::: {layout-ncol=1}
 
 ```{python}
 #| echo: true
@@ -211,18 +211,19 @@ Note: The `sns` module was used here to aid in colouring.
 
 import seaborn as sns
 
-figure_1 = sns.scatterplot( #Creates scatter plot
-    data = pumpkins, #Selects pumpkins
-    x = 'est_weight_kg', #x axis
-    y = 'weight_in_kg', #y axis
-    hue = 'weight_class', #colours by weight class
-    palette='colorblind') #colourblind friendly
-figure_1.figure.set_size_inches(7.8,5)
-figure_1.figure.tight_layout(rect=[0, 0.03, 0.80, 0.95])
+figure_1 = sns.scatterplot(data = pumpkins, x = 'est_weight_kg', y = 'weight_in_kg', hue = 'weight_class', palette='colorblind') #Creates a new figure to draw graph on
+figure_1.figure.set_size_inches(10,5)
+figure_1.figure.tight_layout(rect=[0, 0.05, 0.85, 0.95]) #Creates whitespace at top and bottom of graph
 figure_1.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
-figure_1.legend(title = 'Weight Class', bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+figure_1.legend(title = 'Weight Class', bbox_to_anchor=(1.02, 1), loc=2, borderaxespad=0.)
 figure_1.set_xlabel('Estimated Weight (kg)') #Adding x axis label
 figure_1.set_ylabel('Actual Weight (kg)'); #Adding y axis label
+figure_1.figure.text(
+0.5, #Adjusts caption
+0.02, #adjusts caption
+"A Scatterplot of the relationship between the estimated weight and the actual weight, in kilograms, of pumpkins from the pumpkin competitions dataset. \nThe different colours of plot represent the weight class of each point.", 
+ha = 'center', 
+fontsize = 9);
 ```
 The pattern observed should be the same as if the estimated and actual weight values were plotted in lbs, which can be seen below.
 ```{python}
@@ -244,10 +245,13 @@ plot_area_2.set_ylabel('Actual Weight (lbs)'); #Adding y axis label
 As can be seen above, the two graphs have identical patterns, meaning there were no issues when converting to kilograms.
 
 ### Saving the graph
-Next we can save this graph as a file by running:
+Next we can save this graph as a file by running the following code, this also creates a nice outputs folder for the graphs if it doesn't exist.
 ```{python}
 #| echo: true
-figure_1.figure.savefig("pumpkins_weight_relationship.png", dpi = 300) #Saves the first figure to disk. Increased DPI to improve readability.
+import os
+os.makedirs("outputs", exist_ok=True)
+
+figure_1.figure.savefig("outputs/pumpkins_weight_relationship.png", dpi = 300) #Saves the first figure to disk. Increased DPI to improve readability.
 ```
 
 ### What does the scatterplot show?
@@ -276,7 +280,7 @@ filtered_pumpkins = pumpkins[filter_vars] #Creates list by adding the row if fil
 The filtered data can be easily saved to disk using:
 ```{python}
 #| echo: true
-filtered_pumpkins.to_csv('pumpkins_filtered.csv')
+filtered_pumpkins.to_csv('outputs/pumpkins_filtered.csv')
 ```
 
 ## Task 7 - Summarising the filtered data 🧮 {#Task-7}
@@ -288,7 +292,7 @@ This was done by grouping the `filtered_pumpkins` dataframe by `country` and the
 The mean values for each country can be seen below.
 ```{python}
 #| echo: true
-print(filtered_pumpkins.groupby('country')['weight_in_kg'].mean()) #Groups by country and 
+print(f"Mean pumpkin weight per country: \n{filtered_pumpkins.groupby('country')['weight_in_kg'].mean()}") #Groups by country and 
 #filters to only weight and calculates mean
 ```
 
@@ -296,7 +300,7 @@ print(filtered_pumpkins.groupby('country')['weight_in_kg'].mean()) #Groups by co
 ```{python}
 #| echo: true
 mean_variety_country = filtered_pumpkins.groupby(['country','variety'])['weight_in_kg'].mean()
-print(mean_variety_country) #Groups by country and calculates mean value and then prints
+print(f"Mean weights of pumpkin by variety and country: \n {mean_variety_country}") #Groups by country and calculates mean value and then prints
 ```
 
 Next to get the lowest mean weight variety we can do:
@@ -310,24 +314,33 @@ print(f"The lowest mean weight was '{lowest_mean_row[1]}' from {lowest_mean_row[
 ## Task 8 - Weight Distribution Boxplot 📊  {#Task-8}
 
 ### Creating a boxplot
+::: {layout-ncol=1}
 ```{python}
 #| echo: true
 #| label: fig-weight_boxplot
-#| fig-cap: A boxplot showing the distribution of pumpkin weight of three countries from the filtered pumpkin competitions dataset.
-figure_3 = plt.figure() #Creates a new figure
+#| fig-cap: A boxplot showing the distribution of pumpkin weight across Italy, Japan and the United Kingdom from the filtered pumpkin competitions dataset. Italy has the highest median pumpkin weight, with Japan having lowest median and spread of data and the United Kingdom has an intermediate distribution.
+figure_3 = plt.figure(figsize=(10,6)) #Creates a new figure
 plot_area_3 = figure_3.add_subplot() #Creates new plotting area in figure
 filtered_pumpkins.boxplot(column = 'weight_in_kg', by = 'country', ax = plot_area_3)
 plt.suptitle("") #Removes pandas title so I can add my own
+figure_3.subplots_adjust(bottom=0.18)
 plot_area_3.set_title("Boxplot of Weight distribution by country")
 plot_area_3.set_xlabel('Country')
-plot_area_3.set_ylabel('Pumpkin Weight (kg)');
+plot_area_3.set_ylabel('Pumpkin Weight (kg)')
+figure_3.text(
+    0.5,
+    0.02,
+    "A boxplot showing the distribution of pumpkin weight across Italy, Japan and the United Kingdom from the filtered pumpkin competitions dataset. \nItaly has the highest median pumpkin weight, with Japan having lowest median and spread of data and the United Kingdom has an intermediate distribution.", 
+    ha = 'center', 
+    fontsize = 9);
 ```
+:::
 
 ### Saving the boxplot
 This boxplot can now be saved by running:
 ```{python}
 #| echo: true
-figure_3.savefig("filtered_boxplot.png", dpi = 300) #Saves the third figure (boxplot) to disk. Increased dpi to improve readability.
+figure_3.savefig("outputs/filtered_boxplot.png", dpi = 300) #Saves the third figure (boxplot) to disk. Increased dpi to improve readability.
 ```
 
 ### What does the boxplot show?
@@ -366,17 +379,24 @@ facetplot = sns.catplot( #have to use catplot as boxplot has no facetting
         palette = 'colorblind' #Changes palette to be *colourblind friendly*
     )
 facetplot.set_xticklabels(rotation=90)
-facetplot.figure.tight_layout(rect=[0, 0, 1, 0.95]) #Creates whitespace at top of graph
+facetplot.figure.set_size_inches(17.5,8)
+facetplot.figure.tight_layout(rect=[0, 0.05, 1, 0.95]) #Creates whitespace at top and bottom of graph
 facetplot.set_axis_labels("Variety","Pumpkin Weight (kg)") #Names x and y axis
 facetplot.figure.suptitle("Boxplot of Pumpkin Weight by Variety and Country", y=0.98) #Adds main figure title
 facetplot.set_titles("{col_name}") #Gives each sub plot title
+facetplot.figure.text(
+    0.5, #Adjusts caption
+    0.02, #adjusts caption
+    "A boxplot showing distribution of pumpkin weight by variety and country from the filtered pumpkin competitions dataset.", 
+    ha = 'center', 
+    fontsize = 9);
 ```
 
 ### Saving the plot
 This facet boxplot can now be saved by running:
 ```{python}
 #| echo: true
-facetplot.figure.savefig("filtered_facet_boxplot.png",bbox_inches='tight', dpi = 300) #Saves facetplot to disk. to disk. Increased dpi to improve readability.
+facetplot.figure.savefig("outputs/filtered_facet_boxplot.png",bbox_inches='tight', dpi = 300) #Saves facetplot to disk. to disk. Increased dpi to improve readability.
 #bbox_inches reduces whitespace making it easier to read
 ```
 
