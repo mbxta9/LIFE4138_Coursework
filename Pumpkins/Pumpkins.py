@@ -172,7 +172,7 @@ def main():
             classes.append('light')
         elif i<500: #Medium weight class if weight >250 but <500
             classes.append('medium')
-        elif i>500: #Heavy weight class if weight >500
+        elif i>=500: #Heavy weight class if weight >500
             classes.append('heavy')
         else:
             classes.append(np.nan) #Return NaN if not a valid number
