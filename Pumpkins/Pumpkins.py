@@ -208,7 +208,7 @@ def main():
     figure_3.text(
     0.5, #Adjusts position of caption
     0.02, #Adjusts caption position
-    "A boxplot showing the distribution of pumpkin weight of three countries from the filtered pumpkin competitions dataset.", 
+    "A boxplot showing the distribution of pumpkin weight across Italy, Japan and the United Kingdom from the filtered pumpkin competitions dataset. \nItaly has the highest median pumpkin weight, with Japan having lowest median and spread of data and the United Kingdom has an intermediate distribution.", 
     ha = 'center', 
     fontsize = 9)
     figure_3.savefig("outputs/filtered_boxplot.png", bbox_inches='tight', dpi = 300) #Saves the third figure (boxplot) to disk.
@@ -236,9 +236,9 @@ def main():
         ha = 'center', 
         fontsize = 9) #Saves facetplot to disk. to disk. Increased dpi to improve readability.
     #bbox_inches reduces whitespace making it easier to read
-    plt.show() #Displays all the created figures.
     facetplot.figure.savefig("outputs/filtered_facet_boxplot.png",bbox_inches='tight', dpi = 300) #Saves facetplot to disk. to disk. Increased dpi to improve readability.
     #bbox_inches reduces whitespace making it easier to read
+    #plt.show() #Displays all the created figures interactively
 
 if __name__ == '__main__': #Ensures script runs
     main()
