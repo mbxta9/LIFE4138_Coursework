@@ -123,7 +123,17 @@ def lbs_to_kg(value: float|int) -> float:
 
 def main():
     '''
-    Main script to run analysis on pumpkins dataset
+    Main script to run analysis on pumpkins dataset.
+    1. Imports dataset
+    2. Checks validity of data
+    3. Finds heaviest pumpkin
+    4. Creates a column of weight in kg
+    5. Creates a weight class column
+    6. Plots Estimated Weight vs Actual weight
+    7. Subsets 3 countries and saves as new .csv
+    8. Summarises the filtered data
+    9. Creates a boxplot of distribution by country
+    10. Creates a faceted box plot of previous plot 
     '''
 
     #Importing dataset
@@ -160,8 +170,8 @@ def main():
     pumpkins[f"est_weight_kg"] = [(lbs_to_kg(i)) for i in pumpkins['est_weight']] #Create new column of estimted weight in kg
     
     figure_1 = sns.scatterplot(data = pumpkins, x = 'est_weight_kg', y = 'weight_in_kg', hue = 'weight_class', palette='colorblind') #Creates a new figure to draw graph on
-    figure_1.figure.set_size_inches(10,6)
-    figure_1.figure.tight_layout(rect=[0, 0.05, 0.85, 0.95]) #Creates whitespace at top and bottom of graph
+    figure_1.figure.set_size_inches(10,6) 
+    figure_1.figure.tight_layout(rect=[0, 0.05, 0.85, 0.95]) #Creates whitespace at top and bottom of graph for title and caption
     figure_1.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
     figure_1.legend(title = 'Weight Class', bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     figure_1.set_xlabel('Estimated Weight (kg)') #Adding x axis label
@@ -197,7 +207,7 @@ def main():
     print(f"The lowest mean weight in kg was {lowest_mean_row[1]} from {lowest_mean_row[0]}, weighing {round(lowest_mean_value,2)}kg.")
 
     #Weight distribution boxplot
-    figure_3 = plt.figure(figsize=(8,6)) #Creates a new figure
+    figure_3 = plt.figure(figsize=(8,6)) #Creates a new figure for this plot
     plot_area_3 = figure_3.add_subplot() #Creates new plotting area in figure
     filtered_pumpkins.boxplot(column = 'weight_in_kg', by = 'country', ax = plot_area_3)
     plt.suptitle("") #Removes pandas title so I can add my own
@@ -205,7 +215,7 @@ def main():
     plot_area_3.set_title("Boxplot of Weight distribution by country")
     plot_area_3.set_xlabel('Country')
     plot_area_3.set_ylabel('Pumpkin Weight (kg)')
-    figure_3.text(
+    figure_3.text( #Adds a caption
     0.5, #Adjusts position of caption
     0.02, #Adjusts caption position
     "A boxplot showing the distribution of pumpkin weight across Italy, Japan and the United Kingdom from the filtered pumpkin competitions dataset. \nItaly has the highest median pumpkin weight, with Japan having lowest median and spread of data and the United Kingdom has an intermediate distribution.", 
@@ -224,12 +234,12 @@ def main():
         palette = 'colorblind' #Changes palette to be *colourblind friendly*
     )
     facetplot.set_xticklabels(rotation=90)
-    facetplot.figure.tight_layout(rect=[0, 0.05, 1, 0.95]) #Creates whitespace at top and bottom of graph
+    facetplot.figure.tight_layout(rect=[0, 0.05, 1, 0.95]) #Creates whitespace at top and bottom of graph for title and caption
     facetplot.figure.set_size_inches(17,8)
     facetplot.set_axis_labels("Variety","Pumpkin Weight (kg)") #Names x and y axis
     facetplot.figure.suptitle("Boxplot of Pumpkin Weight by Variety and Country", y=0.98) #Adds main figure title
     facetplot.set_titles("{col_name}") #Gives each sub plot title
-    facetplot.figure.text(
+    facetplot.figure.text( #Adds a caption
         0.5, #Adjusts caption
         0.02, #adjusts caption
         "A boxplot showing distribution of pumpkin weight by variety and country from the filtered pumpkin competitions dataset.", 
