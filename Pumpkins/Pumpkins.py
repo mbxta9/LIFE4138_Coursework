@@ -55,7 +55,7 @@ def check_empty(dataframe: pd.DataFrame):
     Empty columns will cause errors in the graphs, so stops code running unnecesarily.
     '''
 
-    required_cols = [
+    required_cols = [ #List of all needed columns for script
         "weight_lbs",
         "est_weight",
         "country",
@@ -64,17 +64,17 @@ def check_empty(dataframe: pd.DataFrame):
         "state_prov",
         "id"
     ]
-    missing_cols = []
-    empty_cols = []
+    missing_cols = [] #Creates empty list for checks
+    empty_cols = [] #Creates empty list for checks
 
-    for col in required_cols:
-        if col not in dataframe.columns:
+    for col in required_cols: 
+        if col not in dataframe.columns: #Checks if each required col is in data
             missing_cols.append(col)
-        elif dataframe[col].isna().all() or len(dataframe[col]) == 0:
+        elif dataframe[col].isna().all() or len(dataframe[col]) == 0: #Checks if all NAs in the col
             empty_cols.append(col)
     
-    if len(missing_cols) > 0 or len(empty_cols) > 0:
-        raise KeyError(f"Missing required columns: {missing_cols}\nEmpty columns: {empty_cols}")
+    if len(missing_cols) > 0 or len(empty_cols) > 0: #Quits and shows what cols are missing or empty
+        print(f"Missing required columns: {missing_cols}\nEmpty columns: {empty_cols}")
         quit()
     return None
 
@@ -87,17 +87,17 @@ def find_highest(dataframe: pd.DataFrame,column: str):
     dataframe: the dataframe to search through
     column: the column to search through for the highest value
     '''
-    if (isinstance(dataframe, pd.DataFrame)) == False:
+    if (isinstance(dataframe, pd.DataFrame)) == False: #Checks if a dataframe
         print(f"First argument must be a pandas dataframe")
         return None
     try:
-        highest_row = dataframe.loc[dataframe[column].idxmax()]
+        highest_row = dataframe.loc[dataframe[column].idxmax()] #Find row with max value of column
         return highest_row
-    except KeyError: #Error if column doesn't exist
+    except KeyError: #Error if column not in dataframe
         print(f"{column} does not exist in the dataframe")
-    except NameError: #Error if not dataframe
+    except NameError: #Error if not valid variable
         print('Please provide a valid variable')
-    except AttributeError: #Error if not right variable type
+    except AttributeError: #Error if not str
         print('Please enter a valid argument type')
     return None
 
