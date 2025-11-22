@@ -53,9 +53,15 @@ def check_empty(dataframe: pd.DataFrame):
     '''
     Function to check if any of the columns used are completely empty and stops the program.
     Empty columns will cause errors in the graphs, so stops code running unnecesarily.
+
+    Arguments:
+    dataframe - Takes a dataframe to check through
+
+    Returns:
+    None - Doesn't return anything, only used to stop script if data invalid.
     '''
 
-    required_cols = [ #List of all needed columns for script
+    required_cols = [ #List of all needed columns for analysis
         "weight_lbs",
         "est_weight",
         "country",
@@ -79,13 +85,16 @@ def check_empty(dataframe: pd.DataFrame):
     return None
 
 
-def find_highest(dataframe: pd.DataFrame,column: str):
+def find_highest(dataframe: pd.DataFrame,column: str) -> pd.Series:
     '''
     Function to get the row information of the highest value in a column
 
     Arguments:
     dataframe: the dataframe to search through
     column: the column to search through for the highest value
+
+    Returns:
+    highest_row - The row which had the highest value in the given column
     '''
     if (isinstance(dataframe, pd.DataFrame)) == False: #Checks if a dataframe
         print(f"First argument must be a pandas dataframe")
@@ -109,7 +118,8 @@ def lbs_to_kg(value: float|int) -> float:
     Arguments:
     value: a value to be converted
 
-    Returns: new value as a float
+    Returns: 
+    value - The converted value as a float
     '''
     try:
         return ((float(value))/2.20462) #return converted value
@@ -139,7 +149,7 @@ def main():
     #Importing dataset
     pumpkins = import_dataset('pumpkins_datasets/pumpkins_02.csv')
 
-    #Checking for all needed values
+    #Runs checking for all needed values
     check_empty(pumpkins)
 
     #Finding heaviest pumpkin
@@ -181,7 +191,7 @@ def main():
     0.02, #adjusts caption
     "A Scatterplot of the relationship between the estimated weight and the actual weight, in kilograms, of pumpkins from the pumpkin competitions dataset. \nThe different colours of plot represent the weight class of each point.", 
     ha = 'center', 
-    fontsize = 9)
+    fontsize = 9) #Makes caption smaller to fit
 
     figure_2 = plt.figure() #Creates a second figure to draw graph on
     plot_area_2 = figure_2.add_subplot() #Creates a new plotting area inside figure_2 to make axes
@@ -220,7 +230,7 @@ def main():
     0.02, #Adjusts caption position
     "A boxplot showing the distribution of pumpkin weight across Italy, Japan and the United Kingdom from the filtered pumpkin competitions dataset. \nItaly has the highest median pumpkin weight, with Japan having lowest median and spread of data and the United Kingdom has an intermediate distribution.", 
     ha = 'center', 
-    fontsize = 9)
+    fontsize = 9) #Makes caption smaller to fit
     figure_3.savefig("outputs/filtered_boxplot.png", bbox_inches='tight', dpi = 300) #Saves the third figure (boxplot) to disk.
 
     #Facetplot previous graph
@@ -228,9 +238,9 @@ def main():
         data = filtered_pumpkins, #Chooses filtered dataset
         x = 'variety', #Chooses axis for data
         y = 'weight_in_kg', #Chooses axis for data
-        col = 'country',
-        kind = 'box',
-        hue = 'variety', #Creates coloured subplots based on variety
+        col = 'country', #Variable to facet by
+        kind = 'box', 
+        hue = 'variety', #Creates coloured boxes based on variety
         palette = 'colorblind' #Changes palette to be *colourblind friendly*
     )
     facetplot.set_xticklabels(rotation=90)
@@ -240,11 +250,11 @@ def main():
     facetplot.figure.suptitle("Boxplot of Pumpkin Weight by Variety and Country", y=0.98) #Adds main figure title
     facetplot.set_titles("{col_name}") #Gives each sub plot title
     facetplot.figure.text( #Adds a caption
-        0.5, #Adjusts caption
-        0.02, #adjusts caption
+        0.5, #Adjusts caption pos
+        0.02, #adjusts caption pos
         "A boxplot showing distribution of pumpkin weight by variety and country from the filtered pumpkin competitions dataset.", 
-        ha = 'center', 
-        fontsize = 9) #Saves facetplot to disk. to disk. Increased dpi to improve readability.
+        ha = 'center', #Centres the caption
+        fontsize = 9) #Makes caption smaller to fit
     #bbox_inches reduces whitespace making it easier to read
     facetplot.figure.savefig("outputs/filtered_facet_boxplot.png",bbox_inches='tight', dpi = 300) #Saves facetplot to disk. to disk. Increased dpi to improve readability.
     #bbox_inches reduces whitespace making it easier to read
