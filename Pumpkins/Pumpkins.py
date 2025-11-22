@@ -121,6 +121,9 @@ def lbs_to_kg(value: float|int) -> float:
     Returns: 
     value - The converted value as a float
     '''
+    if value <0:
+        print(f"Value provided '{value}' is negative, returning 0")
+        return 0
     try:
         return ((float(value))/2.20462) #return converted value
     except ValueError: #Error if not a number
@@ -162,7 +165,6 @@ def main():
     #Creates an outputs folder for the script results
     os.makedirs("outputs", exist_ok=True)
 
-
     #Create a weight class column
     classes = []
     for i in pumpkins['weight_in_kg']:
@@ -193,7 +195,7 @@ def main():
     ha = 'center', 
     fontsize = 9) #Makes caption smaller to fit
 
-    figure_2 = plt.figure() #Creates a second figure to draw graph on
+    figure_2 = plt.figure() #Creates a second figure for comparison and validation
     plot_area_2 = figure_2.add_subplot() #Creates a new plotting area inside figure_2 to make axes
     plot_area_2.scatter(x = pumpkins['est_weight'],y = pumpkins['weight_lbs'],alpha = 0.25, color = 'red') #Creating the graph in lbs for checking
     plot_area_2.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
@@ -201,7 +203,6 @@ def main():
     plot_area_2.set_ylabel('Actual Weight (lbs)'); #Adding y axis label
 
     figure_1.figure.savefig("outputs/pumpkins_weight_relationship.png", dpi = 300) #Saves the first figure to disk.
-    #plt.show() #Shows the figures when ran from terminal
 
     #Subsetting 3 countries and saving as csv
     filter_vars = [country in ['United Kingdom', 'Japan', 'Italy'] for country in pumpkins['country']] #Checks if country in list, creates list of true and false values
@@ -255,9 +256,7 @@ def main():
         "A boxplot showing distribution of pumpkin weight by variety and country from the filtered pumpkin competitions dataset.", 
         ha = 'center', #Centres the caption
         fontsize = 9) #Makes caption smaller to fit
-    #bbox_inches reduces whitespace making it easier to read
-    facetplot.figure.savefig("outputs/filtered_facet_boxplot.png",bbox_inches='tight', dpi = 300) #Saves facetplot to disk. to disk. Increased dpi to improve readability.
-    #bbox_inches reduces whitespace making it easier to read
+    facetplot.figure.savefig("outputs/filtered_facet_boxplot.png",bbox_inches='tight', dpi = 300) #Saves facetplot to disk. to disk. Increased dpi to improve readability. bbox_inches reduces whitespace making it easier to read
     #plt.show() #Displays all the created figures interactively
 
 if __name__ == '__main__': #Ensures script runs
