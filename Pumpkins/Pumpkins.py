@@ -19,7 +19,7 @@ import seaborn as sns
 import numpy as np
 import os
 
-def import_dataset(path :str): 
+def import_dataset(path :str)-> pd.DataFrame: 
     '''
     Function to import a csv dataset from its filepath or url
     Checks to see if 
@@ -47,6 +47,35 @@ def import_dataset(path :str):
     except Exception as e: #Any other error
         print(f"Unknown error: {e}")
         quit() #Prevents script running if not valid file
+    return None
+
+def check_empty(dataframe: pd.DataFrame):
+    '''
+    Function to check if any of the columns used are completely empty and stops the program.
+    Empty columns will cause errors in the graphs, so stops code running unnecesarily.
+    '''
+
+    required_cols = [
+        "weight_lbs",
+        "est_weight",
+        "country",
+        "variety",
+        "city",
+        "state_prov",
+        "id"
+    ]
+    missing_cols = []
+    empty_cols = []
+
+    for col in required_cols:
+        if col not in dataframe.columns:
+            missing_cols.append(col)
+        elif dataframe[col].isna().all() or len(dataframe[col]) == 0:
+            empty_cols.append(col)
+    
+    if len(missing_cols) > 0 or len(empty_cols) > 0:
+        raise KeyError(f"Missing required columns: {missing_cols}\nEmpty columns: {empty_cols}")
+        quit()
     return None
 
 
@@ -99,6 +128,9 @@ def main():
 
     #Importing dataset
     pumpkins = import_dataset('pumpkins_datasets/pumpkins_02.csv')
+
+    #Checking for all needed values
+    check_empty(pumpkins)
 
     #Finding heaviest pumpkin
     heaviest_pumpkin = find_highest(pumpkins,'weight_lbs')

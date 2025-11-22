@@ -22,13 +22,16 @@ format:
 ```
 
 ## Task 1 - Read in the dataset 🔍 {#Task-1}
-The first task involved reading in the `pumpkins.csv` file. To do this the following `import_dataset` function was made.
+The first task involved reading in the `pumpkins.csv` file. To do this the following `import_dataset` function was made. It returns a dataframe only if the file can be found, is not empty and opens correctly. It quits the program if it fails to prevent unneccesary errors or empty graphs from being created.
+
+### Importing Data
 ```{python}
 #| echo: true
 #| code-fold: true
+#| code-summary: "Show the import_dataset code"
 import pandas as pd
 
-def import_dataset(path :str): 
+def import_dataset(path :str)-> pd.DataFrame: 
     '''
     Function to import a csv dataset from its filepath or url
     Checks to see if 
@@ -63,6 +66,47 @@ This could then be called using the filepath of the .csv file. It is assigned he
 #| echo: true
 pumpkins = import_dataset('pumpkins_datasets/pumpkins_02.csv')
 ```
+
+### Checking Data Validity
+While the previous function checks if the .csv file is completely empty, the data was checked on whether it contained all the columns needed for the analysis. Those columns were then checked to see if they were empty. For this the following function was used:
+```{python}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Show the check_empty code"
+def check_empty(dataframe: pd.DataFrame):
+    '''
+    Function to check if any of the columns used are completely empty and stops the program.
+    Empty columns will cause errors in the graphs, so stops code running unnecesarily.
+    '''
+    required_cols = [
+        "weight_lbs",
+        "est_weight",
+        "country",
+        "variety",
+        "city",
+        "state_prov",
+        "id"
+    ]
+    missing_cols = []
+    empty_cols = []
+
+    for col in required_cols:
+        if col not in dataframe.columns:
+            missing_cols.append(col)
+        elif dataframe[col].isna().all() or len(dataframe[col]) == 0:
+            empty_cols.append(col)
+    
+    if len(missing_cols) > 0 or len(empty_cols) > 0:
+        raise KeyError(f"Missing required columns: {missing_cols}\nEmpty columns: {empty_cols}")
+        quit()
+    return None
+```
+This function also quits the script if it fails, to prevent errors further on. It was then called as below:
+```{python}
+#| echo: true
+check_empty(pumpkins)
+```
+
 ## Task 2 - Identifying the heaviest pumpkin ⚖️ {#Task-2}
 Next was to identify the heaviest pumpkin and data about it including: weight, variety, where it was from and when it was grown.
 
