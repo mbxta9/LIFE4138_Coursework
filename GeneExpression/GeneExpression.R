@@ -34,19 +34,25 @@ a_vs_d <- read_tsv("Datasets/set_2/A_vs_D.deseq2.results.tsv")
 ## Number of significantly upregulated genes
 find_sig_upreg <- function(dataset) {
     #Function to take a dataframe of Deseq2 results and return a new dataframe
-    #Calculates upregulated genes based on the threshold of log2fold change >0.5
+    #Calculates upregulated genes based on the threshold of log2fold change >= 1
     #and adjusted p value < 0.05
-    changed <- subset(dataset, log2FoldChange >= 0.5 & padj < 0.05)
+    changed <- subset(dataset, log2FoldChange >= 1 & padj < 0.05)
     return(changed)
 }
 ## Number of significantly downregulated genes
 find_sig_downreg <- function(dataset) {
     #Function to take a dataframe of Deseq2 results and return a new dataframe
-    #Calculates downregulated genes based on the threshold of log2fold change <-0.5
+    #Calculates downregulated genes based on the threshold of log2fold change <= -1
     #and adjusted p value < 0.05
-    changed <- subset(dataset, log2FoldChange <= -0.5 & padj < 0.05)
+    changed <- subset(dataset, log2FoldChange <= -1 & padj < 0.05)
     return(changed)
 }
+
+a_vs_b$padj[is.na(a_vs_b$padj)] <- 1 #Replaces all NAs in P adjusted value with 1 to show no significance
+a_vs_d$padj[is.na(a_vs_b$padj)] <- 1 #Replaces all NAs in P adjusted value with 1 to show no significance
+
+a_vs_b$log2FoldChange[is.na(a_vs_b$log2FoldChange)] <- 0 #Replaces all NAs in Log2FoldChange with 1 to show no significance
+a_vs_d$log2FoldChange[is.na(a_vs_b$log2FoldChange)] <- 0 #Replaces all NAs in P Log2FoldChange with 1 to show no significance
 
 #Using previous function to create dataframes of significant genes
 sig_a_b_up <- find_sig_upreg(a_vs_b)
@@ -90,17 +96,17 @@ kable(output_a_d, col.names=c("Statistic","P Value","Log2FoldChange"),caption = 
 #Volcano plot
 #Creating a new column for colouring in A vs B
 a_vs_b$diffexpressed <- "NO" #Creates new column and assigns NO to all values
-a_vs_b$diffexpressed[a_vs_b$log2FoldChange >= 0.5 & a_vs_b$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
-a_vs_b$diffexpressed[a_vs_b$log2FoldChange <= -0.5 & a_vs_b$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
+a_vs_b$diffexpressed[a_vs_b$log2FoldChange >= 1 & a_vs_b$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
+a_vs_b$diffexpressed[a_vs_b$log2FoldChange <= 1 & a_vs_b$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
 
 #Creating the volcano plot
-a_vs_b_volcano <- ggplot(data = a_vs_b, aes(x = log2FoldChange, y = -log10(pvalue), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
+a_vs_b_volcano <- ggplot(data = a_vs_b, aes(x = log2FoldChange, y = -log10(padj), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
     geom_point() +
     scale_color_manual(values = c("blue", "grey", "red"), labels = c('Downregulated', 'Not Significant', 'Upregulated')) + #Creates colour scheme based on labels
     coord_cartesian(ylim = c(0, 20), xlim = c(-5, 5)) + #Crops the graph
     labs( #Adds labels
         x = "Log 2 Fold Change",
-        y = "-log10(pvalue)",
+        y = "-log10(P Adjusted Value)",
         title = "Volcano plot of A vs B",
         color = "Significance"
     ) +
@@ -110,17 +116,17 @@ ggplotly(a_vs_b_volcano)
 
 #Creating a new column for colouring in A vs D
 a_vs_d$diffexpressed <- "NO" #Creates new column and assigns NO to all values
-a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 0.5 & a_vs_d$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
-a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= -0.5 & a_vs_d$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
+a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 1 & a_vs_d$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
+a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= 1 & a_vs_d$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
 
 #Creating the volcano plot
-a_vs_d_volcano <- ggplot(data = a_vs_d, aes(x = log2FoldChange, y = -log10(pvalue), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
+a_vs_d_volcano <- ggplot(data = a_vs_d, aes(x = log2FoldChange, y = -log10(padj), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
     geom_point() +
     scale_color_manual(values = c("blue", "grey", "red"), labels = c('Downregulated', 'Not Significant', 'Upregulated')) + #Creates colour scheme based on labels
     coord_cartesian(ylim = c(0, 20), xlim = c(-10, 10)) + #Crops the graph
     labs(
         x = "Log 2 Fold Change",
-        y = "-log10(pvalue)",
+        y = "-log10(P Adjusted Value)",
         title = "Volcano plot of A vs D",
         color = "Significance"
     ) +
@@ -244,9 +250,9 @@ sig_a_b <- bind_rows(
     select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets only columns needed for output
 
 
-dir.create(file.path("Significants"), showWarnings = FALSE) #Creates folder to keep files tidy
+dir.create(file.path("Outputs"), showWarnings = FALSE) #Creates folder to keep files tidy
 
-write_csv(sig_a_b, "Significants/Sig_A_vs_B.csv") #Saves full list to file.
+write_csv(sig_a_b, "Outputs/Sig_A_vs_B.csv") #Saves full list to file.
 
 #Significance Table A vs B
 sig_a_b <- bind_rows( #Creates dataframe of combined top 25
@@ -271,9 +277,9 @@ sig_a_d <- bind_rows(
 ) %>%
     select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets only columns needed for output
 
-dir.create(file.path("Significants"), showWarnings = FALSE) #Creates folder to keep files tidy
+dir.create(file.path("Outputs"), showWarnings = FALSE) #Creates folder to keep files tidy
 
-write_csv(sig_a_d, "Significants/Sig_A_vs_D.csv") #Saves full list to file
+write_csv(sig_a_d, "Outputs/Sig_A_vs_D.csv") #Saves full list to file
 
 #Significance Table A vs D
 sig_a_d <- bind_rows( #Creates dataframe of combined top 25

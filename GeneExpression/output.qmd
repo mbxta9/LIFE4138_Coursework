@@ -47,8 +47,8 @@ The table below outlines the thresholds used.
 
 |   Threshold     | log2FoldChange | Adjusted P Value |
 |-----------------|----------------|------------------|
-| Upregulated     |    >=0.5       | <0.05
-| Downregulated   |    <=0.5       | <0.05
+| Upregulated     |    >=1       | <0.05
+| Downregulated   |    <=1       | <0.05
 : {.hover}
 
 Next a set of functions was created to find these genes in the datasets.
@@ -57,20 +57,23 @@ Next a set of functions was created to find these genes in the datasets.
 #Number of significantly upregulated genes
 find_sig_upreg <- function(dataset) {
     #Function to take a dataframe of Deseq2 results and return a new dataframe
-    #Calculates upregulated genes based on the threshold of log2fold change >0.5
+    #Calculates upregulated genes based on the threshold of log2fold change >1
     #and adjusted p value < 0.05
-    changed <- subset(dataset, log2FoldChange >= 0.5 & padj < 0.05)
+    changed <- subset(dataset, log2FoldChange >= 1 & padj < 0.05)
     return(changed)
 }
 
 #Number of significantly downregulated genes
 find_sig_downreg <- function(dataset) {
     #Function to take a dataframe of Deseq2 results and return a new dataframe
-    #Calculates downregulated genes based on the threshold of log2fold change <-0.5
+    #Calculates downregulated genes based on the threshold of log2fold change <-1
     #and adjusted p value < 0.05
-    changed <- subset(dataset, log2FoldChange <= -0.5 & padj < 0.05)
+    changed <- subset(dataset, log2FoldChange <= -1 & padj < 0.05)
     return(changed)
 }
+
+a_vs_b$padj[is.na(a_vs_b$padj)] <- 1 #Replaces all NAs in P adjusted value with 1 to show no significance
+a_vs_d$padj[is.na(a_vs_b$padj)] <- 1 #Replaces all NAs in P adjusted value with 1 to show no significance
 ```
 This can then be ran on the two datasets to get two new dataframes of only the genes with a statistically significant (<0.05 p value) log2FoldChange.
 
@@ -145,21 +148,21 @@ Here are the volcano plots for the two datasets.
 #| code-fold: true
 #| label: fig-a_vs_b_volcano
 #| code-summary: "Show the volcano plot code"
-#| fig-cap: A volcano plot showing the log2fold changes against -log10(pvalue) for the genes in A vs B. Up regulated genes are shown in red (log2FC ≥ 0.5, padj < 0.05), down regulated genes are shown in blue (log2FC ≤ –0.5, padj < 0.05), while non-significant genes are shown in grey. Plots further from the centre and further from the x axis show greater significance and stronger expression.
+#| fig-cap: A volcano plot showing the log2fold changes against -log10(pvalue) for the genes in A vs B. Up regulated genes are shown in red (log2FC ≥ 1, padj < 0.05), down regulated genes are shown in blue (log2FC ≤ –1, padj < 0.05), while non-significant genes are shown in grey. Plots further from the centre and further from the x axis show greater significance and stronger expression.
 library(plotly)
 #Creating a new column for colouring in A vs B
 a_vs_b$diffexpressed <- "NO" #Creates new column and assigns NO to all values
-a_vs_b$diffexpressed[a_vs_b$log2FoldChange >= 0.5 & a_vs_b$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
-a_vs_b$diffexpressed[a_vs_b$log2FoldChange <= -0.5 & a_vs_b$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
+a_vs_b$diffexpressed[a_vs_b$log2FoldChange >= 1 & a_vs_b$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
+a_vs_b$diffexpressed[a_vs_b$log2FoldChange <= -1 & a_vs_b$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
 
 #Creating the volcano plot
-a_vs_b_volcano <- ggplot(data = a_vs_b, aes(x = log2FoldChange, y = -log10(pvalue), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
+a_vs_b_volcano <- ggplot(data = a_vs_b, aes(x = log2FoldChange, y = -log10(padj), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
     geom_point() +
     scale_color_manual(values = c("blue", "grey", "red"), labels = c('Downregulated', 'Not Significant', 'Upregulated')) + #Creates colour scheme based on labels
     coord_cartesian(ylim = c(0, 20), xlim = c(-5, 5)) + #Crops the graph
     labs( #Adds labels
         x = "Log 2 Fold Change",
-        y = "-log10(pvalue)",
+        y = "-log10(P adjusted value)",
         title = "Volcano plot of A vs B",
         color = "Significance"
     ) +
@@ -172,21 +175,21 @@ ggplotly(a_vs_b_volcano)
 #| echo: true
 #| code-fold: true
 #| label: fig-a_vs_d_volcano
-#| fig-cap: A volcano plot showing the log2fold changes against -log10(pvalue) for the genes in A vs D. Up regulated genes are shown in red (log2FC ≥ 0.5, padj < 0.05), down regulated genes are shown in blue (log2FC ≤ –0.5, padj < 0.05), while non-significant genes are shown in grey. Plots further from the centre and further from the x axis show greater significance and stronger expression.
+#| fig-cap: A volcano plot showing the log2fold changes against -log10(pvalue) for the genes in A vs D. Up regulated genes are shown in red (log2FC ≥ 1, padj < 0.05), down regulated genes are shown in blue (log2FC ≤ –1, padj < 0.05), while non-significant genes are shown in grey. Plots further from the centre and further from the x axis show greater significance and stronger expression.
 #| code-summary: "Show the volcano plot code"
 #Creating a new column for colouring in A vs D
 a_vs_d$diffexpressed <- "NO" #Creates new column and assigns NO to all values
-a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 0.5 & a_vs_d$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
-a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= -0.5 & a_vs_d$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
+a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 1 & a_vs_d$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
+a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= -1 & a_vs_d$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
 
 #Creating the volcano plot
-a_vs_d_volcano <- ggplot(data = a_vs_d, aes(x = log2FoldChange, y = -log10(pvalue), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
+a_vs_d_volcano <- ggplot(data = a_vs_d, aes(x = log2FoldChange, y = -log10(padj), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
     geom_point() +
     scale_color_manual(values = c("blue", "grey", "red"), labels = c('Downregulated', 'Not Significant', 'Upregulated')) + #Creates colour scheme based on labels
     coord_cartesian(ylim = c(0, 20), xlim = c(-10, 10)) + #Crops the graph
     labs(
         x = "Log 2 Fold Change",
-        y = "-log10(pvalue)",
+        y = "-log10(P Adjusted Value)",
         title = "Volcano plot of A vs D",
         color = "Significance"
     ) +
@@ -217,7 +220,7 @@ MA plots were created of the two datasets using the `ggpubr` module. The plots c
 #| code-fold: true
 #| code-summary: "Show the MA plot code"
 #| label: fig-a_vs_b_ma
-#| fig-cap: MA plot of the A vs B comparison, showing Log2 Fold Change against the Log2 Mean Expression. Plots in red indicate genes that are significantly upregulated (log2FC ≥ 0.5, padj < 0.05), plots in blue indicate genes that significantly downregulated (log2FC ≤ –0.5, padj < 0.05), while plots in grey indicate genes that are not significant.
+#| fig-cap: MA plot of the A vs B comparison, showing Log2 Fold Change against the Log2 Mean Expression. Plots in red indicate genes that are significantly upregulated (log2FC ≥ 1, padj < 0.05), plots in blue indicate genes that significantly downregulated (log2FC ≤ –1, padj < 0.05), while plots in grey indicate genes that are not significant.
 library(ggpubr) #Loads ggpubr for creating MA plots
 a_vs_b_MA <- ggmaplot(data = a_vs_b #Creates an MA plot
     )+
@@ -238,7 +241,7 @@ ggplotly(a_vs_b_MA)
 #| code-fold: true
 #| code-summary: "Show the MA plot code"
 #| label: fig-a_vs_d_ma
-#| fig-cap: MA plot of the A vs D comparison, showing Log2 Fold Change against the Log2 Mean Expression. Plots in red indicate genes that are significantly upregulated (log2FC ≥ 0.5, padj < 0.05), plots in blue indicate genes that significantly downregulated (log2FC ≤ –0.5, padj < 0.05), while plots in grey indicate genes that are not significant.
+#| fig-cap: MA plot of the A vs D comparison, showing Log2 Fold Change against the Log2 Mean Expression. Plots in red indicate genes that are significantly upregulated (log2FC ≥ 1, padj < 0.05), plots in blue indicate genes that significantly downregulated (log2FC ≤ –1, padj < 0.05), while plots in grey indicate genes that are not significant.
 a_vs_d_MA <- ggmaplot(data = a_vs_d #Creates an MA plot
     )+
 coord_cartesian(ylim = c(-10, 10)) + #Crops graph
@@ -390,8 +393,8 @@ Tables were generated to showcase the genes with significant differential expres
 
 |   Threshold     | log2FoldChange | Adjusted P Value |
 |-----------------|----------------|------------------|
-| Upregulated     |    >=0.5       | <0.05
-| Downregulated   |    <=0.5       | <0.05
+| Upregulated     |    >=1       | <0.05
+| Downregulated   |    <=1       | <0.05
 : {.hover}
 
 Seperate tables were created for each dataset and they can be seen below.
