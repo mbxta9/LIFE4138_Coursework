@@ -69,6 +69,7 @@ kable(up_down) #Shows table
 
 #Table of summary stats
 generate_summary <- function(dataset,column) {
+    #Function to generate summary statistics on a dataset and a specific column.
     summary <- c( #Creates vector of values
         min(dataset[[column]],na.rm = TRUE), #Min value
         max(dataset[[column]],na.rm = TRUE), #Max value
@@ -88,10 +89,16 @@ output_a_b <- data.frame(stat_names,p_value,log2fold) #Creates a dataframe for o
 kable(output_a_b, col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 1: Summary statistics on the A vs B Dataset") #Shows Table
 
 #A vs D table
-p_value <- generate_summary(a_vs_d,'pvalue') #Generates stats for P value
-log2fold <- generate_summary(a_vs_d,'log2FoldChange') #Generates stats for log2foldchange
-output_a_d <- data.frame(stat_names,p_value,log2fold) #Creates dataframe for outputting
-kable(output_a_d, col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 1: Summary statistics on the A vs D Dataset") #Shows table
+summary_table <- function(dataset, name) {
+    stat_names = c('Min','Max','Mean','Median','Lower Quartile', 'Upper Quartile') #Creates vector of stat names for table
+    p_value <- generate_summary(dataset,'pvalue') #Generates stats for P value
+    log2fold <- generate_summary(dataset,'log2FoldChange') #Generates stats for log2foldchange
+    output <- data.frame(stat_names,p_value,log2fold) #Creates dataframe for outputting
+    return(output)
+}
+
+kable(summary_table(a_vs_b), col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 1: Summary statistics on the A vs B Dataset") #Shows table
+kable(summary_table(a_vs_d), col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 2: Summary statistics on the A vs D Dataset") #Shows table
 
 #Volcano plot
 #Creating a new column for colouring in A vs B

@@ -116,15 +116,16 @@ generate_summary <- function(dataset,column) {
 This can be used to create a dataframe for the `pvalue` and `Log2FoldChange` columns for each dataset.
 ```{r}
 #| echo: true
-stat_names = c('Min','Max','Mean','Median','Lower Quartile', 'Upper Quartile') #Creates vector of stat names for table
-p_value <- generate_summary(a_vs_b,'pvalue') #Generates the summary stats on the p value column
-log2fold <- generate_summary(a_vs_b,'log2FoldChange') #Generates the summary stats on the log2fold change column
-output_a_b <- data.frame(stat_names,p_value,log2fold) #Creates a dataframe for outputting
-kable(output_a_b, col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 1: Summary statistics on the A vs B Dataset") #Shows Table
-p_value <- generate_summary(a_vs_d,'pvalue') #Generates stats for P value
-log2fold <- generate_summary(a_vs_d,'log2FoldChange') #Generates stats for log2foldchange
-output_a_d <- data.frame(stat_names,p_value,log2fold) #Creates dataframe for outputting
-kable(output_a_d, col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 1: Summary statistics on the A vs D Dataset") #Shows table
+summary_table <- function(dataset, name) {
+    stat_names = c('Min','Max','Mean','Median','Lower Quartile', 'Upper Quartile') #Creates vector of stat names for table
+    p_value <- generate_summary(dataset,'pvalue') #Generates stats for P value
+    log2fold <- generate_summary(dataset,'log2FoldChange') #Generates stats for log2foldchange
+    output <- data.frame(stat_names,p_value,log2fold) #Creates dataframe for outputting
+    return(output)
+}
+
+kable(summary_table(a_vs_b), col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 1: Summary statistics on the A vs B Dataset") #Shows table
+kable(summary_table(a_vs_d), col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 2: Summary statistics on the A vs D Dataset") #Shows table
 ```
 
 ::: {.callout-warning .column-body-outset-left}
