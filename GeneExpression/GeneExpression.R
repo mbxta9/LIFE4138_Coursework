@@ -125,7 +125,7 @@ ggplotly(create_volcano(a_vs_b,"A vs B",c(-5,5),c(0,15)))
 ggplotly(create_volcano(a_vs_d,"A vs D",c(-10,10),c(0,20)))
 
 #Function for MA plot
-create_ma <- function(dataset, name,y_crop_values) {
+create_ma <- function(dataset, name, y_crop_values) {
     ma_plot <- ggmaplot(data = dataset) + #Creates an MA plot
     coord_cartesian(ylim = y_crop_values) + #Crops graph
     labs( #Adds labels
@@ -142,10 +142,9 @@ create_ma <- function(dataset, name,y_crop_values) {
 ggplotly(create_ma(a_vs_b, "A vs B", c(-10,10)))
 ggplotly(create_ma(a_vs_d, "A vs D", c(-10,10)))
 
-
-
-#Histogram of A vs B
-a_vs_b_histogram <- ggplot(aes(x = pvalue), data = a_vs_b) +  #Creates histogram
+#Function to make a histogram
+create_histogram <- function(dataset, name) {
+    histogram_plot <- ggplot(aes(x = pvalue), data = dataset) +  #Creates histogram
     geom_histogram(
         binwidth = 0.1,
         colour = "black",
@@ -157,30 +156,14 @@ a_vs_b_histogram <- ggplot(aes(x = pvalue), data = a_vs_b) +  #Creates histogram
     labs(
         x = "P value",
         y = "Frequency",
-        title = "Histogram of P value in A vs B"  
+        title = paste("Histogram of P value in ", name)  
     ) + 
     theme_light() + 
     theme(plot.title = element_text(hjust = 0.5)) #Centres title
-ggplotly(a_vs_b_histogram)
+}
 
-#Histogram of A vs D
-a_vs_d_histogram <- ggplot(aes(x = pvalue), data = a_vs_d) + #Creates histogram
-    geom_histogram(
-        binwidth = 0.1,
-        colour = "black",
-        fill = "blue",
-        na.rm = TRUE #Removing any NAs to prevent errors
-    ) +
-    xlim(0, 1) + #Cropping along x axis
-    ylim(0,1000) + #Cropping along y axis
-    labs(
-        x = "P value",
-        y = "Frequency",
-        title = "Histogram of P value in A vs D"  
-    ) + 
-    theme_light() + 
-    theme(plot.title = element_text(hjust = 0.5)) #Centres title
-ggplotly(a_vs_d_histogram)
+ggplotly(create_histogram(a_vs_b, "A vs B")) #Calls function to draw graph
+ggplotly(create_histogram(a_vs_d, "A vs D")) #Calls function to draw graph
 
 #Heatmap
 heat_ab <- a_vs_b %>%

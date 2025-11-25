@@ -261,8 +261,10 @@ Histograms of the `pvalue` were created for each of the datasets. These along wi
 #| label: fig-a_vs_b_histogram
 #| fig-cap: "Histogram plot of p-values in the A vs B comparison. Peaking towards zero suggests a large number of significantly strong differential expression values. However, a larger distribution across the higher p-values show a large number of non-significant gene expression."
 #| code-summary: "Show the histogram code"
-#Histogram of A vs B
-a_vs_b_histogram <- ggplot(aes(x = pvalue), data = a_vs_b) +  #Creates histogram
+
+#Function to make a histogram
+create_histogram <- function(dataset, name) {
+    histogram_plot <- ggplot(aes(x = pvalue), data = dataset) +  #Creates histogram
     geom_histogram(
         binwidth = 0.1,
         colour = "black",
@@ -274,11 +276,13 @@ a_vs_b_histogram <- ggplot(aes(x = pvalue), data = a_vs_b) +  #Creates histogram
     labs(
         x = "P value",
         y = "Frequency",
-        title = "Histogram of P value in A vs B"  
+        title = paste("Histogram of P value in ", name)  
     ) + 
     theme_light() + 
     theme(plot.title = element_text(hjust = 0.5)) #Centres title
-ggplotly(a_vs_b_histogram)
+}
+
+ggplotly(create_histogram(a_vs_b, "A vs B"))
 ```
 ```{r}
 #| echo: true
@@ -286,24 +290,7 @@ ggplotly(a_vs_b_histogram)
 #| label: fig-a_vs_d_histogram
 #| fig-cap: "Histogram plot of p-values in the A vs D comparison. Peaking towards zero is suggestive of large quantities of significantly strong differential expression values. There is a larger distribution across the higher p-values show a large number of non-significant gene expression."
 #| code-summary: "Show the histogram code"
-#Histogram of A vs D
-a_vs_d_histogram <- ggplot(aes(x = pvalue), data = a_vs_d) + #Creates histogram
-    geom_histogram(
-        binwidth = 0.1,
-        colour = "black",
-        fill = "blue",
-        na.rm = TRUE #Removing any NAs to prevent errors
-    ) +
-    xlim(0, 1) + #Cropping along x axis
-    ylim(0,1000) + #Cropping along y axis
-    labs(
-        x = "P value",
-        y = "Frequency",
-        title = "Histogram of P value in A vs D"  
-    ) + 
-    theme_light() + 
-    theme(plot.title = element_text(hjust = 0.5)) #Centres title
-ggplotly(a_vs_d_histogram)
+ggplotly(create_histogram(a_vs_d, "A vs D")) #Calls function to draw graph
 ```
 :::
 ::: {.callout}
