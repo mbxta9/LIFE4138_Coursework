@@ -423,6 +423,7 @@ sig_table <- function(dataset) {
     return(sig_table)
 }
 
+
 #Showing the tables
 datatable(sig_table(a_vs_b), rownames = FALSE, caption = "Table 3: Top 25 upregulated and top 25 downregulated genes in A vs B") #Shows output nicely
 datatable(sig_table(a_vs_d), rownames = FALSE, caption = "Table 4: Top 25 upregulated and top 25 downregulated genes in A vs D") #Shows output nicely
