@@ -197,7 +197,7 @@ heatmap_plot <- ggplot(heatmap_data, aes( #Creates the plot
     fill = log_expression #Colours heatmap based on expression
 )) +
 geom_tile() +
-scale_fill_gradient(low="white", high="blue", name = "Log10(log2FoldChange)") + #Chooses colours for map
+scale_fill_gradient(low="white", high="blue", name = "log2FoldChange") + #Chooses colours for map
 labs(
     title = "Heatmap of expression of top 20 differentially expressed genes for A vs B and A vs D",
     x = "Dataset Comparison",

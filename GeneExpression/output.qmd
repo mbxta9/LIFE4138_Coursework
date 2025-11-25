@@ -312,7 +312,7 @@ These genes had their `baseMean` value log transformed for comparison and the co
 #| echo: true
 #| code-fold: true
 #| label: fig-heatmap
-#| fig-cap: Heatmap showing log10(baseMean+1) expression values for the top 20 differentially expressed genes from each dataset. Genes with the lowest adjusted p values were chosen and missing baseMean values were filled with zero values. Darker, "more blue" colours represent higher expression levels, while lighter, "more white" colours represent lower expression levels.
+#| fig-cap: Heatmap showing log2FoldChange expression values for the top 20 differentially expressed genes from each dataset. Genes with the lowest adjusted p values were chosen and missing baseMean values were filled with zero values. Darker, "more blue" colours represent higher expression levels, while lighter, "more white" colours represent lower expression levels.
 #| column: screen-inset-left
 #| code-summary: "Show the heatmap code"
 #Heatmap
@@ -340,7 +340,7 @@ heatmap_plot <- ggplot(heatmap_data, aes( #Creates the plot
     fill = log_expression #Colours heatmap based on expression
 )) +
 geom_tile() +
-scale_fill_gradient(low="white", high="blue", name = "Log10(log2FoldChange)") + #Chooses colours for map
+scale_fill_gradient(low="white", high="blue", name = "log2FoldChange") + #Chooses colours for map
 labs(
     title = "Heatmap of expression of top 20 differentially expressed genes for A vs B and A vs D",
     x = "Dataset Comparison",
@@ -358,9 +358,9 @@ ggplotly(heatmap_plot)
 ::: {.callout}
 @fig-heatmap shows the expression pattern for the most significantly expressed genes across the two datasets.
 
-Many genes can be seen to show high expression in one set with low expression in the other (e.g. high in A vs B but low in A vs D). Many genes show this pattern with generally low expression in one and not the other.  
+Many genes can be seen to show high expression in one set with low expression in the other (e.g. high in A vs B but low in A vs D). Many genes show this pattern with generally low expression in one and no change in expression in the other.
 
-An exception to this is `Q0055` which showed high levels of expression in both sets.
+An example of this is `YNCJ0019C` which showed high levels of expression in 'A vs B' but no change in expression in 'A vs D'.
 :::
 :::
 
