@@ -211,57 +211,42 @@ theme(
 
 ggplotly(heatmap_plot)
 
-#Creating saved full list of A vs B
-sig_a_b <- bind_rows(
-    sig_a_b_up %>% mutate(Regulation = "Upregulated"), #Adds regulation label
-    sig_a_b_down %>% mutate(Regulation = "Downregulated") #Adds regulation label
+#Function to create file of significant genes
+create_sig_file <- function(data,name) {
+    dir.create(file.path("Outputs"), showWarnings = FALSE) #Creates folder to keep files tidy
+
+    sig_out <- bind_rows(
+    find_sig_upreg(data) %>% mutate(Regulation = "Upregulated"), #Adds regulation label
+    find_sig_downreg(data) %>% mutate(Regulation = "Downregulated") #Adds regulation label
 ) %>%
     select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets only columns needed for output
 
+    dir.create(file.path("Outputs"), showWarnings = FALSE) #Creates folder to keep files tidy
+    write_csv(sig_out, paste0("Outputs/Sig_",name,".csv")) #Saves full list to file
+}
 
-dir.create(file.path("Outputs"), showWarnings = FALSE) #Creates folder to keep files tidy
+#Creating the files
+create_sig_file(a_vs_b,"A_vs_B")
+create_sig_file(a_vs_d,"A_vs_D")
 
-write_csv(sig_a_b, "Outputs/Sig_A_vs_B.csv") #Saves full list to file.
 
-#Significance Table A vs B
-sig_a_b <- bind_rows( #Creates dataframe of combined top 25
-    sig_a_b_up %>%
+#Function to make a significant genes top 25 table
+sig_table <- function(dataset) {
+    sig_table <- bind_rows( #Creates dataframe of combined top 25
+    find_sig_upreg(dataset) %>%
         arrange(padj) %>% #Sort by lowest padj
         slice_head(n = 25) %>% #Take top 25
         mutate(Regulation = "Upregulated"), #Add new column to show regulation
 
-    sig_a_b_down %>%
+    find_sig_downreg(dataset) %>%
         arrange(padj) %>% #Sort by lowest padj
         slice_head(n = 25) %>% #Take top 25
         mutate(Regulation = "Downregulated") #Add new column to show regulation
 ) %>%
     select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets all columns needed for output
+    return(sig_table)
+}
 
-datatable(sig_a_b, rownames = FALSE, caption = "Table 3: Top 25 upregulated and top 25 downregulated genes in A vs B") #Shows output nicely
-
-#Creating saved full list of A vs D
-sig_a_d <- bind_rows(
-    sig_a_d_up %>% mutate(Regulation = "Upregulated"), #Adds regulation label
-    sig_a_d_down %>% mutate(Regulation = "Downregulated") #Adds regulation label
-) %>%
-    select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets only columns needed for output
-
-dir.create(file.path("Outputs"), showWarnings = FALSE) #Creates folder to keep files tidy
-
-write_csv(sig_a_d, "Outputs/Sig_A_vs_D.csv") #Saves full list to file
-
-#Significance Table A vs D
-sig_a_d <- bind_rows( #Creates dataframe of combined top 25
-    sig_a_d_up %>%
-        arrange(padj) %>% #Sort by lowest padj
-        slice_head(n = 25) %>% #Take top 25
-        mutate(Regulation = "Upregulated"), #Add new column to show regulation
-
-    sig_a_d_down %>%
-        arrange(padj) %>% #Sort by lowest padj
-        slice_head(n = 25) %>% #Take top 25
-        mutate(Regulation = "Downregulated") #Add new column to show regulation
-) %>%
-    select(gene_id, log2FoldChange, pvalue, padj, Regulation) #Gets all columns needed for output
-
-datatable(sig_a_d, rownames = FALSE, caption = "Table 4: Top 25 upregulated and top 25 downregulated genes in A vs D") #Shows output nicely
+#Showing the tables
+datatable(sig_table(a_vs_b), rownames = FALSE, caption = "Table 3: Top 25 upregulated and top 25 downregulated genes in A vs B") #Shows output nicely
+datatable(sig_table(a_vs_d), rownames = FALSE, caption = "Table 4: Top 25 upregulated and top 25 downregulated genes in A vs D") #Shows output nicely
