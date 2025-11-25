@@ -97,7 +97,12 @@ kable(output_a_d, col.names=c("Statistic","P Value","Log2FoldChange"),caption = 
 #Creating a new column for colouring in A vs B
 a_vs_b$diffexpressed <- "NO" #Creates new column and assigns NO to all values
 a_vs_b$diffexpressed[a_vs_b$log2FoldChange >= 1 & a_vs_b$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
-a_vs_b$diffexpressed[a_vs_b$log2FoldChange <= 1 & a_vs_b$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
+a_vs_b$diffexpressed[a_vs_b$log2FoldChange <= -1 & a_vs_b$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
+
+#Creating a new column for colouring in A vs D
+a_vs_d$diffexpressed <- "NO" #Creates new column and assigns NO to all values
+a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 1 & a_vs_d$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
+a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= 1 & a_vs_d$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
 
 #Creating the volcano plot
 a_vs_b_volcano <- ggplot(data = a_vs_b, aes(x = log2FoldChange, y = -log10(padj), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
@@ -114,10 +119,26 @@ a_vs_b_volcano <- ggplot(data = a_vs_b, aes(x = log2FoldChange, y = -log10(padj)
     theme(plot.title = element_text(hjust = 0.5)) #Centres title
 ggplotly(a_vs_b_volcano)
 
-#Creating a new column for colouring in A vs D
-a_vs_d$diffexpressed <- "NO" #Creates new column and assigns NO to all values
-a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 1 & a_vs_d$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
-a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= 1 & a_vs_d$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
+#Function for volcano plot
+create_volcano <- function(dataset, name, x_crop_values, y_crop_values) {
+    volcano <- ggplot(data = dataset, aes(x = log2FoldChange, y = -log10(padj), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
+        geom_point() +
+        scale_color_manual(values = c("blue", "grey", "red"), labels = c('Downregulated', 'Not Significant', 'Upregulated')) + #Creates colour scheme based on labels
+        coord_cartesian(ylim = y_crop_values, xlim = x_crop_values) + #Crops the graph
+        labs( #Adds labels
+            x = "Log 2 Fold Change",
+            y = "-log10(P Adjusted Value)",
+            title = paste("Volcano plot of ", name),
+            color = "Significance"
+        ) +
+        theme_light() +
+        theme(plot.title = element_text(hjust = 0.5)) #Centres title
+
+}
+
+ggplotly(create_volcano(a_vs_b,"A vs B",c(-5,5),c(0,15)))
+ggplotly(create_volcano(a_vs_d,"A vs D",c(-10,10),c(0,20)))
+
 
 #Creating the volcano plot
 a_vs_d_volcano <- ggplot(data = a_vs_d, aes(x = log2FoldChange, y = -log10(padj), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
