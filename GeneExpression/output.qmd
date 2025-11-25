@@ -305,8 +305,6 @@ A heatmap was made for the top 20 differentially expressed genes from each datas
 
 The genes with the lowest adjusted p values were selected. 
 
-These genes had their `baseMean` value log transformed for comparison and the code and the heatmap can be seen below.
-
 ::: {layout-ncol=2 .column-screen-inset}
 ```{r}
 #| echo: true
@@ -375,7 +373,7 @@ Tables were generated to showcase the genes with significant differential expres
 : {.hover}
 
 ::: {.callout-warning .column-body-outset-left}
-**Only the top 25 of upregulated and downregulated genes are shown as the dataset is too large, the full list of genes is available in the files: `Sig_A_vs_B.csv` and `Sig_A_vs_D.csv` which are located in the `Significants` folder in the directory**
+**Only the top 25 of upregulated and downregulated genes are shown as the dataset is too large, the full list of genes is available in the files: `Sig_A_vs_B.csv` and `Sig_A_vs_D.csv` which are located in the `Outputs` folder in the directory**
 :::
 
 ```{r}
