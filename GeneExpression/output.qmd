@@ -310,7 +310,7 @@ The genes with the lowest adjusted p values were selected.
 #| echo: true
 #| code-fold: true
 #| label: fig-heatmap
-#| fig-cap: Heatmap showing log2FoldChange expression values for the top 20 differentially expressed genes from each dataset. Genes with the lowest adjusted p values were chosen and missing baseMean values were filled with zero values. Darker, "more blue" colours represent higher expression levels, while lighter, "more white" colours represent lower expression levels.
+#| fig-cap: Heatmap showing log2FoldChange expression values for the top 20 differentially expressed genes from each dataset. Genes with the lowest adjusted p values were chosen and missing log2FoldChange values were filled with zero values. Darker, "more blue" colours represent higher expression levels, while lighter, "more white" colours represent lower expression levels.
 #| column: screen-inset-left
 #| code-summary: "Show the heatmap code"
 #Heatmap
