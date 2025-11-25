@@ -104,21 +104,6 @@ a_vs_d$diffexpressed <- "NO" #Creates new column and assigns NO to all values
 a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 1 & a_vs_d$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
 a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= 1 & a_vs_d$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
 
-#Creating the volcano plot
-a_vs_b_volcano <- ggplot(data = a_vs_b, aes(x = log2FoldChange, y = -log10(padj), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
-    geom_point() +
-    scale_color_manual(values = c("blue", "grey", "red"), labels = c('Downregulated', 'Not Significant', 'Upregulated')) + #Creates colour scheme based on labels
-    coord_cartesian(ylim = c(0, 20), xlim = c(-5, 5)) + #Crops the graph
-    labs( #Adds labels
-        x = "Log 2 Fold Change",
-        y = "-log10(P Adjusted Value)",
-        title = "Volcano plot of A vs B",
-        color = "Significance"
-    ) +
-    theme_light() +
-    theme(plot.title = element_text(hjust = 0.5)) #Centres title
-ggplotly(a_vs_b_volcano)
-
 #Function for volcano plot
 create_volcano <- function(dataset, name, x_crop_values, y_crop_values) {
     volcano <- ggplot(data = dataset, aes(x = log2FoldChange, y = -log10(padj), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
@@ -139,51 +124,24 @@ create_volcano <- function(dataset, name, x_crop_values, y_crop_values) {
 ggplotly(create_volcano(a_vs_b,"A vs B",c(-5,5),c(0,15)))
 ggplotly(create_volcano(a_vs_d,"A vs D",c(-10,10),c(0,20)))
 
-
-#Creating the volcano plot
-a_vs_d_volcano <- ggplot(data = a_vs_d, aes(x = log2FoldChange, y = -log10(padj), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
-    geom_point() +
-    scale_color_manual(values = c("blue", "grey", "red"), labels = c('Downregulated', 'Not Significant', 'Upregulated')) + #Creates colour scheme based on labels
-    coord_cartesian(ylim = c(0, 20), xlim = c(-10, 10)) + #Crops the graph
-    labs(
-        x = "Log 2 Fold Change",
-        y = "-log10(P Adjusted Value)",
-        title = "Volcano plot of A vs D",
+#Function for MA plot
+create_ma <- function(dataset, name,y_crop_values) {
+    ma_plot <- ggmaplot(data = dataset) + #Creates an MA plot
+    coord_cartesian(ylim = y_crop_values) + #Crops graph
+    labs( #Adds labels
+        x = "Log2 Mean Expression",
+        y = "Log 2 Fold Change",
+        title = paste("MA plot of ",name),
         color = "Significance"
     ) +
     theme_light() +
-    theme(plot.title = element_text(hjust = 0.5)) #Centres title
-ggplotly(a_vs_d_volcano)
+    theme(plot.title = element_text(hjust = 0.5)) 
+}
 
+#Drawing the MA plots
+ggplotly(create_ma(a_vs_b, "A vs B", c(-10,10)))
+ggplotly(create_ma(a_vs_d, "A vs D", c(-10,10)))
 
-#MA PLOT
-#A vs B
-a_vs_b_MA <- ggmaplot(data = a_vs_b #Creates an MA plot
-    )+
-coord_cartesian(ylim = c(-10, 10)) + #Crops graph
-labs( #Adds labels
-    x = "Log2 Mean Expression",
-    y = "Log 2 Fold Change",
-    title = "MA plot of A vs B",
-    color = "Significance"
-) +
-theme_light() +
-theme(plot.title = element_text(hjust = 0.5)) #Centres title
-ggplotly(a_vs_b_MA)
-
-#A vs D
-a_vs_d_MA <- ggmaplot(data = a_vs_d #Creates an MA plot
-    )+
-coord_cartesian(ylim = c(-10, 10)) + #Crops graph
-labs( #Adding labels
-    x = "Log2 Mean Expression",
-    y = "Log 2 Fold Change",
-    title = "MA plot of A vs D",
-    color = "Significance"
-) +
-theme_light() +
-theme(plot.title = element_text(hjust = 0.5)) #Centres title
-ggplotly(a_vs_d_MA)
 
 
 #Histogram of A vs B
@@ -228,19 +186,19 @@ ggplotly(a_vs_d_histogram)
 heat_ab <- a_vs_b %>%
     arrange(padj) %>%
     slice_head(n = 20) %>% #Arrange by adjusted p value and take only top 20
-    select(gene_id,baseMean) %>%
+    select(gene_id,log2FoldChange) %>%
     mutate(Name = "A_vs_B") #Add column called Name to kno which dataset its from
 
 heat_ad <- a_vs_d %>%
     arrange(padj) %>%
     slice_head(n = 20) %>% #Arrange by adjusted p value and take only top 20
-    select(gene_id,baseMean) %>%
+    select(gene_id,log2FoldChange) %>%
     mutate(Name = "A_vs_D") #Add column called Name to kno which dataset its from
 
 heatmap_data <- bind_rows(heat_ab, heat_ad) #Combine the two top 20 datasets
 heatmap_data <- heatmap_data %>%
-    complete(gene_id,Name, fill = list(baseMean = 0)) %>% #Fill blanks with 0 values
-    mutate(log_expression = log10(baseMean + 1)) #Create new column with log adjusted values
+    complete(gene_id,Name, fill = list(log2FoldChange = 0)) %>% #Fill blanks with 0 values
+    mutate(log_expression = log2FoldChange) #Create new column with log adjusted values
 
 
 heatmap_plot <- ggplot(heatmap_data, aes( #Creates the plot
@@ -249,7 +207,7 @@ heatmap_plot <- ggplot(heatmap_data, aes( #Creates the plot
     fill = log_expression #Colours heatmap based on expression
 )) +
 geom_tile() +
-scale_fill_gradient(low="white", high="blue", name = "Log10(baseMean)") + #Chooses colours for map
+scale_fill_gradient(low="white", high="blue", name = "Log10(log2FoldChange)") + #Chooses colours for map
 labs(
     title = "Heatmap of expression of top 20 differentially expressed genes for A vs B and A vs D",
     x = "Dataset Comparison",

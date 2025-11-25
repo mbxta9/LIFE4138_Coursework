@@ -217,18 +217,23 @@ MA plots were created of the two datasets using the `ggpubr` module. The plots c
 #| label: fig-a_vs_b_ma
 #| fig-cap: MA plot of the A vs B comparison, showing Log2 Fold Change against the Log2 Mean Expression. Plots in red indicate genes that are significantly upregulated (log2FC ≥ 1, padj < 0.05), plots in blue indicate genes that significantly downregulated (log2FC ≤ –1, padj < 0.05), while plots in grey indicate genes that are not significant.
 library(ggpubr) #Loads ggpubr for creating MA plots
-a_vs_b_MA <- ggmaplot(data = a_vs_b #Creates an MA plot
-    )+
-coord_cartesian(ylim = c(-10, 10)) + #Crops graph
-labs( #Adds labels
-    x = "Log2 Mean Expression",
-    y = "Log 2 Fold Change",
-    title = "MA plot of A vs B",
-    color = "Significance"
-) +
-theme_light() +
-theme(plot.title = element_text(hjust = 0.5)) #Centres title
-ggplotly(a_vs_b_MA)
+
+#Function for MA plot
+create_ma <- function(dataset, name,y_crop_values) {
+    ma_plot <- ggmaplot(data = dataset) + #Creates an MA plot
+    coord_cartesian(ylim = y_crop_values) + #Crops graph
+    labs( #Adds labels
+        x = "Log2 Mean Expression",
+        y = "Log 2 Fold Change",
+        title = paste("MA plot of ",name),
+        color = "Significance"
+    ) +
+    theme_light() +
+    theme(plot.title = element_text(hjust = 0.5)) 
+}
+
+#Drawing the MA plots
+ggplotly(create_ma(a_vs_b, "A vs B", c(-10,10)))
 ```
 
 ```{r}
@@ -237,18 +242,7 @@ ggplotly(a_vs_b_MA)
 #| code-summary: "Show the MA plot code"
 #| label: fig-a_vs_d_ma
 #| fig-cap: MA plot of the A vs D comparison, showing Log2 Fold Change against the Log2 Mean Expression. Plots in red indicate genes that are significantly upregulated (log2FC ≥ 1, padj < 0.05), plots in blue indicate genes that significantly downregulated (log2FC ≤ –1, padj < 0.05), while plots in grey indicate genes that are not significant.
-a_vs_d_MA <- ggmaplot(data = a_vs_d #Creates an MA plot
-    )+
-coord_cartesian(ylim = c(-10, 10)) + #Crops graph
-labs( #Adding labels
-    x = "Log2 Mean Expression",
-    y = "Log 2 Fold Change",
-    title = "MA plot of A vs D",
-    color = "Significance"
-) +
-theme_light() +
-theme(plot.title = element_text(hjust = 0.5)) #Centres title
-ggplotly(a_vs_d_MA)
+ggplotly(create_ma(a_vs_d, "A vs D", c(-10,10)))
 ```
 
 :::
@@ -337,19 +331,19 @@ These genes had their `baseMean` value log transformed for comparison and the co
 heat_ab <- a_vs_b %>%
     arrange(padj) %>%
     slice_head(n = 20) %>% #Arrange by adjusted p value and take only top 20
-    select(gene_id,baseMean) %>%
+    select(gene_id,log2FoldChange) %>%
     mutate(Name = "A_vs_B") #Add column called Name to kno which dataset its from
 
 heat_ad <- a_vs_d %>%
     arrange(padj) %>%
     slice_head(n = 20) %>% #Arrange by adjusted p value and take only top 20
-    select(gene_id,baseMean) %>%
+    select(gene_id,log2FoldChange) %>%
     mutate(Name = "A_vs_D") #Add column called Name to kno which dataset its from
 
 heatmap_data <- bind_rows(heat_ab, heat_ad) #Combine the two top 20 datasets
 heatmap_data <- heatmap_data %>%
-    complete(gene_id,Name, fill = list(baseMean = 0)) %>% #Fill blanks with 0 values
-    mutate(log_expression = log10(baseMean + 1)) #Create new column with log adjusted values
+    complete(gene_id,Name, fill = list(log2FoldChange = 0)) %>% #Fill blanks with 0 values
+    mutate(log_expression = log2FoldChange) #Create new column with log adjusted values
 
 
 heatmap_plot <- ggplot(heatmap_data, aes( #Creates the plot
@@ -358,7 +352,7 @@ heatmap_plot <- ggplot(heatmap_data, aes( #Creates the plot
     fill = log_expression #Colours heatmap based on expression
 )) +
 geom_tile() +
-scale_fill_gradient(low="white", high="blue", name = "Log10(baseMean)") + #Chooses colours for map
+scale_fill_gradient(low="white", high="blue", name = "Log10(log2FoldChange)") + #Chooses colours for map
 labs(
     title = "Heatmap of expression of top 20 differentially expressed genes for A vs B and A vs D",
     x = "Dataset Comparison",
@@ -374,7 +368,7 @@ ggplotly(heatmap_plot)
 ```
 
 ::: {.callout}
-@fig-heatmap shows the expression pattern for the most significantly expressed genes across the two datasets. A log10 transformation was applied to the `baseMean` values in order to normalise the heatmap and to make clearer distinctions in levels of expression.  
+@fig-heatmap shows the expression pattern for the most significantly expressed genes across the two datasets.
 
 Many genes can be seen to show high expression in one set with low expression in the other (e.g. high in A vs B but low in A vs D). Many genes show this pattern with generally low expression in one and not the other.  
 
