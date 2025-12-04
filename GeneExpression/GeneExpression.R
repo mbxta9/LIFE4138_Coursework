@@ -15,6 +15,10 @@
 #install.packages("tidyverse")
 #install.packages("DT")
 #install.packages("knitr")
+#install.packages("ggrepel")
+#install.packages("RColorBrewer")
+#install.packages("plotly")
+#install.packages("ggpubr")
 library(tidyverse)
 library(DT) #For interactive tables
 library(knitr) #For table viewing
