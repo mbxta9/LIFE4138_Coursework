@@ -177,13 +177,13 @@ heat_ab <- a_vs_b %>%
     arrange(padj) %>%
     slice_head(n = 20) %>% #Arrange by adjusted p value and take only top 20
     select(gene_id,log2FoldChange) %>%
-    mutate(Name = "A_vs_B") #Add column called Name to kno which dataset its from
+    mutate(Name = "A vs B") #Add column called Name to kno which dataset its from
 
 heat_ad <- a_vs_d %>%
     arrange(padj) %>%
     slice_head(n = 20) %>% #Arrange by adjusted p value and take only top 20
     select(gene_id,log2FoldChange) %>%
-    mutate(Name = "A_vs_D") #Add column called Name to kno which dataset its from
+    mutate(Name = "A vs D") #Add column called Name to kno which dataset its from
 
 heatmap_data <- bind_rows(heat_ab, heat_ad) #Combine the two top 20 datasets
 heatmap_data <- heatmap_data %>%
@@ -210,6 +210,51 @@ theme(
 )
 
 ggplotly(heatmap_plot)
+
+#Heatmap with only data from both
+top_from_A_vs_B <- a_vs_b %>%
+    arrange(padj) %>%
+    slice_head(n = 20)
+
+top_from_A_vs_D <- a_vs_d %>%
+    arrange(padj) %>%
+    slice_head(n = 20)
+
+top_gene_rows <- bind_rows(top_from_A_vs_B, top_from_A_vs_D)
+
+top_gene_list <- unique(top_gene_rows$gene_id)
+
+heat_ab_common <- a_vs_b %>%
+    filter(gene_id %in% top_gene_list) %>%
+    select(gene_id,log2FoldChange) %>%
+    mutate(Name = "A vs B")
+
+heat_ad_common <- a_vs_d %>%
+    filter(gene_id %in% top_gene_list) %>%
+    select(gene_id,log2FoldChange) %>%
+    mutate(Name = "A vs D")
+
+heatmap_data_common <- bind_rows(heat_ab_common,heat_ad_common)
+
+heatmap_plot_common <- ggplot(heatmap_data_common, aes( #Creates the plot
+    x = Name, #Comparison of datasets
+    y = gene_id, #Gene list on y axis
+    fill = log2FoldChange #Colours heatmap based on expression
+)) +
+geom_tile() +
+scale_fill_gradient(low="white", high="blue", name = "log2FoldChange") + #Chooses colours for map
+labs(
+    title = "Heatmap of expression of top 20 differentially expressed genes for A vs B and A vs D",
+    x = "Dataset Comparison",
+    y = "Gene ID"
+)+
+theme_minimal() +
+theme(
+    panel.grid = element_blank(), #Removes gridlines
+    plot.title = element_text(hjust = 0.5, size = 11) #Centres title and makes it fit
+)
+
+ggplotly(heatmap_plot_common)
 
 #Function to create file of significant genes
 create_sig_file <- function(data,name) {
