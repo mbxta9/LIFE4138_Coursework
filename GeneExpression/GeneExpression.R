@@ -175,27 +175,27 @@ ggplotly(create_histogram(a_vs_d, "A vs D")) #Calls function to draw graph
 #Heatmap
 top_from_A_vs_B <- a_vs_b %>%
     arrange(padj) %>%
-    slice_head(n = 20)
+    slice_head(n = 20) #Arrange by padj and take top 20
 
 top_from_A_vs_D <- a_vs_d %>%
     arrange(padj) %>%
-    slice_head(n = 20)
+    slice_head(n = 20) #Arrange by padj and take top 20
 
-top_gene_rows <- bind_rows(top_from_A_vs_B, top_from_A_vs_D)
+top_gene_rows <- bind_rows(top_from_A_vs_B, top_from_A_vs_D) #Create combined list of top genes
 
-top_gene_list <- unique(top_gene_rows$gene_id)
+top_gene_list <- unique(top_gene_rows$gene_id) #Create list of only unique genes to use as a filter
 
 heat_ab_common <- a_vs_b %>%
-    filter(gene_id %in% top_gene_list) %>%
-    select(gene_id,log2FoldChange) %>%
-    mutate(Name = "A vs B")
+    filter(gene_id %in% top_gene_list) %>% #Select only genes from top 20
+    select(gene_id,log2FoldChange) %>% #Take gene name and change
+    mutate(Name = "A vs B") #Add new column of Name
 
 heat_ad_common <- a_vs_d %>%
-    filter(gene_id %in% top_gene_list) %>%
-    select(gene_id,log2FoldChange) %>%
-    mutate(Name = "A vs D")
+    filter(gene_id %in% top_gene_list) %>% #Select only genes from top 20
+    select(gene_id,log2FoldChange) %>% #Take gene name and change
+    mutate(Name = "A vs D") #Add new column of Name
 
-heatmap_data_common <- bind_rows(heat_ab_common,heat_ad_common)
+heatmap_data_common <- bind_rows(heat_ab_common,heat_ad_common) #Combine to create top 40 list with values from both AvsB and AvsD
 
 heatmap_plot_common <- ggplot(heatmap_data_common, aes( #Creates the plot
     x = Name, #Comparison of datasets
