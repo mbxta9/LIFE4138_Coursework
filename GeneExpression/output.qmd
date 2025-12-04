@@ -9,7 +9,7 @@ format:
         toc-title: "Contents"
         embed-resources: true
         page-layout: full
-        theme: united
+        theme: zephr
         code-tools: false
         code-line-numbers: true
         title-block-banner: "#4A7AB5"   
