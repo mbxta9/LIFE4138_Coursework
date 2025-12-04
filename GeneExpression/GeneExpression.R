@@ -117,7 +117,11 @@ a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= 1 & a_vs_d$padj < 0.05] <- "DOWN" 
 
 #Function for volcano plot
 create_volcano <- function(dataset, name, x_crop_values, y_crop_values) {
-    volcano <- ggplot(data = dataset, aes(x = log2FoldChange, y = -log10(padj), color = diffexpressed, text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
+    volcano <- ggplot(data = dataset, aes(
+        x = log2FoldChange, 
+        y = -log10(padj), 
+        color = diffexpressed, 
+        text = gene_id)) + #colours by diffexpressed and adds text to each point for plotly
         geom_point() +
         scale_color_manual(values = c("blue", "grey", "red"), labels = c('Downregulated', 'Not Significant', 'Upregulated')) + #Creates colour scheme based on labels
         coord_cartesian(ylim = y_crop_values, xlim = x_crop_values) + #Crops the graph
