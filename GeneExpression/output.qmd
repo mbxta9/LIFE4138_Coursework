@@ -313,32 +313,37 @@ The genes with the lowest adjusted p values were selected.
 #| fig-cap: Heatmap showing log2FoldChange expression values for the top 20 differentially expressed genes from each dataset. Genes with the lowest adjusted p values were chosen and missing log2FoldChange values were filled with zero values. Darker, "more blue" colours represent higher expression levels, while lighter, "more white" colours represent lower expression levels.
 #| column: screen-inset-left
 #| code-summary: "Show the heatmap code"
-#Heatmap
-heat_ab <- a_vs_b %>%
+top_from_A_vs_B <- a_vs_b %>%
     arrange(padj) %>%
-    slice_head(n = 20) %>% #Arrange by adjusted p value and take only top 20
-    select(gene_id,log2FoldChange) %>%
-    mutate(Name = "A_vs_B") #Add column called Name to kno which dataset its from
+    slice_head(n = 20)
 
-heat_ad <- a_vs_d %>%
+top_from_A_vs_D <- a_vs_d %>%
     arrange(padj) %>%
-    slice_head(n = 20) %>% #Arrange by adjusted p value and take only top 20
+    slice_head(n = 20)
+
+top_gene_rows <- bind_rows(top_from_A_vs_B, top_from_A_vs_D)
+
+top_gene_list <- unique(top_gene_rows$gene_id)
+
+heat_ab_common <- a_vs_b %>%
+    filter(gene_id %in% top_gene_list) %>%
     select(gene_id,log2FoldChange) %>%
-    mutate(Name = "A_vs_D") #Add column called Name to kno which dataset its from
+    mutate(Name = "A vs B")
 
-heatmap_data <- bind_rows(heat_ab, heat_ad) #Combine the two top 20 datasets
-heatmap_data <- heatmap_data %>%
-    complete(gene_id,Name, fill = list(log2FoldChange = 0)) %>% #Fill blanks with 0 values
-    mutate(log_expression = log2FoldChange) #Create new column with log adjusted values
+heat_ad_common <- a_vs_d %>%
+    filter(gene_id %in% top_gene_list) %>%
+    select(gene_id,log2FoldChange) %>%
+    mutate(Name = "A vs D")
 
+heatmap_data_common <- bind_rows(heat_ab_common,heat_ad_common)
 
-heatmap_plot <- ggplot(heatmap_data, aes( #Creates the plot
+heatmap_plot_common <- ggplot(heatmap_data_common, aes( #Creates the plot
     x = Name, #Comparison of datasets
     y = gene_id, #Gene list on y axis
-    fill = log_expression #Colours heatmap based on expression
+    fill = log2FoldChange #Colours heatmap based on expression
 )) +
 geom_tile() +
-scale_fill_gradient(low="white", high="blue", name = "log2FoldChange") + #Chooses colours for map
+scale_fill_viridis_c(option = "D", name = "log2FoldChange") + #Chooses colours for map
 labs(
     title = "Heatmap of expression of top 20 differentially expressed genes for A vs B and A vs D",
     x = "Dataset Comparison",
@@ -350,7 +355,7 @@ theme(
     plot.title = element_text(hjust = 0.5, size = 11) #Centres title and makes it fit
 )
 
-ggplotly(heatmap_plot)
+ggplotly(heatmap_plot_common)
 ```
 
 ::: {.callout}
@@ -358,9 +363,11 @@ ggplotly(heatmap_plot)
 
 Many genes can be seen to show high expression in one set with low expression in the other (e.g. high in A vs B but low in A vs D). Many genes show this pattern with generally low expression in one and no change in expression in the other.
 
-An example of this is `YNCJ0019C` which showed high levels of expression in 'A vs B' but no change in expression in 'A vs D'.
+An example of this is `YNCJ0019C` which showed high change in expression in 'A vs B' but very little change in expression in 'A vs D'.
 :::
 :::
+
+
 
 # Significant Gene Tables 🧬 {.column-screen-inset-left #gene-tables}
 
