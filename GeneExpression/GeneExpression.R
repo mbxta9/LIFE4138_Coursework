@@ -203,7 +203,7 @@ heatmap_plot_common <- ggplot(heatmap_data_common, aes( #Creates the plot
     fill = log2FoldChange #Colours heatmap based on expression
 )) +
 geom_tile() +
-scale_fill_gradient(low="white", high="blue", name = "log2FoldChange") + #Chooses colours for map
+scale_fill_viridis_c(option = "D", name = "log2FoldChange") + #Chooses colours for map
 labs(
     title = "Heatmap of expression of top 20 differentially expressed genes for A vs B and A vs D",
     x = "Dataset Comparison",
