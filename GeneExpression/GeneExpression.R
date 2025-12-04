@@ -173,45 +173,6 @@ ggplotly(create_histogram(a_vs_b, "A vs B")) #Calls function to draw graph
 ggplotly(create_histogram(a_vs_d, "A vs D")) #Calls function to draw graph
 
 #Heatmap
-heat_ab <- a_vs_b %>%
-    arrange(padj) %>%
-    slice_head(n = 20) %>% #Arrange by adjusted p value and take only top 20
-    select(gene_id,log2FoldChange) %>%
-    mutate(Name = "A vs B") #Add column called Name to kno which dataset its from
-
-heat_ad <- a_vs_d %>%
-    arrange(padj) %>%
-    slice_head(n = 20) %>% #Arrange by adjusted p value and take only top 20
-    select(gene_id,log2FoldChange) %>%
-    mutate(Name = "A vs D") #Add column called Name to kno which dataset its from
-
-heatmap_data <- bind_rows(heat_ab, heat_ad) #Combine the two top 20 datasets
-heatmap_data <- heatmap_data %>%
-    complete(gene_id,Name, fill = list(log2FoldChange = 0)) %>% #Fill blanks with 0 values
-    mutate(log_expression = log2FoldChange) #Create new column with log adjusted values
-
-
-heatmap_plot <- ggplot(heatmap_data, aes( #Creates the plot
-    x = Name, #Comparison of datasets
-    y = gene_id, #Gene list on y axis
-    fill = log_expression #Colours heatmap based on expression
-)) +
-geom_tile() +
-scale_fill_gradient(low="white", high="blue", name = "log2FoldChange") + #Chooses colours for map
-labs(
-    title = "Heatmap of expression of top 20 differentially expressed genes for A vs B and A vs D",
-    x = "Dataset Comparison",
-    y = "Gene ID"
-)+
-theme_minimal() +
-theme(
-    panel.grid = element_blank(), #Removes gridlines
-    plot.title = element_text(hjust = 0.5, size = 11) #Centres title and makes it fit
-)
-
-ggplotly(heatmap_plot)
-
-#Heatmap with only data from both
 top_from_A_vs_B <- a_vs_b %>%
     arrange(padj) %>%
     slice_head(n = 20)
