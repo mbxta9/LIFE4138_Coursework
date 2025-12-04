@@ -363,7 +363,7 @@ ggplotly(heatmap_plot_common)
 
 Many genes can be seen to show high expression in one set with low expression in the other (e.g. high in A vs B but low in A vs D). Many genes show this pattern with generally low expression in one and no change in expression in the other.
 
-An example of this is `YNCJ0019C` which showed high change in expression in 'A vs B' but very little change in expression in 'A vs D'.
+An example of this is `YNCJ0005C` which showed high change in expression in 'A vs B' but very little change in expression in 'A vs D'.
 :::
 :::
 
