@@ -180,7 +180,7 @@ Now that this function is verified to work it can be used to create new column o
 The following line of code was ran that created a new column and called the previously created function
 ```{python}
 #| echo: true
-pumpkins[f"weight_in_kg"] = [(lbs_to_kg(i)) for i in pumpkins['weight_lbs']] #Creates new column using values by calling conversion function in list
+pumpkins[f"weight_kg"] = [(lbs_to_kg(i)) for i in pumpkins['weight_lbs']] #Creates new column using values by calling conversion function in list
 ```
 Now we can take a look at the new column in the dataset:
 ```{python}
@@ -190,8 +190,8 @@ print(pumpkins.head(1))
 We can re-run the code from earlier on the new column to find the value in kg for the heaviest pumpkin
 ```{python}
 #|echo: true
-heaviest_pumpkin = find_highest(pumpkins,'weight_in_kg')
-print(f"The heaviest pumpkin was a {heaviest_pumpkin['variety']} from {heaviest_pumpkin['city']}, {heaviest_pumpkin['state_prov']}, {heaviest_pumpkin['country']}.\nIt weighed {round(heaviest_pumpkin['weight_in_kg'],2)}kg and was grown in the year {heaviest_pumpkin['id'].removesuffix('-P')}.")
+heaviest_pumpkin = find_highest(pumpkins,'weight_kg')
+print(f"The heaviest pumpkin was a {heaviest_pumpkin['variety']} from {heaviest_pumpkin['city']}, {heaviest_pumpkin['state_prov']}, {heaviest_pumpkin['country']}.\nIt weighed {round(heaviest_pumpkin['weight_kg'],2)}kg and was grown in the year {heaviest_pumpkin['id'].removesuffix('-P')}.")
 ```
 ## Task 4 - Weight class 🏋🏼‍♂️ {#Task-4}
 This task required creating another new column, with three classes of weight: light, medium and heavy.
@@ -209,7 +209,7 @@ This column was created using the following code.
 ```{python}
 #| echo: true
 classes = []
-for i in pumpkins['weight_in_kg']:
+for i in pumpkins['weight_kg']:
     if i<250: #Light weight class if weight <250
         classes.append('light')
     elif i<500: #Medium weight class if weight >250 but <500
@@ -223,7 +223,7 @@ pumpkins["weight_class"] = classes #Create new column from classes list
 We can see the `weight_class` values for the first three rows below
 ```{python}
 #| echo: true
-print(pumpkins[['weight_in_kg','weight_class']].head(3))   
+print(pumpkins[['weight_kg','weight_class']].head(3))   
 ```
 
 ## Task 5 - Estimated vs Actual Weight plotting 📈 {#Task-5}
@@ -237,7 +237,7 @@ A new column in the dataset was created called `est_weight_kg` using the code be
 #| echo: true
 pumpkins[f"est_weight_kg"] = [(lbs_to_kg(i)) for i in pumpkins['est_weight']]
 ```
-This new set column of data (`est_weight_kg`) can be plotted against the `weight_in_kg` column to see the relationship.
+This new set column of data (`est_weight_kg`) can be plotted against the `weight_kg` column to see the relationship.
 
 ### Creating the graph
 The module matplotlib is used to create graphs and is imported.
@@ -258,7 +258,7 @@ Note: The `sns` module was used here to aid in colouring.
 
 import seaborn as sns
 
-figure_1 = sns.scatterplot(data = pumpkins, x = 'est_weight_kg', y = 'weight_in_kg', hue = 'weight_class', palette='colorblind') #Creates a new figure to draw graph on
+figure_1 = sns.scatterplot(data = pumpkins, x = 'est_weight_kg', y = 'weight_kg', hue = 'weight_class', palette='colorblind') #Creates a new figure to draw graph on
 figure_1.figure.set_size_inches(10,5)
 figure_1.figure.tight_layout(rect=[0, 0.05, 0.85, 0.95]) #Creates whitespace at top and bottom of graph
 figure_1.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
@@ -335,21 +335,30 @@ Next was to summarise the filtered data, with two key tasks. Finding the mean we
 This exercise was done using the previously calculated kilogram values.
 
 ### Finding mean weight per country
-This was done by grouping the `filtered_pumpkins` dataframe by `country` and then selecting the `weight_in_kg` column and calculating the mean.
+This was done by grouping the `filtered_pumpkins` dataframe by `country` and then selecting the `weight_kg` column and calculating the mean.
 The mean values for each country can be seen below.
 ```{python}
 #| echo: true
-print(f"Mean pumpkin weight per country: \n{filtered_pumpkins.groupby('country')['weight_in_kg'].mean()}") #Groups by country and 
+print(f"Mean pumpkin weight per country in kg: \n{filtered_pumpkins.groupby('country')['weight_kg'].mean()}") #Groups by country and 
 #filters to only weight and calculates mean
+```
+
+### Finding country with heighest mean weight
+This was found similarly to the mean weights above but using the max values.
+```{python}
+#| echo: true
+print(f"Country with the heighest mean weight: \n{filtered_pumpkins.groupby('country')['weight_kg'].mean().idxmax()}") #Groups by country and 
+#filters to only weight and calculates mean and finds heighest
 ```
 
 ### Finding mean weight per variety per country
 ```{python}
 #| echo: true
-mean_variety_country = filtered_pumpkins.groupby(['country','variety'])['weight_in_kg'].mean()
-print(f"Mean weights of pumpkin by variety and country: \n {mean_variety_country}") #Groups by country and calculates mean value and then prints
+mean_variety_country = filtered_pumpkins.groupby(['country','variety'])['weight_kg'].mean()
+print(f"Mean weights of pumpkin by variety and country in kg: \n {mean_variety_country}") #Groups by country and calculates mean value and then prints
 ```
 
+### Finding variety with lowest mean weight
 Next to get the lowest mean weight variety we can do:
 ```{python}
 #| echo: true
@@ -368,7 +377,7 @@ print(f"The lowest mean weight was '{lowest_mean_row[1]}' from {lowest_mean_row[
 #| fig-cap: A boxplot showing the distribution of pumpkin weight across Italy, Japan and the United Kingdom from the filtered pumpkin competitions dataset. Italy has the highest median pumpkin weight, with Japan having lowest median and spread of data and the United Kingdom has an intermediate distribution.
 figure_3 = plt.figure(figsize=(10,6)) #Creates a new figure
 plot_area_3 = figure_3.add_subplot() #Creates new plotting area in figure
-filtered_pumpkins.boxplot(column = 'weight_in_kg', by = 'country', ax = plot_area_3)
+filtered_pumpkins.boxplot(column = 'weight_kg', by = 'country', ax = plot_area_3)
 plt.suptitle("") #Removes pandas title so I can add my own
 figure_3.subplots_adjust(bottom=0.18)
 plot_area_3.set_title("Boxplot of Weight distribution by country")
@@ -419,7 +428,7 @@ Next a facet plot can be made using seaborn as follows:
 facetplot = sns.catplot( #have to use catplot as boxplot has no facetting
         data = filtered_pumpkins, #Chooses filtered dataset
         x = 'variety', #Chooses axis for data
-        y = 'weight_in_kg', #Chooses axis for data
+        y = 'weight_kg', #Chooses axis for data
         col = 'country',
         kind = 'box',
         hue = 'variety', #Creates coloured subplots based on variety

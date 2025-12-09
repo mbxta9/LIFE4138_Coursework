@@ -160,14 +160,14 @@ def main():
     print(f"The heaviest pumpkin was a {heaviest_pumpkin['variety']} from {heaviest_pumpkin['city']}, {heaviest_pumpkin['state_prov']}, {heaviest_pumpkin['country']}. It weighed {round(heaviest_pumpkin['weight_lbs'],2)}lbs and was grown in the year {heaviest_pumpkin['id']}")
 
     #Create a column of weight in kg
-    pumpkins[f"weight_in_kg"] = [(lbs_to_kg(i)) for i in pumpkins['weight_lbs']] #Creates new column using values by calling conversion function in list
+    pumpkins[f"weight_kg"] = [(lbs_to_kg(i)) for i in pumpkins['weight_lbs']] #Creates new column using values by calling conversion function in list
 
     #Creates an outputs folder for the script results
     os.makedirs("outputs", exist_ok=True)
 
     #Create a weight class column
     classes = []
-    for i in pumpkins['weight_in_kg']:
+    for i in pumpkins['weight_kg']:
         if i<250: #Light weight class if weight <250
             classes.append('light')
         elif i<500: #Medium weight class if weight >250 but <500
@@ -181,7 +181,7 @@ def main():
     #Plot Estimated weight against actual weight in kgs
     pumpkins[f"est_weight_kg"] = [(lbs_to_kg(i)) for i in pumpkins['est_weight']] #Create new column of estimted weight in kg
     
-    figure_1 = sns.scatterplot(data = pumpkins, x = 'est_weight_kg', y = 'weight_in_kg', hue = 'weight_class', palette='colorblind') #Creates a new figure to draw graph on
+    figure_1 = sns.scatterplot(data = pumpkins, x = 'est_weight_kg', y = 'weight_kg', hue = 'weight_class', palette='colorblind') #Creates a new figure to draw graph on
     figure_1.figure.set_size_inches(10,6) 
     figure_1.figure.tight_layout(rect=[0, 0.05, 0.85, 0.95]) #Creates whitespace at top and bottom of graph for title and caption
     figure_1.set_title('Estimated Pumpkin Weight vs Actual Pumpkin Weight') #Adding title and axis labels
@@ -210,9 +210,10 @@ def main():
     filtered_pumpkins.to_csv('outputs/pumpkins_filtered.csv') #Saves the filtered data to disk
 
     #Summarising filtered data
-    print(f"Mean pumpkin weight per country: \n{filtered_pumpkins.groupby('country')['weight_in_kg'].mean()}") #Groups by country and filters to only weight and calculates mean
-    mean_variety_country = filtered_pumpkins.groupby(['country','variety'])['weight_in_kg'].mean() #Groups by country and variety to calculate mean
-    print(f"Mean weights of pumpkin by variety and country: \n {mean_variety_country}") 
+    print(f"Mean pumpkin weight per country in kg: \n{filtered_pumpkins.groupby('country')['weight_kg'].mean()}") #Groups by country and filters to only weight and calculates mean
+    print(f"Country with the heighest mean weight: \n{filtered_pumpkins.groupby('country')['weight_kg'].mean().idxmax()}") #Groups by country and filters to only weight and calculates mean and finds heighest
+    mean_variety_country = filtered_pumpkins.groupby(['country','variety'])['weight_kg'].mean() #Groups by country and variety to calculate mean
+    print(f"Mean weights of pumpkin by variety and country in kg: \n {mean_variety_country}") 
     lowest_mean_row = mean_variety_country.idxmin() #Gets lowest row (country, variety)
     lowest_mean_value = mean_variety_country.min() #Gets lowest mean weight value
     print(f"The lowest mean weight in kg was {lowest_mean_row[1]} from {lowest_mean_row[0]}, weighing {round(lowest_mean_value,2)}kg.")
@@ -220,7 +221,7 @@ def main():
     #Weight distribution boxplot
     figure_3 = plt.figure(figsize=(8,6)) #Creates a new figure for this plot
     plot_area_3 = figure_3.add_subplot() #Creates new plotting area in figure
-    filtered_pumpkins.boxplot(column = 'weight_in_kg', by = 'country', ax = plot_area_3)
+    filtered_pumpkins.boxplot(column = 'weight_kg', by = 'country', ax = plot_area_3)
     plt.suptitle("") #Removes pandas title so I can add my own
     figure_3.subplots_adjust(bottom=0.18) #Adds space at bottom for caption
     plot_area_3.set_title("Boxplot of Weight distribution by country")
@@ -238,15 +239,15 @@ def main():
     facetplot = sns.catplot( #have to use catplot as boxplot has no facetting
         data = filtered_pumpkins, #Chooses filtered dataset
         x = 'variety', #Chooses axis for data
-        y = 'weight_in_kg', #Chooses axis for data
+        y = 'weight_kg', #Chooses axis for data
         col = 'country', #Variable to facet by
         kind = 'box', 
         hue = 'variety', #Creates coloured boxes based on variety
         palette = 'colorblind' #Changes palette to be *colourblind friendly*
     )
     facetplot.set_xticklabels(rotation=90)
-    facetplot.figure.tight_layout(rect=[0, 0.05, 1, 0.95]) #Creates whitespace at top and bottom of graph for title and caption
     facetplot.figure.set_size_inches(17,8)
+    facetplot.figure.tight_layout(rect=[0, 0.05, 1, 0.95]) #Creates whitespace at top and bottom of graph for title and caption
     facetplot.set_axis_labels("Variety","Pumpkin Weight (kg)") #Names x and y axis
     facetplot.figure.suptitle("Boxplot of Pumpkin Weight by Variety and Country", y=0.98) #Adds main figure title
     facetplot.set_titles("{col_name}") #Gives each sub plot title

@@ -1,4 +1,4 @@
-,id,place,weight_lbs,grower_name,city,state_prov,country,gpc_site,seed_mother,pollinator_father,ott,est_weight,pct_chart,variety,dataset_id,weight_in_kg,weight_class,est_weight_kg
+,id,place,weight_lbs,grower_name,city,state_prov,country,gpc_site,seed_mother,pollinator_father,ott,est_weight,pct_chart,variety,dataset_id,weight_kg,weight_class,est_weight_kg
 99,2016-P,814,878.4494187173618,"Ferraris, Giustino",Calcio,Lombardy,Italy,Festa della zucca di sale,,,353.48703318837556,772.9656644457706,3.046991056598974,Atlantic Giant,2,398.45842762805466,medium,350.6117446298095
 102,2019-P,133,1614.9719125116137,"Daniele, Farina",Sirtori,Lombardy,Italy,Sfida Nazionale della Zucca - Club Maspiano,,Self,436.69515132132426,1475.6386367331188,0.9645076894650734,Connecticut Field,2,732.5398084529824,heavy,669.3392225114164
 103,2017-P,1016,601.8302611950255,"Petrelli, Team",Sulzano,Lombardy,Italy,Sfida degli Zucconi della Brianza,502 Turmolli,Self,313.7017427194417,598.2847504995112,0.0,Rouge Vif d’Etampes,2,272.98593916186263,medium,271.3777206500491
