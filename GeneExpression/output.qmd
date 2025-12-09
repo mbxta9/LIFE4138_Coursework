@@ -93,7 +93,7 @@ library(knitr) #Loads knitr for table displaying
 up_down <- data.frame(Dataset_Name=c('A vs B','A vs D'),
     Upregulated_genes=c(nrow(sig_a_b_up), nrow(sig_a_d_up)), #Num of upregulated
     Downregulated_genes = c(nrow(sig_a_b_down), nrow(sig_a_d_down))) #Num of downregulated
-kable(up_down) #Shows table
+kable(up_down, col.names=c("Dataset Name","Upregulated Genes","Downregulated Genes")) #Shows table
 ```
 
 ## Creating a summary table {.column-screen-inset-left #creating-summary-table}

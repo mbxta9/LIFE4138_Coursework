@@ -69,7 +69,7 @@ sig_a_d_down <- find_sig_downreg(a_vs_d)
 up_down <- data.frame(Dataset_Name=c('A vs B','A vs D'),
     Upregulated_genes=c(nrow(sig_a_b_up), nrow(sig_a_d_up)), #Num of upregulated
     Downregulated_genes = c(nrow(sig_a_b_down), nrow(sig_a_d_down))) #Num of downregulated
-kable(up_down) #Shows table
+kable(up_down, col.names=c("Dataset Name","Upregulated Genes","Downregulated Genes")) #Shows table
 
 #Table of summary stats
 generate_summary <- function(dataset,column) {
