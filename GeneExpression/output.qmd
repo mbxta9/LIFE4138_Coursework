@@ -34,10 +34,13 @@ First the data is imported using the `readr` module from `tidyverse`. This creat
 library(tidyverse)
 
 load_dataset <- function(filepath) {
-    if (!file.exists(filepath)) {
+    #Function to import a tsv file containing the results of Deseq2 analysis
+    #Checks if file exists and has valid data and returns a dataframe of results
+    if (!file.exists(filepath)) { #Checks if file exists and stops if not
         stop("File not found at ", filepath)
     }
-    read_tsv(filepath)
+    df <- read_tsv(filepath)
+    return(df)
 }
 
 a_vs_b <- load_dataset("Datasets/set_2/A_vs_B.deseq2.results.tsv")

@@ -30,7 +30,9 @@ library(ggpubr) #For MA plots
 
 # Loading the datasets
 load_dataset <- function(filepath) {
-    if (!file.exists(filepath)) {
+    #Function to import a tsv file containing the results of Deseq2 analysis
+    #Checks if file exists and has valid data and returns a dataframe of results
+    if (!file.exists(filepath)) { #Checks if file exists and stops if not
         stop("File not found at ", filepath)
     }
     df <- read_tsv(filepath)
@@ -51,6 +53,7 @@ find_sig_upreg <- function(dataset) {
     changed <- subset(dataset, log2FoldChange >= 1 & padj < 0.05)
     return(changed)
 }
+
 ## Number of significantly downregulated genes
 find_sig_downreg <- function(dataset) {
     #Function to take a dataframe of Deseq2 results and return a new dataframe
