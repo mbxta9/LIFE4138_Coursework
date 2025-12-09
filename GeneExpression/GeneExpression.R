@@ -29,8 +29,15 @@ library(ggpubr) #For MA plots
 
 
 # Loading the datasets
-a_vs_b <- read_tsv("Datasets/set_2/A_vs_B.deseq2.results.tsv")
-a_vs_d <- read_tsv("Datasets/set_2/A_vs_D.deseq2.results.tsv")
+load_dataset <- function(filepath) {
+    if (!file.exists(filepath)) {
+        stop("File not found at ", filepath)
+    }
+    read_tsv(filepath)
+}
+
+a_vs_b <- load_dataset("Datasets/set_2/A_vs_B.deseq2.results.tsv")
+a_vs_d <- load_dataset("Datasets/set_2/A_vs_D.deseq2.results.tsv")
 
 
 # Generating summary statistics
