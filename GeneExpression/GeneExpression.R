@@ -52,11 +52,12 @@ find_sig_downreg <- function(dataset) {
     return(changed)
 }
 
+#Handling for missing data
 a_vs_b$padj[is.na(a_vs_b$padj)] <- 1 #Replaces all NAs in P adjusted value with 1 to show no significance
-a_vs_d$padj[is.na(a_vs_b$padj)] <- 1 #Replaces all NAs in P adjusted value with 1 to show no significance
+a_vs_d$padj[is.na(a_vs_d$padj)] <- 1 #Replaces all NAs in P adjusted value with 1 to show no significance
 
 a_vs_b$log2FoldChange[is.na(a_vs_b$log2FoldChange)] <- 0 #Replaces all NAs in Log2FoldChange with 1 to show no significance
-a_vs_d$log2FoldChange[is.na(a_vs_b$log2FoldChange)] <- 0 #Replaces all NAs in P Log2FoldChange with 1 to show no significance
+a_vs_d$log2FoldChange[is.na(a_vs_d$log2FoldChange)] <- 0 #Replaces all NAs in P Log2FoldChange with 1 to show no significance
 
 #Using previous function to create dataframes of significant genes
 sig_a_b_up <- find_sig_upreg(a_vs_b)
@@ -93,7 +94,7 @@ output_a_b <- data.frame(stat_names,p_value,log2fold) #Creates a dataframe for o
 kable(output_a_b, col.names=c("Statistic","P Value","Log2FoldChange"),caption = "Table 1: Summary statistics on the A vs B Dataset") #Shows Table
 
 #A vs D table
-summary_table <- function(dataset, name) {
+summary_table <- function(dataset) {
     stat_names = c('Min','Max','Mean','Median','Lower Quartile', 'Upper Quartile') #Creates vector of stat names for table
     p_value <- generate_summary(dataset,'pvalue') #Generates stats for P value
     log2fold <- generate_summary(dataset,'log2FoldChange') #Generates stats for log2foldchange
@@ -113,7 +114,7 @@ a_vs_b$diffexpressed[a_vs_b$log2FoldChange <= -1 & a_vs_b$padj < 0.05] <- "DOWN"
 #Creating a new column for colouring in A vs D
 a_vs_d$diffexpressed <- "NO" #Creates new column and assigns NO to all values
 a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 1 & a_vs_d$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
-a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= 1 & a_vs_d$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
+a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= -1 & a_vs_d$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
 
 #Function for volcano plot
 create_volcano <- function(dataset, name, x_crop_values, y_crop_values) {

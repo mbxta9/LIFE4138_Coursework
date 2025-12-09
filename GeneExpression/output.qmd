@@ -72,8 +72,12 @@ find_sig_downreg <- function(dataset) {
     return(changed)
 }
 
+#Handling for missing data
 a_vs_b$padj[is.na(a_vs_b$padj)] <- 1 #Replaces all NAs in P adjusted value with 1 to show no significance
-a_vs_d$padj[is.na(a_vs_b$padj)] <- 1 #Replaces all NAs in P adjusted value with 1 to show no significance
+a_vs_d$padj[is.na(a_vs_d$padj)] <- 1 #Replaces all NAs in P adjusted value with 1 to show no significance
+
+a_vs_b$log2FoldChange[is.na(a_vs_b$log2FoldChange)] <- 0 #Replaces all NAs in Log2FoldChange with 1 to show no significance
+a_vs_d$log2FoldChange[is.na(a_vs_d$log2FoldChange)] <- 0 #Replaces all NAs in P Log2FoldChange with 1 to show no significance
 ```
 This can then be ran on the two datasets to get two new dataframes of only the genes with a statistically significant (<0.05 p value) log2FoldChange.
 
@@ -116,7 +120,7 @@ generate_summary <- function(dataset,column) {
 This can be used to create a dataframe for the `pvalue` and `Log2FoldChange` columns for each dataset.
 ```{r}
 #| echo: true
-summary_table <- function(dataset, name) {
+summary_table <- function(dataset) {
     stat_names = c('Min','Max','Mean','Median','Lower Quartile', 'Upper Quartile') #Creates vector of stat names for table
     p_value <- generate_summary(dataset,'pvalue') #Generates stats for P value
     log2fold <- generate_summary(dataset,'log2FoldChange') #Generates stats for log2foldchange
@@ -188,7 +192,7 @@ ggplotly(create_volcano(a_vs_b,"A vs B",c(-5,5),c(0,15)))
 #Creating a new column for colouring in A vs D
 a_vs_d$diffexpressed <- "NO" #Creates new column and assigns NO to all values
 a_vs_d$diffexpressed[a_vs_d$log2FoldChange >= 1 & a_vs_d$padj < 0.05] <- "UP" #Calculates if sig. up reg. then assigns up
-a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= 1 & a_vs_d$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
+a_vs_d$diffexpressed[a_vs_d$log2FoldChange <= -1 & a_vs_d$padj < 0.05] <- "DOWN" #Calculates if sig. down reg. then assigns down
 
 #Showing the plot
 ggplotly(create_volcano(a_vs_d,"A vs D",c(-10,10),c(0,20)))
