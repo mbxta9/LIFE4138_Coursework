@@ -33,7 +33,8 @@ load_dataset <- function(filepath) {
     if (!file.exists(filepath)) {
         stop("File not found at ", filepath)
     }
-    read_tsv(filepath)
+    df <- read_tsv(filepath)
+    return(df)
 }
 
 a_vs_b <- load_dataset("Datasets/set_2/A_vs_B.deseq2.results.tsv")
