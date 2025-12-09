@@ -28,10 +28,11 @@ knitr:
 
 # Importing the data 📊 {.column-screen-inset-left #importing-data}
 ::: {.column-screen-inset-left}
-First the data is imported using the `readr` module from `tidyverse`. This creates two dataframes, `a_vs_b` and `a_vs_d`.
+First the data is imported using the `readr` module from `tidyverse`. This creates two dataframes, `a_vs_b` and `a_vs_d`. The following function was used, that can check to ensure the file exists and prevents the script running if it does not.
 ```{r}
 #| echo: true
 library(tidyverse)
+
 load_dataset <- function(filepath) {
     if (!file.exists(filepath)) {
         stop("File not found at ", filepath)
