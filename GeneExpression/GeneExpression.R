@@ -35,7 +35,25 @@ load_dataset <- function(filepath) {
     if (!file.exists(filepath)) { #Checks if file exists and stops if not
         stop("File not found at ", filepath)
     }
-    df <- read_tsv(filepath)
+
+    df <- read_tsv(filepath) #Read in dataset
+
+    required_cols <- c('gene_id','log2FoldChange','pvalue','padj') #List of columns needed for script
+    missing_cols <- c()
+
+    for (col in required_cols) { #Checks if all columns needed are in imported dataframe
+        if (!(col %in% names(df))) {
+            missing_cols <- c(missing_cols, col) #Add to empty vector
+        }
+    }
+    if (length(missing_cols)>0) { #If found missing columns stop
+        stop("The file is missing the required columns ", paste(missing_cols))
+    }
+
+    #Handling for missing data
+    df$padj[is.na(df$padj)] <- 1 #Replaces all NAs in P adjusted value with 1 to show no significance
+    df$log2FoldChange[is.na(df$log2FoldChange)] <- 0 #Replaces all NAs in P Log2FoldChange with 0 to show no change
+
     return(df)
 }
 
@@ -62,13 +80,6 @@ find_sig_downreg <- function(dataset) {
     changed <- subset(dataset, log2FoldChange <= -1 & padj < 0.05)
     return(changed)
 }
-
-#Handling for missing data
-a_vs_b$padj[is.na(a_vs_b$padj)] <- 1 #Replaces all NAs in P adjusted value with 1 to show no significance
-a_vs_d$padj[is.na(a_vs_d$padj)] <- 1 #Replaces all NAs in P adjusted value with 1 to show no significance
-
-a_vs_b$log2FoldChange[is.na(a_vs_b$log2FoldChange)] <- 0 #Replaces all NAs in Log2FoldChange with 1 to show no significance
-a_vs_d$log2FoldChange[is.na(a_vs_d$log2FoldChange)] <- 0 #Replaces all NAs in P Log2FoldChange with 1 to show no significance
 
 #Using previous function to create dataframes of significant genes
 sig_a_b_up <- find_sig_upreg(a_vs_b)
